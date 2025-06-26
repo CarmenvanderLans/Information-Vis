@@ -1,5 +1,8 @@
 # Dataset and preprocessing
 
+Aangezien ons thema erg breed is en we elk standpunt en argument grondig willen onderbouwen, hebben we voor ieder perspectief aparte datasets geselecteerd. Hieronder beschrijven we per perspectief en argument uitgebreid welke datasets we gekozen hebben en hoe we deze hebben voorbewerkt.
+
+
 ## Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot
 
 ### Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie
