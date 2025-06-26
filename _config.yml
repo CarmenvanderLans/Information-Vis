@@ -8,12 +8,12 @@ execute:
   execute_notebooks: force
 
 # LaTeX/PDF-settings (lijst van dicts, niet van strings!)
-latex:
-  latex_documents:
-    - targetname: book.tex
-      title: "CO₂-uitstoot van de landbouwsector"
-      author: "Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai"
-      documentclass: manual
+# latex:
+#  latex_documents:
+ #   - targetname: book.tex
+ #     title: "CO₂-uitstoot van de landbouwsector"
+  #    author: "Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai"
+  #    documentclass: manual
 
 # “Edit on GitHub” knop
 repository:
