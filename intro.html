@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to your Jupyter Book &#8212; My sample book</title>
+    <title>Introductie &#8212; My sample book</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -178,7 +178,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1 current active">
                 <a class="reference internal" href="#">
-                    Welcome to your Jupyter Book
+                    Introductie
                 </a>
             </li>
         </ul>
@@ -358,7 +358,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -369,11 +371,21 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Welcome to your Jupyter Book</h1>
+    <h1>Introductie</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introductie</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#auteurs">Auteurs</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -383,19 +395,31 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-your-jupyter-book">
-<h1>Welcome to your Jupyter Book<a class="headerlink" href="#welcome-to-your-jupyter-book" title="Link to this heading">#</a></h1>
-<p>This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out <a class="reference external" href="https://jupyterbook.org">the Jupyter Book documentation</a> for more information.</p>
-<p>Check out the content pages bundled with this sample book to see more.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Content with notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
+  <section class="tex2jax_ignore mathjax_ignore" id="introductie">
+<h1>Introductie<a class="headerlink" href="#introductie" title="Link to this heading">#</a></h1>
+<p>De landbouwsector is wereldwijd verantwoordelijk voor een aanzienlijk deel van de CO₂-uitstoot. Maar waarom stoten sommige landen meer uit dan andere? De verschillen zijn niet alleen toe te schrijven aan productieomvang, maar ook aan beleid, economische omstandigheden en geografische factoren.</p>
+<p>In dit dataverhaal onderzoeken we de <em>factoren die de verschillen in CO₂-uitstoot van de landbouwsector tussen landen verklaren</em>. Met behulp van gegevens van FAOSTAT en de Environmental Performance Index (EPI) analyseren we welke landen efficiënt en duurzaam produceren, en welke achterblijven — en waarom.</p>
+<p>We benaderen deze vraag vanuit drie perspectieven:</p>
+<p><em>Perspectief 1:</em><br />
+<em>Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot.</em><br />
+Landen met streng milieubeleid en hogere EPI-scores hebben doorgaans een lagere uitstoot per geproduceerde eenheid landbouwproduct.</p>
+<p><em>Perspectief 2:</em><br />
+<em>Economische welvaart en productiviteit beïnvloeden uitstoot.</em><br />
+Rijkere landen investeren vaker in efficiënte, emissiearme technologieën. Tegelijkertijd kan hogere productie ook tot hogere totale uitstoot leiden.</p>
+<p><em>Perspectief 3:</em><br />
+<em>Geografische ligging beïnvloedt landbouwuitstoot.</em><br />
+Klimaat, bodemkwaliteit en beschikbare landbouwgrond spelen een rol. Tropische landen stoten bijvoorbeeld vaak meer uit per hectare vanwege andere gewassen en productiemethoden.</p>
+<p>In de volgende secties introduceren we de gebruikte datasets en presenteren we visualisaties die elk perspectief onderbouwen. Het doel: inzicht krijgen in hoe verschillende factoren samenhangen met landbouwemissies en welke lessen hieruit te trekken zijn voor duurzamer beleid.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="auteurs">
+<h1>Auteurs<a class="headerlink" href="#auteurs" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Carmen van der Lans</p></li>
+<li><p>Jette Walvis</p></li>
+<li><p>Sarah Schaefers</p></li>
+<li><p>Nur Shidai</p></li>
 </ul>
+<div class="toctree-wrapper compound">
 </div>
 </section>
 
@@ -444,6 +468,23 @@ It does not go in-depth into any particular topic - check out <a class="referenc
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introductie</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#auteurs">Auteurs</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
