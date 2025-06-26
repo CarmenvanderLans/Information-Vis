@@ -10,10 +10,11 @@ execute:
 # Information for PDF (LaTeX) builds
 latex:
   latex_documents:
-    - targetname: book.tex
-    - title: "CO2-uitstoot van de landbouwsector"
-    - author: "Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai"
-    - documentclass: manual
+    book:                  # key voor deze PDF‐output
+      - intro              # root‐pagina (intro.md zonder extensie)
+      - book.tex           # gegenereerde .tex en later .pdf
+      - "CO2-uitstoot van de landbouwsector"  # titel in de PDF
+      - manual             # documentclass
 
 # Repository information for “Edit on GitHub” links
 repository:
