@@ -1,5 +1,5 @@
 # Book settings
-title: CO2-uitstoot van de landbouwsector
+title: CO₂-uitstoot van de landbouwsector
 author: Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai
 logo: logo.png
 
@@ -7,23 +7,32 @@ logo: logo.png
 execute:
   execute_notebooks: force
 
-# Information for PDF (LaTeX) builds
+# LaTeX/PDF-settings blijven zoals ze zijn
 latex:
   latex_documents:
-    book:                  # key voor deze PDF‐output
-      - intro              # root‐pagina (intro.md zonder extensie)
-      - book.tex           # gegenereerde .tex en later .pdf
-      - "CO2-uitstoot van de landbouwsector"  # titel in de PDF
-      - manual             # documentclass
+    - intro        # key voor deze PDF-output
+    - book.tex     # -> book.tex -> book.pdf
+    - "CO₂-uitstoot van de landbouwsector"
+    - manual
 
-# Repository information for “Edit on GitHub” links
+# Repository info
 repository:
   url: https://github.com/CarmenvanderLans/Information-Vis
   path_to_book: .
   branch: main
 
-# HTML theme options
+# sphinx-extenstions om plotly-figuren te ondersteunen
+sphinx:
+  extra_extensions:
+    - sphinxcontrib.jquery
+    - plotly.sphinxext.plotly_directive
+
+# HTML-theme options, + Plotly.js
 html:
   use_repository_button: true
-  use_issues_button: true
+  use_issues_button:   true
   favicon: logo.png
+
+  # hier-link naar de Plotly client-side library:
+  js_files:
+    - https://cdn.plot.ly/plotly-latest.min.js
