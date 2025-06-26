@@ -7,32 +7,31 @@ logo: logo.png
 execute:
   execute_notebooks: force
 
-# LaTeX/PDF-settings blijven zoals ze zijn
+# Settings for LaTeX/PDF builds (on dezelfde manier als je al had)
 latex:
   latex_documents:
-    - intro        # key voor deze PDF-output
-    - book.tex     # -> book.tex -> book.pdf
+    - intro          # key voor deze PDF-output
+    - book.tex       # → book.tex → book.pdf
     - "CO₂-uitstoot van de landbouwsector"
     - manual
 
-# Repository info
+# Repository information for “Edit on GitHub” links
 repository:
   url: https://github.com/CarmenvanderLans/Information-Vis
   path_to_book: .
   branch: main
 
-# sphinx-extenstions om plotly-figuren te ondersteunen
+# Sphinx-extensions om Plotly-figuren client-side in te laden
 sphinx:
   extra_extensions:
-    - sphinxcontrib.jquery
-    - plotly.sphinxext.plotly_directive
+    - sphinxext.plotly_directive
+  config:
+    # Dit laadt Plotly.js in in elk HTML-pagina
+    html_js_files:
+      - https://cdn.plot.ly/plotly-latest.min.js
 
-# HTML-theme options, + Plotly.js
+# HTML theme options
 html:
   use_repository_button: true
-  use_issues_button:   true
-  favicon: logo.png
-
-  # hier-link naar de Plotly client-side library:
-  js_files:
-    - https://cdn.plot.ly/plotly-latest.min.js
+  use_issues_button:    true
+  favicon:              logo.png
