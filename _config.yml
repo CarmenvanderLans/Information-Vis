@@ -11,9 +11,9 @@ execute:
 latex:
   latex_documents:
     - targetname: book.tex
-      title: "CO2-uitstoot van de landbouwsector"
-      author: "Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai"
-      documentclass: manual
+    - title: "CO2-uitstoot van de landbouwsector"
+    - author: "Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai"
+    - documentclass: manual
 
 # Repository information for “Edit on GitHub” links
 repository:
