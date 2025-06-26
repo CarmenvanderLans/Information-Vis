@@ -13,11 +13,6 @@ repository:
   path_to_book: .
   branch: main
 
-# Nodige Sphinx-extensions voor Plotly
-sphinx:
-  extra_extensions:
-    - sphinxcontrib.jquery
-    - plotly.sphinxext.plotly_directive
 
 # HTML-themaopties + Plotly.js clientside library
 html:
