@@ -1,5 +1,9 @@
 # Dataset and preprocessing
 
+## Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot
+
+### Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie
+
 Voor deze visualisatie hebben we drie datasets uit 2022 gecombineerd die samen een goed beeld geven van landbouw en milieubeleid wereldwijd:
 
 FAOSTAT Landbouwemissies: toont per land hoeveel broeikasgassen er in de landbouwsector worden uitgestoten.
