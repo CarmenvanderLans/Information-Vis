@@ -180,3 +180,4 @@ Drie rijen in één figuur: balkgrafiek CO₂ per inwoner, polar-diagram product
 - Kenia: bloemen en thee → zeer lage uitstoot.  
 - Brazilië: soja en suikerriet → gemiddelde uitstoot.  
 - Verenigde Staten: graan en vee → lagere uitstoot door schaalvoordelen.
+
