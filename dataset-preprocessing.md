@@ -23,9 +23,9 @@ We wilden niet alleen kijken naar hoeveel CO₂ een land uitstoot, maar juist na
 
 2. *Berekening van uitstoot per ton landbouwproductie*  
    Na aggregatie is per land de verhouding berekend tussen totale uitstoot en totale productie:  
-$$
+$
 \text{CO₂-uitstoot per ton landbouwproductie} = \frac{\text{Totale landbouwemissie (kt)}}{\text{Totale landbouwproductie (kt)}}
-$$
+$
 
 3. *Koppeling aan de EPI-score*  
    De gecombineerde dataset is verrijkt met de EPI-score per land. Zo kan de relatie tussen milieubeleid en emissie-efficiëntie worden geanalyseerd.  
@@ -68,9 +68,9 @@ Door de verhouding tussen GSSE en TSE te berekenen, ontstaat een duurzaamheidsma
    Voor elk land en jaar zijn de volgende variabelen berekend:  
    - **Duurzaamheidsratio subsidies:**
 
-     $$
+     $
      \text{GSSE-ratio} = \frac{\text{GSSE}}{\text{TSE}}
-     $$
+     $
 
      waarbij:
      - **GSSE** = General Services Support Estimate (duurzame infrastructuur en kennis)  
@@ -78,9 +78,9 @@ Door de verhouding tussen GSSE en TSE te berekenen, ontstaat een duurzaamheidsma
 
    - **Totale landbouwuitstoot in tonnen:**
 
-     $$
+     $
      \text{Totale uitstoot (ton)} = \text{CO₂ (kt)} \times 1.000
-     $$
+     $
 
 5. *Opschonen en exporteren*  
    - Waarden met ontbrekende of nulwaardes in TSE zijn verwijderd  
@@ -131,29 +131,29 @@ Deze maatstaven zijn gecombineerd met welvaartsdata (GDP per capita), zodat kan 
 
    * **CO₂-uitstoot per ton landbouwproductie**:
 
-     $$
+     $
      \text{CO₂/ton} = \frac{\text{Emissies (kt)} \times 1.000}{\text{Productie (ton)}}
-     $$
+     $
 
    * **Productie-efficiëntie per hectare landbouwgrond**:
 
-     $$
+     $
      \text{Efficiëntie} = \frac{\text{Productie (ton)}}{\text{Landbouwoppervlak (ha)}}
-     $$
+     $
 
    Voor **Argument 2 (Scatterplot)** zijn deze indicatoren jaarlijks berekend voor elk land (2015–2023):
 
    * **Jaarlijkse CO₂-uitstoot per ton landbouwproductie**:
 
-     $$
+     $
      \text{Jaarlijkse CO₂/ton} = \frac{\text{Jaarlijkse emissie (kt)} \times 1.000}{\text{Jaarlijkse productie (ton)}}
-     $$
+     $
 
    * **Jaarlijkse efficiëntie per hectare**:
 
-     $$
+     $
      \text{Ton/ha} = \frac{\text{Productie (ton)}}{\text{Landbouwgrond (ha)}}
-     $$
+     $
 
 3. *Koppeling aan GDP en bevolkingsdata*  
    Door GDP per capita en bevolkingsgrootte toe te voegen, ontstaat een breder profiel per land: rijkdom, schaal, uitstoot en efficiëntie.
@@ -197,19 +197,19 @@ We wilden emissies koppelen aan de mate waarin een land voor de wereldmarkt prod
    Voor elk land en jaar zijn de volgende indicatoren berekend:
 
    - **Export per inwoner:**
-     $$
+     $
      \text{Export per capita} = \frac{\text{Export (ton)}}{\text{Bevolking}}
-     $$
+     $
 
    - **Emissies per inwoner:**
-     $$
+     $
      \text{Emissies per capita} = \frac{\text{Emissies (kt)} \times 1.000}{\text{Bevolking}}
-     $$
+     $
 
    - **Emissies per geëxporteerde ton:**
-     $$
+     $
      \text{Emissies per exportton} = \frac{\text{Emissies (kt)} \times 1.000.000}{\text{Export (ton)}}
-     $$
+     $
 
 3. *Schoonmaak*  
    - Jaren zonder waarden zijn verwijderd.  
@@ -253,9 +253,9 @@ We koppelden emissies en productmix aan klimaatgegevens om te tonen hoe klimaat 
    - Totale landbouwemissies per land verzameld (in kiloton CO₂-equivalent).  
    - **Emissies per inwoner:**
 
-     $$
+     $
      \text{Emissies per capita} = \frac{\text{Emissies (kt)}}{\text{Bevolking}}
-     $$
+     $
 
 4. *Klimaatdata harmoniseren*  
    - Maandnamen omgezet naar datetime-formaat  
