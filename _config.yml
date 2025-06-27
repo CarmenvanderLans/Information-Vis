@@ -19,6 +19,12 @@ html:
   use_repository_button: true
   use_issues_button: true
   favicon: logo.png
+html:
+  # turn *off* the per-page mini-TOC entirely
+toc:
+  includehidden: false
+    # this setting hides the local “contents” box on each page
+  show: false
 
   # laad Plotly JS vanuit CDN (nodig om interactieve grafieken in te sluiten)
   js_files:
