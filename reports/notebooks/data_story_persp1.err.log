@@ -18,114 +18,90 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Cell 2: load, process, and draw the figure
+# ─────────────────────────────────────────────────────────────────────────────
 import pandas as pd
 import plotly.graph_objects as go
 
-# Data inladen
-emissies = pd.read_csv("data1/FAOSTAT_landbouw_emissies_2022.csv")
-productie = pd.read_csv("data1/FAOSTAT_landbouw_productie_2022.csv")
-epi = pd.read_csv("data1/epi2022results05302022.csv")
+# 1) Load raw data from data1/
+emissies  = pd.read_csv("../data1/FAOSTAT_landbouw_emissies_2022.csv")
+productie = pd.read_csv("../data1/FAOSTAT_landbouw_productie_2022.csv")
+epi       = pd.read_csv("../data1/epi2022results05302022.csv")
 
-# Emissies per land (in kiloton)
-emissie_per_land = emissies.groupby("Area")["Value"].sum().reset_index()
-emissie_per_land.columns = ["Country", "Emissions_kt"]
+# 2) Aggregate to per‐country numbers
+em_land = emissies.groupby("Area")["Value"].sum().reset_index()
+em_land.columns = ["Country", "Emissions_kt"]
 
-# Productie per land (in ton omzetten naar kiloton)
-productie_per_land = productie.groupby("Area")["Value"].sum().reset_index()
-productie_per_land.columns = ["Country", "Production_ton"]
-productie_per_land["Production_kt"] = productie_per_land["Production_ton"] / 1000
+pr_land = productie.groupby("Area")["Value"].sum().reset_index()
+pr_land.columns = ["Country", "Production_ton"]
+pr_land["Production_kt"] = pr_land["Production_ton"] / 1000
 
-# Combineren en uitstoot per ton berekenen
-combined = pd.merge(emissie_per_land, productie_per_land, on="Country")
-combined["Emissions_per_ton"] = combined["Emissions_kt"] / combined["Production_kt"]
+# 3) Merge and compute per‐ton emissions
+df = pd.merge(em_land, pr_land, on="Country", how="inner")
+df["Emissions_per_ton"] = df["Emissions_kt"] / df["Production_kt"]
 
-# EPI-score koppelen
+# 4) Attach EPI score
 epi = epi.rename(columns={"country": "Country", "EPI.new": "EPI_Score"})
-final = pd.merge(combined, epi[["Country", "EPI_Score"]], on="Country")
+df = pd.merge(df, epi[["Country", "EPI_Score"]], on="Country", how="left")
 
-# Filter landen met voldoende landbouwactiviteit
-final = final[(final["Production_kt"] > 5000) & (final["Emissions_kt"] > 50)]
+# 5) Filter out tiny producers
+df = df[(df["Production_kt"] > 5000) & (df["Emissions_kt"] > 50)]
 
-# Percentielen voor kleurcontrast
-p10 = final["Emissions_per_ton"].quantile(0.10)
-p90 = final["Emissions_per_ton"].quantile(0.90)
+# 6) Build the two layers
+p10, p90 = df["Emissions_per_ton"].quantile([0.1, 0.9])
 
-# Achtergrondkaart: EPI-score
 choropleth = go.Choropleth(
-    locations=final["Country"],
+    locations=df["Country"],
     locationmode="country names",
-    z=final["EPI_Score"],
+    z=df["EPI_Score"],
     colorscale="YlGn",
-    zmin=0,
-    zmax=100,
+    zmin=0, zmax=100,
     showscale=True,
-    colorbar=dict(
-        title="EPI Score",
-        x=1.01,
-        len=0.6
-    )
+    colorbar=dict(title="EPI Score", x=1.02, len=0.6)
 )
 
-# Puntenkaart: CO₂-uitstoot per ton landbouwproductie
 scatter = go.Scattergeo(
-    locationmode='country names',
-    locations=final["Country"],
-    text=final["Country"],
+    locations=df["Country"],
+    locationmode="country names",
+    text=df["Country"],
     marker=dict(
-        size=5,
-        color=final["Emissions_per_ton"],
+        size=6,
+        color=df["Emissions_per_ton"],
         colorscale=["#ffffcc", "#ffcc66", "#ff9933", "#cc3300", "#660000"],
-        cmin=p10,
-        cmax=p90,
+        cmin=p10, cmax=p90,
         colorbar=dict(
-            title=None,
-            orientation='h',
-            x=0.5,
-            xanchor="center",
-            y=-0.2,
-            yanchor="bottom",
-            len=1.0,
-            thickness=15,
-            tickangle=0,
-            tickvals=[
-                round(p10, 3),
-                round((p10 + p90) / 2, 3),
-                round(p90, 3)
-            ]
+            title="CO₂ per ton",
+            orientation="h",
+            x=0.5, xanchor="center",
+            y=-0.18, yanchor="bottom",
+            len=1.0, thickness=15,
+            tickvals=[round(p10,3), round((p10+p90)/2,3), round(p90,3)],
         )
     ),
     name="Uitstoot per ton"
 )
 
-# Visualisatie samenstellen
-fig = go.Figure(data=[choropleth, scatter])
+# 7) Compose final layout
+fig = go.Figure([choropleth, scatter])
 fig.update_layout(
     title="CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)",
     title_font=dict(size=16),
     geo=dict(
-        showframe=False,
-        showcoastlines=True,
-        projection_type='equirectangular',
-        projection_scale=1.3,
+        showframe=False, showcoastlines=True,
+        projection_type="equirectangular", projection_scale=1.3,
         center=dict(lat=10, lon=10)
     ),
-    height=710,
-    width=1100,
-    margin=dict(t=60, b=220, r=60, l=60),
+    margin=dict(t=60, b=220, l=60, r=60),
+    height=710, width=1100,
     annotations=[
-        # Titel boven de kleurenschaal
         dict(
             text="CO₂-uitstoot per ton landbouwproductie",
-            showarrow=False,
-            xref='paper',
-            yref='paper',
-            x=0.5,
-            y=-0.15,
-            xanchor='center',
-            yanchor='bottom',
+            showarrow=False, xref="paper", yref="paper",
+            x=0.5, y=-0.15, xanchor="center", yanchor="bottom",
             font=dict(size=13)
         ),
-        # Toelichting onderaan
         dict(
             text=(
                 "Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen<br>"
@@ -133,32 +109,34 @@ fig.update_layout(
                 "(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),<br>"
                 "om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen."
             ),
-            showarrow=False,
-            xref='paper',
-            yref='paper',
-            x=0.5,
-            y=-0.36,
-            xanchor='center',
-            yanchor='bottom',
-            align='center',
-            font=dict(size=12)
+            showarrow=False, xref="paper", yref="paper",
+            x=0.5, y=-0.36, xanchor="center", yanchor="bottom",
+            align="center", font=dict(size=12)
         )
     ]
 )
 
+# 8) Show & export
 fig.show()
+
+# write a high-res PNG for embedding
+os.makedirs("../iframe_figures", exist_ok=True)
+fig.write_image(
+    "../iframe_figures/persp1_arg1.png",
+    format="png", width=1100, height=710, scale=2
+)
 
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Cell [0;32mIn[1], line 5[0m
-[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mgraph_objects[39;00m [38;5;28;01mas[39;00m [38;5;21;01mgo[39;00m
-[1;32m      4[0m [38;5;66;03m# Data inladen[39;00m
-[0;32m----> 5[0m emissies [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124mdata1/FAOSTAT_landbouw_emissies_2022.csv[39m[38;5;124m"[39m)
-[1;32m      6[0m productie [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124mdata1/FAOSTAT_landbouw_productie_2022.csv[39m[38;5;124m"[39m)
-[1;32m      7[0m epi [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124mdata1/epi2022results05302022.csv[39m[38;5;124m"[39m)
+Cell [0;32mIn[3], line 8[0m
+[1;32m      5[0m [38;5;28;01mimport[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mgraph_objects[39;00m [38;5;28;01mas[39;00m [38;5;21;01mgo[39;00m
+[1;32m      7[0m [38;5;66;03m# 1) Load raw data from data1/[39;00m
+[0;32m----> 8[0m emissies  [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/FAOSTAT_landbouw_emissies_2022.csv[39m[38;5;124m"[39m)
+[1;32m      9[0m productie [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/FAOSTAT_landbouw_productie_2022.csv[39m[38;5;124m"[39m)
+[1;32m     10[0m epi       [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/epi2022results05302022.csv[39m[38;5;124m"[39m)
 
 File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1026[0m, in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)[0m
 [1;32m   1013[0m kwds_defaults [38;5;241m=[39m _refine_defaults_read(
@@ -215,5 +193,5 @@ File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/common.py:873
 [1;32m    881[0m         [38;5;66;03m# Binary mode[39;00m
 [1;32m    882[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(handle, ioargs[38;5;241m.[39mmode)
 
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'data1/FAOSTAT_landbouw_emissies_2022.csv'
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '../data1/FAOSTAT_landbouw_emissies_2022.csv'
 
