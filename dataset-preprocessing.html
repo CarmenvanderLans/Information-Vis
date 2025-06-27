@@ -57,6 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'dataset-preprocessing';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -381,13 +383,13 @@ Niet de absolute uitstoot is doorslaggevend, maar de efficiëntie ervan. Door de
 <ol class="arabic simple">
 <li><p><strong>Aggregatie per land</strong>: emissie-, productie- en areaaldata samengevoegd.</p></li>
 <li><p><strong>Berekening van CO₂ per ton</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{CO₂ per ton} = \frac{\text{totale uitstoot (kt)} \times 1000}{\text{totale productie (ton)}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Berekening van efficiëntie</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{Efficiëntie (ton/ha)} = \frac{\text{totale productie (ton)}}{\text{area (ha)}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Koppeling aan EPI-score</strong>: EPI-scores toegevoegd om milieubeleid te relateren aan emissie-efficiëntie.</p></li>
 <li><p><strong>Filtering van landen</strong>: alleen landen met ≥ 5 000 kt productie én ≥ 50 kt uitstoot behouden.</p></li>
 </ol>
@@ -440,13 +442,13 @@ Bepalen van CO₂ per ton voedsel en productie per hectare, gekoppeld aan welvaa
 <ol class="arabic simple">
 <li><p><strong>Aggregatie per land</strong>: emissie-, productie- en areaaldata samengevoegd.</p></li>
 <li><p><strong>Berekening van CO₂ per ton</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{CO₂ per ton} = \frac{\text{totale uitstoot (kt)} \times 1000}{\text{totale productie (ton)}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Berekening van efficiëntie</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{Efficiëntie (ton/ha)} = \frac{\text{totale productie (ton)}}{\text{area (ha)}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Koppeling van GDP en bevolkingsdata</strong>.</p></li>
 <li><p><strong>Filtering op complete datasets</strong>.</p></li>
 <li><p><strong>Normalisatie voor radarplot</strong>.</p></li>
@@ -487,17 +489,17 @@ Normaliseren van emissies en exportvolumes per inwoner.</p>
 <ol class="arabic simple">
 <li><p><strong>Aggregatie per land-jaar</strong>: exportvolumes en emissies samengevoegd.</p></li>
 <li><p><strong>Berekening van export per capita</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{Export per capita} = \frac{\text{exportvolume (ton)}}{\text{bevolking}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Berekening van emissies per capita</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{Emissies per capita} = \frac{\text{uitstoot (kt)} \times 1000}{\text{bevolking}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Berekening van emissies per exportton</strong>:<br />
-[
+$<span class="math notranslate nohighlight">\(
 \text{Emissies per exportton} = \frac{\text{uitstoot (kt)} \times 1000}{\text{exportvolume (ton)}}
-]</p></li>
+\)</span>$</p></li>
 <li><p><strong>Behoud van hiaten</strong> (lege waarden).</p></li>
 </ol>
 <p><strong>Opbouw van de visualisatie</strong><br />

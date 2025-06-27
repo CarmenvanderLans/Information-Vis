@@ -21,13 +21,13 @@ Niet de absolute uitstoot is doorslaggevend, maar de efficiëntie ervan. Door de
 **Stappen in het verwerkingsproces**  
 1. **Aggregatie per land**: emissie-, productie- en areaaldata samengevoegd.  
 2. **Berekening van CO₂ per ton**:  
-   \[
+   $$
    \text{CO₂ per ton} = \frac{\text{totale uitstoot (kt)} \times 1000}{\text{totale productie (ton)}}
-   \]
+   $$
 3. **Berekening van efficiëntie**:  
-   \[
+   $$
    \text{Efficiëntie (ton/ha)} = \frac{\text{totale productie (ton)}}{\text{area (ha)}}
-   \]
+   $$
 4. **Koppeling aan EPI-score**: EPI-scores toegevoegd om milieubeleid te relateren aan emissie-efficiëntie.  
 5. **Filtering van landen**: alleen landen met ≥ 5 000 kt productie én ≥ 50 kt uitstoot behouden.
 
@@ -82,13 +82,13 @@ Bepalen van CO₂ per ton voedsel en productie per hectare, gekoppeld aan welvaa
 **Stappen in het verwerkingsproces**  
 1. **Aggregatie per land**: emissie-, productie- en areaaldata samengevoegd.  
 2. **Berekening van CO₂ per ton**:  
-   \[
+   $$
    \text{CO₂ per ton} = \frac{\text{totale uitstoot (kt)} \times 1000}{\text{totale productie (ton)}}
-   \]
+   $$
 3. **Berekening van efficiëntie**:  
-   \[
+   $$
    \text{Efficiëntie (ton/ha)} = \frac{\text{totale productie (ton)}}{\text{area (ha)}}
-   \]
+   $$
 4. **Koppeling van GDP en bevolkingsdata**.  
 5. **Filtering op complete datasets**.  
 6. **Normalisatie voor radarplot**.
@@ -133,17 +133,17 @@ Normaliseren van emissies en exportvolumes per inwoner.
 **Stappen in het verwerkingsproces**  
 1. **Aggregatie per land-jaar**: exportvolumes en emissies samengevoegd.  
 2. **Berekening van export per capita**:  
-   \[
+   $$
    \text{Export per capita} = \frac{\text{exportvolume (ton)}}{\text{bevolking}}
-   \]
+   $$
 3. **Berekening van emissies per capita**:  
-   \[
+   $$
    \text{Emissies per capita} = \frac{\text{uitstoot (kt)} \times 1000}{\text{bevolking}}
-   \]
+   $$
 4. **Berekening van emissies per exportton**:  
-   \[
+   $$
    \text{Emissies per exportton} = \frac{\text{uitstoot (kt)} \times 1000}{\text{exportvolume (ton)}}
-   \]
+   $$
 5. **Behoud van hiaten** (lege waarden).
 
 **Opbouw van de visualisatie**  
@@ -180,4 +180,3 @@ Drie rijen in één figuur: balkgrafiek CO₂ per inwoner, polar-diagram product
 - Kenia: bloemen en thee → zeer lage uitstoot.  
 - Brazilië: soja en suikerriet → gemiddelde uitstoot.  
 - Verenigde Staten: graan en vee → lagere uitstoot door schaalvoordelen.
-
