@@ -5,8 +5,8 @@ root: intro
 
 chapters:
   - file: dataset-preprocessing
-  - file: notebooks/perspectief1  
-  - file: notebooks/perspectief2
-  - file: notebooks/perspectief3 
+  - file: perspectief1  
+  - file: perspectief2
+  - file: perspectief3 
   - file: reflectie
   - file: werkverdeling
