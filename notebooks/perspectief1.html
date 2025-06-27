@@ -1,0 +1,844 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot &#8212; CO₂-uitstoot van de landbouwsector</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/perspectief1';</script>
+    <link rel="icon" href="../_static/logo.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Economische welvaart en productiviteit beïnvloeden uitstoot" href="perspectief2.html" />
+    <link rel="prev" title="Dataset and preprocessing" href="../dataset-preprocessing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="CO₂-uitstoot van de landbouwsector - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="CO₂-uitstoot van de landbouwsector - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introductie
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../dataset-preprocessing.html">Dataset and preprocessing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perspectief2.html">Economische welvaart en productiviteit beïnvloeden uitstoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perspectief3.html">De invloed van klimaat en geografie op voedselproductie</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reflectie.html">Reflectie</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../werkverdeling.html">Werkverdeling</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/CarmenvanderLans/Information-Vis" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/CarmenvanderLans/Information-Vis/issues/new?title=Issue%20on%20page%20%2Fnotebooks/perspectief1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/perspectief1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landen-die-duurzaamheid-belonen-via-subsidies-stoten-relatief-minder-co2-uit-binnen-hun-landbouwsector">Landen die duurzaamheid belonen via subsidies, stoten relatief minder CO₂ uit binnen hun landbouwsector</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#waarom-deze-landen">Waarom deze landen?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse">Analyse</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">
+<h1>Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot<a class="headerlink" href="#verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot" title="Link to this heading">#</a></h1>
+<p>De uitstoot van de landbouwsector verschilt sterk tussen landen. In dit perspectief onderzoeken we hoe beleidskeuzes zoals milieuregels en landbouwsubsidies bijdragen aan die verschillen. We gebruiken internationale data om te analyseren welke landen efficiënt produceren en welke landen vervuilende landbouw blijven stimuleren.</p>
+<section id="landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">
+<h2>Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie.<a class="headerlink" href="#landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie" title="Link to this heading">#</a></h2>
+<p>In veel gesprekken over landbouw en klimaat gaat de aandacht uit naar de totale uitstoot per land. Maar het zegt veel meer als je kijkt naar hoe efficiënt die uitstoot is in verhouding tot wat er wordt geproduceerd. Door CO₂-uitstoot te koppelen aan de hoeveelheid landbouwproducten krijgen we een eerlijker beeld van hoe vervuilend of juist duurzaam een landbouwsysteem echt is. Zo kunnen landen op een eerlijke manier met elkaar worden vergeleken, ongeacht hun grootte of landbouwproductie, en wordt duidelijker welke landen daadwerkelijk inzetten op een duurzamere landbouw.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cell 1</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># make sure we&#39;re in /Users/carmenvanderlans/Information-Vis</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Information-Vis&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cwd =&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cwd = /Users/carmenvanderlans/Information-Vis
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="c1"># Data inladen</span>
+<span class="n">emissies</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">epi</span>      <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;epi2022results05302022.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Emissies per land (in kiloton)</span>
+<span class="n">emissie_per_land</span> <span class="o">=</span> <span class="n">emissies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">emissie_per_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span>
+
+<span class="c1"># Productie per land (in ton omzetten naar kiloton)</span>
+<span class="n">productie_per_land</span> <span class="o">=</span> <span class="n">productie</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">productie_per_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span>
+<span class="n">productie_per_land</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">productie_per_land</span><span class="p">[</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
+
+<span class="c1"># Combineren en uitstoot per ton berekenen</span>
+<span class="n">combined</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">emissie_per_land</span><span class="p">,</span> <span class="n">productie_per_land</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+<span class="n">combined</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">combined</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span>
+
+<span class="c1"># EPI-score koppelen</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">final</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">combined</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+
+<span class="c1"># Filter landen met voldoende landbouwactiviteit</span>
+<span class="n">final</span> <span class="o">=</span> <span class="n">final</span><span class="p">[(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)]</span>
+
+<span class="c1"># Percentielen voor kleurcontrast</span>
+<span class="n">p10</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.10</span><span class="p">)</span>
+<span class="n">p90</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.90</span><span class="p">)</span>
+
+<span class="c1"># Achtergrondkaart: EPI-score</span>
+<span class="n">choropleth</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">],</span>
+    <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+    <span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">zmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI Score&quot;</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">1.01</span><span class="p">,</span>
+        <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Puntenkaart: CO₂-uitstoot per ton landbouwproductie</span>
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s1">&#39;country names&#39;</span><span class="p">,</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">text</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">],</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span> <span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span> <span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span> <span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span> <span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
+        <span class="n">cmin</span><span class="o">=</span><span class="n">p10</span><span class="p">,</span>
+        <span class="n">cmax</span><span class="o">=</span><span class="n">p90</span><span class="p">,</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">tickangle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="nb">round</span><span class="p">((</span><span class="n">p10</span> <span class="o">+</span> <span class="n">p90</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Uitstoot per ton&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Visualisatie samenstellen</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">choropleth</span><span class="p">,</span> <span class="n">scatter</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)&quot;</span><span class="p">,</span>
+    <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">),</span>
+    <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s1">&#39;equirectangular&#39;</span><span class="p">,</span>
+        <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">annotations</span><span class="o">=</span><span class="p">[</span>
+        <span class="c1"># Titel boven de kleurenschaal</span>
+        <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie&quot;</span><span class="p">,</span>
+            <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">xref</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span>
+            <span class="n">yref</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span>
+            <span class="n">xanchor</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+            <span class="n">yanchor</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p><span style="font-size: 60%;"> Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen (meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot), om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen. </span></p>
+<p>De visualisatie laat duidelijk zien dat landen met een hoge EPI-score, wat wijst op sterker milieubeleid, gemiddeld minder CO₂ uitstoten per ton landbouwproductie. Dit is goed te zien bij landen als Zwitserland, Duitsland en Nieuw-Zeeland. Deze landen zijn donkergroen gekleurd, wat duidt op een hoog milieubeleidsscore, en hebben lichtere stippen, wat betekent dat hun uitstoot per ton landbouwproductie relatief laag is.</p>
+<p>Landen met lage EPI-scores, zoals India, Pakistan, Nigeria en Kenya, vallen juist op door hun lichtere achtergrondkleur in combinatie met donkergekleurde stippen. Dit betekent dat deze landen minder streng milieubeleid voeren en tegelijkertijd relatief veel uitstoten per ton landbouwproductie. Dit patroon ondersteunt sterk het idee dat strenger milieubeleid samenhangt met duurzamere landbouw.</p>
+<p>Een opvallende uitzondering vormen sommige Scandinavische landen, zoals Zweden en Finland. Zij scoren hoog op milieubeleid en zijn dus donkergroen op de kaart, maar hebben toch relatief donkere stippen. Dat betekent dat hun uitstoot per ton landbouwproductie hoger ligt dan je op basis van hun EPI-score zou verwachten. Toch zijn dit uitzonderingen op een veel duidelijker en bredere trend: landen met beter milieubeleid produceren landbouw gemiddeld op een schonere en efficiëntere manier.</p>
+</section>
+<section id="landen-die-duurzaamheid-belonen-via-subsidies-stoten-relatief-minder-co2-uit-binnen-hun-landbouwsector">
+<h2>Landen die duurzaamheid belonen via subsidies, stoten relatief minder CO₂ uit binnen hun landbouwsector<a class="headerlink" href="#landen-die-duurzaamheid-belonen-via-subsidies-stoten-relatief-minder-co2-uit-binnen-hun-landbouwsector" title="Link to this heading">#</a></h2>
+<p>Niet alleen milieuregels zijn van belang. Financiële prikkels spelen namelijk ook een grote rol. Overheden beïnvloeden landbouwgedrag niet alleen met wetten, maar ook via subsidies. Die subsidies kunnen duurzame praktijken stimuleren, zoals het beschermen van ecosystemen of het terugdringen van uitstoot. Maar ze kunnen ook onbedoeld vervuilende landbouw ondersteunen, bijvoorbeeld door intensieve veehouderij of het overmatig gebruik van kunstmest aantrekkelijk te maken.</p>
+<p><strong>Twee vormen van landbouwsubsidies:</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Subsidie</p></th>
+<th class="head"><p>Volledige naam</p></th>
+<th class="head"><p>Inhoud</p></th>
+<th class="head"><p>Duurzaamheidswaarde</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong><em>GSSE</em></strong></p></td>
+<td><p><em>General Services Support Estimate</em></p></td>
+<td><p>Overheidsuitgaven voor publieke goederen en langetermijnvoorzieningen in de landbouw (onderzoek, kennisoverdracht, infrastructuur, milieuherstel). Boeren ontvangen deze steun niet direct.</p></td>
+<td><p>Wordt algemeen beschouwd als duurzame, niet-productiegebonden steun.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong><em>PSE</em></strong></p></td>
+<td><p><em>Producer Support Estimate</em></p></td>
+<td><p>Directe betalingen aan boeren, vaak gekoppeld aan hoeveel ze produceren of exporteren. Dit kan leiden tot intensivering en overproductie.</p></td>
+<td><p>Wordt vaak gezien als minder duurzaam of zelfs schadelijk voor het milieu.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>De <em>TSE</em> (<em>Total Support Estimate</em>) omvat álle subsidies (dus <em>TSE</em> = <em>GSSE</em> + <em>PSE</em> + andere steunvormen van de originele OECD dataset).</p>
+<p><em>Bron: <a class="reference external" href="https://www.oecd.org/agriculture/topics/agricultural-policy-monitoring-and-evaluation/"><em>OECD Glossary on Agricultural Support Indicators</em></a></em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;CO2.csv&quot;</span><span class="p">)</span>
+
+
+<span class="n">landnaam_vertaling</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Australia&#39;</span><span class="p">:</span> <span class="s1">&#39;Australië&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;China&#39;</span><span class="p">:</span> <span class="s1">&#39;China&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Brazil&#39;</span><span class="p">:</span> <span class="s1">&#39;Brazilië&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;South Africa&#39;</span><span class="p">:</span> <span class="s1">&#39;Zuid-Afrika&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;United States of America&#39;</span><span class="p">:</span> <span class="s1">&#39;Verenigde Staten&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Republic of Korea&#39;</span><span class="p">:</span> <span class="s1">&#39;Zuid-Korea&#39;</span>
+<span class="p">}</span>
+
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Land_NL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mapped_Country&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">landnaam_vertaling</span><span class="p">)</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GSSE_Subsidy&#39;</span><span class="p">,</span> <span class="s1">&#39;TSE_Subsidy&#39;</span><span class="p">,</span> <span class="s1">&#39;CO2_Emission&#39;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;TSE_Subsidy&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Duurzaamheidsratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;GSSE_Subsidy&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;TSE_Subsidy&#39;</span><span class="p">]</span>
+
+
+<span class="n">gewilde_landen</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">landnaam_vertaling</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mapped_Country&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">gewilde_landen</span><span class="p">)]</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Land_NL&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">])</span>
+<span class="n">landen</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Land_NL&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+<span class="n">dropdown_buttons</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">land</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">landen</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Land_NL&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">land</span><span class="p">]</span>
+    <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">landen</span><span class="p">))</span>
+
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">],</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Duurzaamheidsratio&#39;</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Duurzame subsidies (GSSE/TSE) – </span><span class="si">{</span><span class="n">land</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#C7EEF9&#39;</span><span class="p">,</span>
+        <span class="n">yaxis</span><span class="o">=</span><span class="s1">&#39;y1&#39;</span><span class="p">,</span>
+        <span class="n">visible</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">))</span>
+    <span class="n">visible</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Year&#39;</span><span class="p">],</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;CO2_Emission&#39;</span><span class="p">],</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;CO₂-uitstoot – </span><span class="si">{</span><span class="n">land</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines+markers&#39;</span><span class="p">,</span>
+        <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#EF8C60&#39;</span><span class="p">,</span>
+        <span class="n">yaxis</span><span class="o">=</span><span class="s1">&#39;y2&#39;</span><span class="p">,</span>
+        <span class="n">visible</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">))</span>
+    <span class="n">visible</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    
+    <span class="n">dropdown_buttons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">land</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="s1">&#39;update&#39;</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="p">[{</span><span class="s1">&#39;visible&#39;</span><span class="p">:</span> <span class="n">visible</span><span class="p">},</span>
+              <span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Duurzame subsidies en CO₂-uitstoot – </span><span class="si">{</span><span class="n">land</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}]</span>
+    <span class="p">))</span>
+
+
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Duurzame subsidies en CO₂-uitstoot – &quot;</span> <span class="o">+</span> <span class="n">landen</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Jaar&quot;</span><span class="p">),</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;GSSE / TSE (duurzaamheidsratio)&quot;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+    <span class="n">yaxis2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot (ton CO₂eq)&quot;</span><span class="p">,</span> <span class="n">overlaying</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">),</span>
+    <span class="n">updatemenus</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">buttons</span><span class="o">=</span><span class="n">dropdown_buttons</span><span class="p">,</span>
+        <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;down&#39;</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">1.03</span><span class="p">,</span>
+        <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mf">1.15</span><span class="p">,</span>
+        <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+        <span class="n">showactive</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)],</span>
+    <span class="n">legend</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_white&#39;</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">b</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span> 
+<span class="p">)</span>
+
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">(</span>
+    <span class="n">text</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot; Met het dropdownmenu rechtsboven kun je wisselen tussen landen. &lt;br&gt;&quot;</span> 
+        <span class="s2">&quot; Beweeg met je muis over de grafiek om de exacte waarden per jaar te bekijken. &lt;br&gt;&quot;</span>
+        <span class="s2">&quot; De grafiek helpt inzicht te krijgen in hoe subsidiebeleid mogelijk samenhangt met de uitstoot uit de landbouwsector.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">align</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">),</span>
+    <span class="n">borderpad</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">)</span>
+
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<p><span style="font-size: 60%;"> * Let op: de schaalverdeling van de assen wisselt per land bij Grafiek 2.
+Dit is bewust zo gekozen om zowel hoge als lage waarden goed te laten uitkomen. Bij een uniforme asschaal zouden voor sommige landen de weergave van kleinere waarden (grotendeels) verborgen worden. </span></p>
+<section id="waarom-deze-landen">
+<h3>Waarom deze landen?<a class="headerlink" href="#waarom-deze-landen" title="Link to this heading">#</a></h3>
+<p>De zes gevisualiseerde landen Australië, Brazilië, China, Zuid-Afrika, Verenigde Staten en Zuid-Korea zijn geselecteerd vanwege hun variatie in duurzaamheidsratio’s. Zo konden zowel landen met een relatief hoge als lage inzet op duurzame landbouwsubsidies worden geanalyseerd, wat waardevol is om verschillen in CO₂-uitstoot beter te begrijpen.</p>
+</section>
+<section id="analyse">
+<h3>Analyse<a class="headerlink" href="#analyse" title="Link to this heading">#</a></h3>
+<p>Uit de visualisaties van zes landen blijkt een opvallende samenhang tussen de mate van duurzame landbouwsubsidies en CO₂-uitstoot. Hoewel we geen causale conclusies kunnen trekken, zijn er wel patronen zichtbaar die het argument ondersteunen dat landen die duurzaamheid belonen via subsidies, stoten relatief minder CO₂ uit binnen hun landbouwsector.</p>
+<p>Australië laat een stijgende duurzaamheidsratio zien vanaf de jaren 2000, samen met een licht dalende of stabiele CO₂-uitstoot in recente jaren. Dit wijst op een mogelijke effectiviteit van duurzaam beleid.</p>
+<p>Brazilië laat zien dat tussen 1995 en 2005 een daling van duurzame subsidies samen gaat met een stijging in CO₂-uitstoot. Wat wel tegenstrijdig lijkt te zijn is dat in 2010 de uitstoot sterk daalt ondanks een lage duurzaamheidsratio.</p>
+<p>China De grafiek laat zien dat China tussen 1995 en 2005 een relatief hoge duurzaamheidsratio had. In die periode bleef de CO₂-uitstoot nog relatief laag en groeide slechts langzaam. Maar na 2005 daalt de duurzaamheidsratio flink, terwijl de CO₂-uitstoot juist versneld begint te stijgen. Dat suggereert dat het afbouwen van duurzame subsidies mogelijk heeft bijgedragen aan een snellere stijging van de uitstoot in de landbouwsector</p>
+<p>Zuid-Afrika De grafiek van Zuid-Afrika toont een grillig patroon met meerdere pieken en dalen in zowel de duurzaamheidsratio als de CO₂-uitstoot. Opvallend is dat deze schommelingen vaak ongeveer gelijktijdig optreden, wat kan wijzen op een samenhang.</p>
+<p>Verenigde Staten hebben langdurig een lage duurzaamheidsratio, namelijk rond 0.1 – 0.2, en de CO₂-uitstoot blijft ook relatief hoog, met recente pieken. De verhouding tussen GSSE en TSE is hier opvallend laag vergeleken met andere landen.</p>
+<p>Zuid-Korea In Zuid-Korea blijft de duurzaamheidsratio structureel laag, terwijl de CO₂-uitstoot van de landbouwsector sterk blijft stijgen. Dit ondersteunt het argument dat een gebrek aan gerichte duurzame subsidies samenhangt met een gestage toename van emissies.</p>
+<p>De gevisualiseerde grafieken suggereren dat een hogere duurzaamheidratio kan leiden naar relatief lagere CO₂-uitstoot in de landbouwsector.<br />
+De duurzaamheid van subsidies lijkt dus een relevante factor in het klimaatbeleid. De interactieve grafiek maakt dit visueel duidelijk, vooral door het contrast tussen landen met lage en hoge duurzame subsidieratio’s.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../dataset-preprocessing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Dataset and preprocessing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="perspectief2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Economische welvaart en productiviteit beïnvloeden uitstoot</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#landen-die-duurzaamheid-belonen-via-subsidies-stoten-relatief-minder-co2-uit-binnen-hun-landbouwsector">Landen die duurzaamheid belonen via subsidies, stoten relatief minder CO₂ uit binnen hun landbouwsector</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#waarom-deze-landen">Waarom deze landen?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analyse">Analyse</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
