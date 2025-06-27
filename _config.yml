@@ -18,6 +18,8 @@ html:
   use_repository_button: true
   use_issues_button: true
   favicon: logo.png
+
+html:
   collapse_input: true
 
 toc:
