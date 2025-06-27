@@ -5,7 +5,7 @@ format: jb-book
 root: docs/intro
 chapters:
 - file: docs/dataset-preprocessing
-- file: notebooks
-- file: data_story_p1_arg1
+- file: notebooks/notebooks
+- file: notebooks/data_story_p1_arg1
 - file: docs/reflectie
 - file: docs/werkverdeling
