@@ -61,8 +61,8 @@
     <link rel="icon" href="../_static/logo.png"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Reflectie" href="../reflectie.html" />
-    <link rel="prev" title="Content with notebooks" href="notebooks.html" />
+    <link rel="next" title="De invloed van klimaat en geografie op voedselproductie" href="data_story_persp3.html" />
+    <link rel="prev" title="Dataset and preprocessing" href="../dataset-preprocessing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -182,8 +182,8 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../dataset-preprocessing.html">Dataset and preprocessing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Content with notebooks</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_story_persp3.html">De invloed van klimaat en geografie op voedselproductie</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reflectie.html">Reflectie</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="../werkverdeling.html">Werkverdeling</a></li>
@@ -407,114 +407,204 @@ document.write(`
 <p>In veel gesprekken over landbouw en klimaat gaat de aandacht uit naar de totale uitstoot per land. Maar het zegt veel meer als je kijkt naar hoe efficiënt die uitstoot is in verhouding tot wat er wordt geproduceerd. Door CO₂-uitstoot te koppelen aan de hoeveelheid landbouwproducten krijgen we een eerlijker beeld van hoe vervuilend of juist duurzaam een landbouwsysteem echt is. Zo kunnen landen op een eerlijke manier met elkaar worden vergeleken, ongeacht hun grootte of landbouwproductie, en wordt duidelijker welke landen daadwerkelijk inzetten op een duurzamere landbouw.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cell 1</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># make sure we&#39;re in /Users/carmenvanderlans/Information-Vis</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/Information-Vis&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cwd =&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cwd = /Users/carmenvanderlans/Information-Vis
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># — Cell 2: load, process, and draw the figure —</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
 
-<span class="c1"># Data inladen</span>
-<span class="n">emissies</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
-<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
-<span class="n">epi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
+<span class="c1"># 1) Load raw data from data1/</span>
+<span class="n">emissies</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
 
-<span class="c1"># Emissies per land (in kiloton)</span>
-<span class="n">emissie_per_land</span> <span class="o">=</span> <span class="n">emissies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-<span class="n">emissie_per_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span>
+<span class="c1"># 2) Aggregate to per‐country</span>
+<span class="n">em_land</span> <span class="o">=</span> <span class="n">emissies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">em_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span>
+<span class="n">pr_land</span> <span class="o">=</span> <span class="n">productie</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">pr_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span>
+<span class="n">pr_land</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr_land</span><span class="p">[</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000</span>
 
-<span class="c1"># Productie per land (in ton omzetten naar kiloton)</span>
-<span class="n">productie_per_land</span> <span class="o">=</span> <span class="n">productie</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-<span class="n">productie_per_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span>
-<span class="n">productie_per_land</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">productie_per_land</span><span class="p">[</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
+<span class="c1"># 3) Merge and compute per‐ton emissions</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">em_land</span><span class="p">,</span> <span class="n">pr_land</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span>
 
-<span class="c1"># Combineren en uitstoot per ton berekenen</span>
-<span class="n">combined</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">emissie_per_land</span><span class="p">,</span> <span class="n">productie_per_land</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
-<span class="n">combined</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">combined</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">combined</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span>
+<span class="c1"># 4) Attach EPI score</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
 
-<span class="c1"># EPI-score koppelen</span>
-<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
-<span class="n">final</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">combined</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+<span class="c1"># 5) Filter out very small producers</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5_000</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)]</span>
 
-<span class="c1"># Filter landen met voldoende landbouwactiviteit</span>
-<span class="n">final</span> <span class="o">=</span> <span class="n">final</span><span class="p">[(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)]</span>
+<span class="c1"># 6) Build the two layers</span>
+<span class="n">p10</span><span class="p">,</span> <span class="n">p90</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
 
-<span class="c1"># Percentielen voor kleurcontrast</span>
-<span class="n">p10</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.10</span><span class="p">)</span>
-<span class="n">p90</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.90</span><span class="p">)</span>
-
-<span class="c1"># Achtergrondkaart: EPI-score</span>
 <span class="n">choropleth</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
-    <span class="n">locations</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
-    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
-    <span class="n">z</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">],</span>
-    <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
-    <span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">zmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-    <span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI Score&quot;</span><span class="p">,</span>
-        <span class="n">x</span><span class="o">=</span><span class="mf">1.01</span><span class="p">,</span>
-        <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span>
-    <span class="p">)</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span> <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">],</span> <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span> <span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI Score&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">1.02</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
 <span class="p">)</span>
-
-<span class="c1"># Puntenkaart: CO₂-uitstoot per ton landbouwproductie</span>
 <span class="n">scatter</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span>
-    <span class="n">locationmode</span><span class="o">=</span><span class="s1">&#39;country names&#39;</span><span class="p">,</span>
-    <span class="n">locations</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
-    <span class="n">text</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span> <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
     <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="n">final</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">],</span>
-        <span class="n">colorscale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span> <span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span> <span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span> <span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span> <span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
-        <span class="n">cmin</span><span class="o">=</span><span class="n">p10</span><span class="p">,</span>
-        <span class="n">cmax</span><span class="o">=</span><span class="n">p90</span><span class="p">,</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">],</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span><span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span><span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span><span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span><span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
+        <span class="n">cmin</span><span class="o">=</span><span class="n">p10</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">p90</span><span class="p">,</span>
         <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span>
-            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span>
-            <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-            <span class="nb">len</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-            <span class="n">tickangle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span>
-                <span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-                <span class="nb">round</span><span class="p">((</span><span class="n">p10</span> <span class="o">+</span> <span class="n">p90</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-                <span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-            <span class="p">]</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂ per ton&quot;</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">((</span><span class="n">p10</span><span class="o">+</span><span class="n">p90</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
         <span class="p">)</span>
     <span class="p">),</span>
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Uitstoot per ton&quot;</span>
 <span class="p">)</span>
 
-<span class="c1"># Visualisatie samenstellen</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">choropleth</span><span class="p">,</span> <span class="n">scatter</span><span class="p">])</span>
+<span class="c1"># 7) Layout and annotations</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">([</span><span class="n">choropleth</span><span class="p">,</span> <span class="n">scatter</span><span class="p">])</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)&quot;</span><span class="p">,</span>
     <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">),</span>
     <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">projection_type</span><span class="o">=</span><span class="s1">&#39;equirectangular&#39;</span><span class="p">,</span>
-        <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;equirectangular&quot;</span><span class="p">,</span> <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
         <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="p">),</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span>
-    <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
-    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
     <span class="n">annotations</span><span class="o">=</span><span class="p">[</span>
-        <span class="c1"># Titel boven de kleurenschaal</span>
+      <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie&quot;</span><span class="p">,</span>
+        <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+        <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+      <span class="p">),</span>
+      <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="p">(</span>
+          <span class="s2">&quot;Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen&lt;br&gt;&quot;</span>
+          <span class="s2">&quot;zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen&lt;br&gt;&quot;</span>
+          <span class="s2">&quot;(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),&lt;br&gt;&quot;</span>
+          <span class="s2">&quot;om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen.&quot;</span>
+        <span class="p">),</span>
+        <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.36</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+        <span class="n">align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># 8) Render</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ─────────────────────────────────────────────────────────────────────────────</span>
+<span class="c1"># Cell 2: load, process, and draw the figure</span>
+<span class="c1"># ─────────────────────────────────────────────────────────────────────────────</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="c1"># 1) Load raw data from data1/</span>
+<span class="n">emissies</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2) Aggregate to per‐country numbers</span>
+<span class="n">em_land</span> <span class="o">=</span> <span class="n">emissies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">em_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span>
+
+<span class="n">pr_land</span> <span class="o">=</span> <span class="n">productie</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">pr_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span>
+<span class="n">pr_land</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr_land</span><span class="p">[</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
+
+<span class="c1"># 3) Merge and compute per‐ton emissions</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">em_land</span><span class="p">,</span> <span class="n">pr_land</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span>
+
+<span class="c1"># 4) Attach EPI score</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5) Filter out tiny producers</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)]</span>
+
+<span class="c1"># 6) Build the two layers</span>
+<span class="n">p10</span><span class="p">,</span> <span class="n">p90</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+
+<span class="n">choropleth</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">],</span>
+    <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+    <span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">zmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI Score&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mf">1.02</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">],</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span> <span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span> <span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span> <span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span> <span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
+        <span class="n">cmin</span><span class="o">=</span><span class="n">p10</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="n">p90</span><span class="p">,</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂ per ton&quot;</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=-</span><span class="mf">0.18</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">((</span><span class="n">p10</span><span class="o">+</span><span class="n">p90</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span><span class="mi">3</span><span class="p">)],</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Uitstoot per ton&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># 7) Compose final layout</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">([</span><span class="n">choropleth</span><span class="p">,</span> <span class="n">scatter</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)&quot;</span><span class="p">,</span>
+    <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">16</span><span class="p">),</span>
+    <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;equirectangular&quot;</span><span class="p">,</span> <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+    <span class="n">annotations</span><span class="o">=</span><span class="p">[</span>
         <span class="nb">dict</span><span class="p">(</span>
             <span class="n">text</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie&quot;</span><span class="p">,</span>
-            <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">xref</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span>
-            <span class="n">yref</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span>
-            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span>
-            <span class="n">xanchor</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
-            <span class="n">yanchor</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
+            <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
             <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
         <span class="p">),</span>
-        <span class="c1"># Toelichting onderaan</span>
         <span class="nb">dict</span><span class="p">(</span>
             <span class="n">text</span><span class="o">=</span><span class="p">(</span>
                 <span class="s2">&quot;Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen&lt;br&gt;&quot;</span>
@@ -522,31 +612,463 @@ document.write(`
                 <span class="s2">&quot;(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),&lt;br&gt;&quot;</span>
                 <span class="s2">&quot;om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen.&quot;</span>
             <span class="p">),</span>
-            <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">xref</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span>
-            <span class="n">yref</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">,</span>
-            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=-</span><span class="mf">0.36</span><span class="p">,</span>
-            <span class="n">xanchor</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
-            <span class="n">yanchor</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span>
-            <span class="n">align</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
-            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+            <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.36</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+            <span class="n">align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
+<span class="c1"># 8) Show &amp; export</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;../iframe_figures&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="c1"># write out a static PNG via Kaleido:</span>
+<span class="c1"># write a high-res PNG for embedding</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;../iframe_figures&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span>
-    <span class="s1">&#39;../iframe_figures/persp1_arg1.png&#39;</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">,</span>
-    <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span>
-    <span class="n">scale</span><span class="o">=</span><span class="mi">2</span>
+    <span class="s2">&quot;../iframe_figures/persp1_arg1.png&quot;</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># 1) Load raw data from data1/</span>
+<span class="ne">----&gt; </span><span class="mi">8</span> <span class="n">emissies</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1026,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1013</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1014</span>     <span class="n">dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1015</span>     <span class="n">delimiter</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1022</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1023</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1024</span> <span class="n">kwds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds_defaults</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1026</span> <span class="k">return</span> <span class="n">_read</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:620,</span> in <span class="ni">_read</span><span class="nt">(filepath_or_buffer, kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">617</span> <span class="n">_validate_names</span><span class="p">(</span><span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">619</span> <span class="c1"># Create the parser.</span>
+<span class="ne">--&gt; </span><span class="mi">620</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">TextFileReader</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">622</span> <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">or</span> <span class="n">iterator</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">623</span>     <span class="k">return</span> <span class="n">parser</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1620,</span> in <span class="ni">TextFileReader.__init__</span><span class="nt">(self, f, engine, **kwds)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1617</span>     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1619</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">IOHandles</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">-&gt; </span><span class="mi">1620</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_engine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1880,</span> in <span class="ni">TextFileReader._make_engine</span><span class="nt">(self, f, engine)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1878</span>     <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1879</span>         <span class="n">mode</span> <span class="o">+=</span> <span class="s2">&quot;b&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1880</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1881</span>     <span class="n">f</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1882</span>     <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1883</span>     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1884</span>     <span class="n">compression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1885</span>     <span class="n">memory_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_map&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1886</span>     <span class="n">is_text</span><span class="o">=</span><span class="n">is_text</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1887</span>     <span class="n">errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1888</span>     <span class="n">storage_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1889</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1890</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1891</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/common.py:873,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">868</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">869</span>     <span class="c1"># Check whether the filename is to be opened in binary mode.</span>
+<span class="g g-Whitespace">    </span><span class="mi">870</span>     <span class="c1"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
+<span class="g g-Whitespace">    </span><span class="mi">871</span>     <span class="k">if</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">872</span>         <span class="c1"># Encoding</span>
+<span class="ne">--&gt; </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">876</span>             <span class="n">encoding</span><span class="o">=</span><span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">877</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
+<span class="g g-Whitespace">    </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../data1/FAOSTAT_landbouw_emissies_2022.csv&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># move up from notebooks/ into your repo root</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">&quot;..&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cwd =&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;contains:&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cwd = /Users
+contains: [&#39;carmenvanderlans&#39;, &#39;.localized&#39;, &#39;Shared&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1) cd into your repo root so &quot;data1/…&quot; resolves correctly</span>
+<span class="o">%</span><span class="k">cd</span> ~/Information-Vis
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="c1"># 2) Load your data (from the root of the repo)</span>
+<span class="n">emissies</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3) Compute emissions per land &amp; per ton</span>
+<span class="n">em_l</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">emissies</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Area&quot;</span><span class="p">:</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">})</span>
+<span class="p">)</span>
+<span class="n">pr_l</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">productie</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span>
+    <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Area&quot;</span><span class="p">:</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">})</span>
+<span class="p">)</span>
+<span class="n">pr_l</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr_l</span><span class="p">[</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">em_l</span><span class="p">,</span> <span class="n">pr_l</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span>
+
+<span class="c1"># 4) join EPI</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span><span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5) filter out tiny producers</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">5000</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">50</span><span class="p">)]</span>
+
+<span class="c1"># 6) define p10/p90 of your emissions‐per‐ton for the dot colors</span>
+<span class="n">p10</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.10</span><span class="p">)</span>
+<span class="n">p90</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.90</span><span class="p">)</span>
+
+<span class="c1"># 7) Build two traces, each assigned to its own coloraxis</span>
+<span class="n">choropleth</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">],</span>
+    <span class="n">coloraxis</span><span class="o">=</span><span class="s2">&quot;coloraxis1&quot;</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;EPI Score&quot;</span>
+<span class="p">)</span>
+
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scattergeo</span><span class="p">(</span>
+    <span class="n">locations</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">text</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">],</span>
+    <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">],</span>
+        <span class="n">cmin</span><span class="o">=</span><span class="n">p10</span><span class="p">,</span>
+        <span class="n">cmax</span><span class="o">=</span><span class="n">p90</span><span class="p">,</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span><span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span><span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span><span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span><span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
+        <span class="n">coloraxis</span><span class="o">=</span><span class="s2">&quot;coloraxis2&quot;</span>
+    <span class="p">),</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;CO₂ per ton&quot;</span>
+<span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">([</span><span class="n">choropleth</span><span class="p">,</span> <span class="n">scatter</span><span class="p">])</span>
+
+<span class="c1"># 8) layout: two coloraxes and positioning</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie &amp; milieubeleid (EPI) 2022&quot;</span><span class="p">,</span>
+    <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;equirectangular&quot;</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">coloraxis1</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+        <span class="n">cmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">cmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI Score&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;middle&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">1.02</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">coloraxis2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂ per ton&quot;</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                      <span class="nb">round</span><span class="p">((</span><span class="n">p10</span><span class="o">+</span><span class="n">p90</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                      <span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+    <span class="n">annotations</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">text</span><span class="o">=</span><span class="p">(</span>
+          <span class="s2">&quot;Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie&lt;br&gt;&quot;</span>
+          <span class="s2">&quot;en relateert dit aan het milieubeleid van landen (EPI-score).&lt;br&gt;&quot;</span>
+          <span class="s2">&quot;Alleen landen met &gt;5.000 kt productie en &gt;50 kt uitstoot.&quot;</span>
+        <span class="p">),</span>
+        <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.27</span><span class="p">,</span>
+        <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+        <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+        <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">),</span>
+    <span class="p">)]</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/carmenvanderlans/Information-Vis
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+<span class="c1"># 1) Load data from your repo root</span>
+<span class="n">emissies</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2) Compute per-country emissions per tonne</span>
+<span class="n">em</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">emissies</span>
+      <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+      <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">productie</span>
+      <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+      <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Production_kt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">Production_ton</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">em</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Emissions_kt</span> <span class="o">/</span> <span class="n">df</span><span class="o">.</span><span class="n">Production_kt</span>
+
+<span class="c1"># 3) Merge in EPI and filter</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span><span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">final</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Production_kt&gt;5000 and Emissions_kt&gt;50&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># 4) Percentiles for CO₂ colourbar</span>
+<span class="n">p10</span><span class="p">,</span> <span class="n">p90</span> <span class="o">=</span> <span class="n">final</span><span class="o">.</span><span class="n">Emissions_per_ton</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.9</span><span class="p">])</span>
+
+<span class="c1"># 5) Build the green EPI choropleth</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
+    <span class="n">final</span><span class="p">,</span>
+    <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+    <span class="n">range_color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># assign its coloraxis</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">coloraxis</span><span class="o">=</span><span class="s2">&quot;coloraxis&quot;</span><span class="p">)</span>
+
+<span class="c1"># 6) Build the red-orange CO₂ bubbles</span>
+<span class="n">bub</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_geo</span><span class="p">(</span>
+    <span class="n">final</span><span class="p">,</span>
+    <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span><span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span><span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span><span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span><span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
+    <span class="n">range_color</span><span class="o">=</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="n">p90</span><span class="p">),</span>
+    <span class="n">size_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># point them at a second coloraxis</span>
+<span class="n">bub</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_coloraxis</span><span class="o">=</span><span class="s2">&quot;coloraxis2&quot;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_traces</span><span class="p">(</span><span class="n">bub</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># 7) Layout: two colourbars, one right, one bottom</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;equirectangular&quot;</span><span class="p">,</span>
+        <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">coloraxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI-score&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">coloraxis2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton&quot;</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span>
+            <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="nb">round</span><span class="p">((</span><span class="n">p10</span><span class="o">+</span><span class="n">p90</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># 8) Exact annotation underneath</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">(</span>
+    <span class="n">text</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen&lt;br&gt;&quot;</span>
+        <span class="s2">&quot;zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen&lt;br&gt;&quot;</span>
+        <span class="s2">&quot;(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),&lt;br&gt;&quot;</span>
+        <span class="s2">&quot;om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+<span class="c1"># 1) Load data from your repo root</span>
+<span class="n">emissies</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_emissies_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
+<span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2) Compute per-country emissions per tonne</span>
+<span class="n">em</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">emissies</span>
+      <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+      <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">productie</span>
+      <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+      <span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Production_kt</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">Production_ton</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">em</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Emissions_kt</span> <span class="o">/</span> <span class="n">df</span><span class="o">.</span><span class="n">Production_kt</span>
+
+<span class="c1"># 3) Merge in EPI and filter</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span><span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">final</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Production_kt&gt;5000 and Emissions_kt&gt;50&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># 4) Percentiles for CO₂ colourbar</span>
+<span class="n">p10</span><span class="p">,</span> <span class="n">p90</span> <span class="o">=</span> <span class="n">final</span><span class="o">.</span><span class="n">Emissions_per_ton</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.9</span><span class="p">])</span>
+
+<span class="c1"># 5) Build the green EPI choropleth</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">choropleth</span><span class="p">(</span>
+    <span class="n">final</span><span class="p">,</span>
+    <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+    <span class="n">range_color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># assign its coloraxis</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">coloraxis</span><span class="o">=</span><span class="s2">&quot;coloraxis&quot;</span><span class="p">)</span>
+
+<span class="c1"># 6) Build the red-orange CO₂ bubbles</span>
+<span class="n">bub</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_geo</span><span class="p">(</span>
+    <span class="n">final</span><span class="p">,</span>
+    <span class="n">locations</span><span class="o">=</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span>
+    <span class="n">locationmode</span><span class="o">=</span><span class="s2">&quot;country names&quot;</span><span class="p">,</span>
+    <span class="n">size</span><span class="o">=</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">,</span>
+    <span class="n">color_continuous_scale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#ffffcc&quot;</span><span class="p">,</span><span class="s2">&quot;#ffcc66&quot;</span><span class="p">,</span><span class="s2">&quot;#ff9933&quot;</span><span class="p">,</span><span class="s2">&quot;#cc3300&quot;</span><span class="p">,</span><span class="s2">&quot;#660000&quot;</span><span class="p">],</span>
+    <span class="n">range_color</span><span class="o">=</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="n">p90</span><span class="p">),</span>
+    <span class="n">size_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># point them at a second coloraxis</span>
+<span class="n">bub</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">marker_coloraxis</span><span class="o">=</span><span class="s2">&quot;coloraxis2&quot;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_traces</span><span class="p">(</span><span class="n">bub</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># 7) Layout: two colourbars, one right, one bottom</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">geo</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">showframe</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">showcoastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;equirectangular&quot;</span><span class="p">,</span>
+        <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
+        <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">coloraxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;EPI-score&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">len</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">coloraxis2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton&quot;</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span>
+            <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">p10</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="nb">round</span><span class="p">((</span><span class="n">p10</span><span class="o">+</span><span class="n">p90</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="nb">round</span><span class="p">(</span><span class="n">p90</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># 8) Exact annotation underneath</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_annotation</span><span class="p">(</span>
+    <span class="n">text</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen&lt;br&gt;&quot;</span>
+        <span class="s2">&quot;zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen&lt;br&gt;&quot;</span>
+        <span class="s2">&quot;(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),&lt;br&gt;&quot;</span>
+        <span class="s2">&quot;om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen.&quot;</span>
+    <span class="p">),</span>
+    <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.30</span><span class="p">,</span>
+    <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+    <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -705,6 +1227,78 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../data1/CO2.csv&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">landnaam_vertaling</span> <span class="o">=</span> <span class="p">{</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="s1">&#39;Australia&#39;</span><span class="p">:</span> <span class="s1">&#39;Australië&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="s1">&#39;China&#39;</span><span class="p">:</span> <span class="s1">&#39;China&#39;</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span>     <span class="s1">&#39;Republic of Korea&#39;</span><span class="p">:</span> <span class="s1">&#39;Zuid-Korea&#39;</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span> <span class="p">}</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Land_NL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Mapped_Country&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">landnaam_vertaling</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1026,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1013</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1014</span>     <span class="n">dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1015</span>     <span class="n">delimiter</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1022</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1023</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1024</span> <span class="n">kwds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds_defaults</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1026</span> <span class="k">return</span> <span class="n">_read</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:620,</span> in <span class="ni">_read</span><span class="nt">(filepath_or_buffer, kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">617</span> <span class="n">_validate_names</span><span class="p">(</span><span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">619</span> <span class="c1"># Create the parser.</span>
+<span class="ne">--&gt; </span><span class="mi">620</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">TextFileReader</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">622</span> <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">or</span> <span class="n">iterator</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">623</span>     <span class="k">return</span> <span class="n">parser</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1620,</span> in <span class="ni">TextFileReader.__init__</span><span class="nt">(self, f, engine, **kwds)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1617</span>     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1619</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">IOHandles</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">-&gt; </span><span class="mi">1620</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_engine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1880,</span> in <span class="ni">TextFileReader._make_engine</span><span class="nt">(self, f, engine)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1878</span>     <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1879</span>         <span class="n">mode</span> <span class="o">+=</span> <span class="s2">&quot;b&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1880</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1881</span>     <span class="n">f</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1882</span>     <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1883</span>     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1884</span>     <span class="n">compression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1885</span>     <span class="n">memory_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_map&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1886</span>     <span class="n">is_text</span><span class="o">=</span><span class="n">is_text</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1887</span>     <span class="n">errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1888</span>     <span class="n">storage_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1889</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1890</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1891</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
+
+<span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/io/common.py:873,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">868</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">869</span>     <span class="c1"># Check whether the filename is to be opened in binary mode.</span>
+<span class="g g-Whitespace">    </span><span class="mi">870</span>     <span class="c1"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
+<span class="g g-Whitespace">    </span><span class="mi">871</span>     <span class="k">if</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">872</span>         <span class="c1"># Encoding</span>
+<span class="ne">--&gt; </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">876</span>             <span class="n">encoding</span><span class="o">=</span><span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">877</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
+<span class="g g-Whitespace">    </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../data1/CO2.csv&#39;
+</pre></div>
+</div>
 </div>
 </div>
 <span style="font-size: 60%;">
@@ -768,20 +1362,20 @@ De duurzaamheid van subsidies lijkt dus een relevante factor in het klimaatbelei
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="notebooks.html"
+       href="../dataset-preprocessing.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Content with notebooks</p>
+        <p class="prev-next-title">Dataset and preprocessing</p>
       </div>
     </a>
     <a class="right-next"
-       href="../reflectie.html"
+       href="data_story_persp3.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Reflectie</p>
+        <p class="prev-next-title">De invloed van klimaat en geografie op voedselproductie</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
