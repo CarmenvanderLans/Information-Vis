@@ -6,6 +6,6 @@ root: intro
 chapters:
 - file: dataset-preprocessing
 - file: notebooks/notebooks
-- file: notebooks/data_story_p1_arg1
+- file: notebooks/data_story_persp1
 - file: reflectie
 - file: werkverdeling
