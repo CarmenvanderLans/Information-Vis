@@ -1,37 +1,38 @@
 # Introductie
 ## CO₂-uitstoot van de landbouwsector
 
-Landbouw is van essentieel belang voor de mens. Het voorziet ons van voedsel, grondstoffen en werkgelegenheid. Tegelijkertijd ligt de landbouwsector steeds vaker onder een vergrootglas, denk aan de actuele discussies rond boeren in Nederland. Dat is niet zonder reden. De landbouwsector is namelijk verantwoordelijk voor een groot deel van de wereldwijde CO₂-uitstoot (Food and Agriculture Organization, 2020).
+Landbouw is onmisbaar: zij voorziet de wereldbevolking van voedsel, grondstoffen en werkgelegenheid. Toch draagt de sector naar schatting ongeveer een kwart bij aan de antropogene broeikasgasuitstoot (Food and Agriculture Organization, 2020)..
 
-Duurzamere landbouw is daarom erg belangrijk om deze CO₂-uitstoot te verlagen. Sommige landen doen het op dat vlak beter dan andere, waardoor wij ons afvroegen: waarom stoten sommige landen meer uit dan andere? De verschillen in uitstoot zijn niet alleen te verklaren door de schaal van de productie. Ook beleidskeuzes, economische omstandigheden en geografische factoren spelen een rol.
+Een duurzamere landbouw is dus essentieel om de klimaatdoelstellingen te halen. Interessant is dat sommige landen hun uitstoot veel sterker weten te beperken dan andere. Die verschillen laten zich niet enkel verklaren door de omvang van de landbouwproductie; ook beleidskeuzes, economische omstandigheden en geografische factoren spelen een rol. In dit dataverhaal onderzoeken we waarom de CO₂‑uitstoot van de landbouwsector zo uiteenloopt en welke factoren daarbij het zwaarst wegen.
 
-In dit dataverhaal gaan we de factoren die de verschillen in CO₂-uitstoot van de landbouwsector tussen landen onderzoeken en proberen te verklaren. We benaderen dit vanuit drie perspectieven:
-
+We benaderen dit vraagstuk vanuit drie complementaire perspectieven:
 
 
 ## Perspectief 1  
-*Verschillen in milieubeleid leiden tot verschillen in de CO₂-uitstoot van de landbouwsector.*
+Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot.
 
-- **Argument 1:**  
-  Landen met streng milieubeleid en hogere EPI-scores hebben doorgaans een lagere CO₂-uitstoot per geproduceerde eenheid landbouwproduct.
-- **Argument 2:**  
-  Landen die duurzaamheid belonen via subsidies stoten minder CO₂ uit.
+- Argument 1: 
+  Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie.
+- Argument 2: 
+  Landen die duurzaamheid belonen via subsidies, stoten relatief minder CO₂ uit binnen hun landbouwsector.
 
 
 ## Perspectief 2  
-*Economische welvaart en productiviteit beïnvloeden CO₂-uitstoot.*
+Economische welvaart en productiviteit beïnvloeden CO₂-uitstoot.
 
-- **Argument:**  
-  Rijkere landen investeren vaker in efficiënte, emissiearme technologieën. Tegelijkertijd kan hogere productie ook tot hogere totale CO₂-uitstoot leiden.
+- Argument 1:  
+  Rijke landen produceren efficiënter en stoten minder CO₂ uit per ton voedsel.
+- Argument 2: 
+  Hogere productie-efficiëntie verlaagt uitstoot ongeacht de productieschaal. 
 
 
 ## Perspectief 3  
-*Geografische ligging beïnvloedt CO₂-uitstoot van de landbouwsector.*
+De invloed van klimaat en geografie op voedselproductie
 
-- **Argument:**  
-  Klimaat, bodemkwaliteit en beschikbare landbouwgrond spelen een rol. Tropische landen stoten bijvoorbeeld vaak meer CO₂ uit per hectare vanwege andere gewassen en productiemethoden.
-
-
+- Argument 1:  
+  Internationale handelsstromen beïnvloeden nationale uitstoot
+- Argument 2: 
+  De geografische ligging van een land (en de bijbehorende klimaatzones) beïnvloedt welke gewassen en dieren men produceert — en dat heeft directe impact op de landbouwgerelateerde CO₂-uitstoot per capita. 
 
 In de volgende secties introduceren we de gebruikte datasets en presenteren we visualisaties die elk perspectief onderbouwen. Het doel is om inzicht te krijgen in hoe verschillende factoren samenhangen met landbouwemissies en welke lessen hieruit te trekken zijn voor duurzamer beleid.
 
