@@ -19,8 +19,8 @@ html:
   use_repository_button: true
   use_issues_button: true
   favicon: logo.png
-html:
-  # turn *off* the per-page mini-TOC entirely
+  collapse_input: true
+
 toc:
   includehidden: false
     # this setting hides the local “contents” box on each page
