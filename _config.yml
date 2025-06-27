@@ -16,9 +16,7 @@ html:
   use_repository_button: true
   use_issues_button: true
   favicon: logo.png
-  collapse_input: true      # álle cellen standaard dichtklappen
-  # (optioneel kun je hier toggle‐knoplabels aanpassen met code_prompt_show / hide)
-
+ 
 # Myst-NB globale hide/remove instellingen
 mystnb:
   remove_code_source: true  # verwijder alle code‐inputs volledig
