@@ -1,11 +1,11 @@
 # Introductie
 ## CO₂-uitstoot van de landbouwsector
 
-Landbouw is onmisbaar: zij voorziet de wereldbevolking van voedsel, grondstoffen en werkgelegenheid. Toch draagt de sector naar schatting ongeveer een kwart bij aan de antropogene broeikasgasuitstoot (Food and Agriculture Organization, 2020).
+Landbouw is onmisbaar: zij voorziet de wereldbevolking van voedsel, grondstoffen en werkgelegenheid. Toch draagt de sector naar schatting ongeveer een kwart bij aan de antropogene broeikasgasuitstoot (IPCC, 2019). Een duurzamere landbouw is dus essentieel om de klimaatdoelstellingen te halen.
 
-Een duurzamere landbouw is dus essentieel om de klimaatdoelstellingen te halen. Interessant is dat sommige landen hun uitstoot veel sterker weten te beperken dan andere. Die verschillen laten zich niet enkel verklaren door de omvang van de landbouwproductie; ook beleidskeuzes, economische omstandigheden en geografische factoren spelen een rol. In dit dataverhaal onderzoeken we waarom de CO₂‑uitstoot van de landbouwsector zo uiteenloopt en welke factoren daarbij het zwaarst wegen.
+Interessant is dat sommige landen hun uitstoot veel sterker weten te beperken dan andere. Die verschillen laten zich niet enkel verklaren door de omvang van de landbouwproductie; ook beleidskeuzes, economische omstandigheden en geografische factoren spelen een rol (FAO, 2021; Poore & Nemecek, 2018).
 
-We benaderen dit vraagstuk vanuit drie complementaire perspectieven:
+In dit dataverhaal onderzoeken we waarom de CO₂‑uitstoot van de landbouwsector zo uiteenloopt en welke factoren daarbij het zwaarst wegen.
 
 
 ## Perspectief 1  
