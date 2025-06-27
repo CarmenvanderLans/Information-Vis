@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Dataset and preprocessing &#8212; CO₂-uitstoot van de landbouwsector</title>
+    <title>Dataset en preprocessing &#8212; CO₂-uitstoot van de landbouwsector</title>
   
   
   
@@ -180,11 +180,10 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataset and preprocessing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataset en preprocessing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="perspectief1.html">Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="perspectief2.html">Economische welvaart en productiviteit beïnvloeden uitstoot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="perspectief3.html">De invloed van klimaat en geografie op voedselproductie</a></li>
-<li class="toctree-l1"><a class="reference internal" href="perspectief3_geen_java.html">De invloed van klimaat en geografie op voedselproductie</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reflectie.html">Reflectie</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="werkverdeling.html">Werkverdeling</a></li>
@@ -326,7 +325,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Dataset and preprocessing</h1>
+    <h1>Dataset en preprocessing</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -337,10 +336,63 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#doel-van-de-preprocessing">Doel van de preprocessing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stappen-in-het-verwerkingsproces">Stappen in het verwerkingsproces</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#opbouw-van-de-visualisatie">Opbouw van de visualisatie</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-strenger-milieubeleid-resulteert-in-minder-co2-per-ton-landbouwproduct">Argument 1 – Strenger milieubeleid resulteert in minder CO₂ per ton landbouwproduct</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stelling">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gebruikte-datasets">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#doel-van-de-preprocessing">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stappen-in-het-verwerkingsproces">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opbouw-van-de-visualisatie">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#resultaten">Resultaten</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-2-duurzaam-gerichte-subsidies-verlagen-landbouw-co2">Argument 2 – Duurzaam gerichte subsidies verlagen landbouw-CO₂</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Resultaten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-2-economische-welvaart-en-productiviteit-beinvloeden-uitstoot">Perspectief 2: Economische welvaart en productiviteit beïnvloeden uitstoot</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-rijkdom-leidt-niet-automatisch-tot-schonere-productie">Argument 1 – Rijkdom leidt niet automatisch tot schonere productie</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Resultaten</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-2-hogere-land-efficientie-gaat-vaak-samen-met-lagere-co2-per-ton">Argument 2 – Hogere land-efficiëntie gaat vaak samen met lagere CO₂ per ton</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Resultaten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-3-de-invloed-van-klimaat-geografie-op-landbouw-co2">Perspectief 3: De invloed van klimaat &amp; geografie op landbouw-CO₂</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-exportgerichtheid-verhoogt-uitstoot-per-inwoner">Argument 1 – Exportgerichtheid verhoogt uitstoot per inwoner</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Resultaten</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-2-klimaatzone-bepaalt-productmix-en-emissieprofiel">Argument 2 – Klimaatzone bepaalt productmix en emissieprofiel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gebruikte-datasets-2022">Gebruikte datasets (2022)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Resultaten</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -354,58 +406,281 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="dataset-and-preprocessing">
-<h1>Dataset and preprocessing<a class="headerlink" href="#dataset-and-preprocessing" title="Link to this heading">#</a></h1>
-<p>Aangezien ons thema erg breed is en we elk standpunt en argument grondig willen onderbouwen, hebben we voor ieder perspectief aparte datasets geselecteerd. Hieronder beschrijven we per perspectief en argument uitgebreid welke datasets we gekozen hebben en hoe we deze hebben voorbewerkt.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="dataset-en-preprocessing">
+<h1>Dataset en preprocessing<a class="headerlink" href="#dataset-en-preprocessing" title="Link to this heading">#</a></h1>
+<p>Aangezien ons thema erg breed is en we elk standpunt en argument grondig willen onderbouwen, hebben we voor ieder perspectief aparte datasets geselecteerd. Hieronder beschrijven we per perspectief en per argument consequent welke datasets we gekozen hebben, hoe we deze hebben voorbewerkt en hoe de uiteindelijke visualisaties zijn opgebouwd.</p>
+<hr class="docutils" />
 <section id="perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">
 <h2>Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot<a class="headerlink" href="#perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot" title="Link to this heading">#</a></h2>
-<section id="argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">
-<h3>Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie<a class="headerlink" href="#argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie" title="Link to this heading">#</a></h3>
-<p>Voor deze visualisatie hebben we drie datasets uit 2022 gecombineerd die samen een goed beeld geven van landbouw en milieubeleid wereldwijd:</p>
-<p>FAOSTAT Landbouwemissies: toont per land hoeveel broeikasgassen er in de landbouwsector worden uitgestoten.</p>
-<p>FAOSTAT Landbouwproductie – geeft inzicht in hoeveel landbouwproducten landen produceren (in tonnen).</p>
-<p>Environmental Performance Index (EPI) – een internationale score die laat zien hoe goed landen het doen op het gebied van milieubeleid.</p>
+<section id="argument-1-strenger-milieubeleid-resulteert-in-minder-co2-per-ton-landbouwproduct">
+<h3>Argument 1 – Strenger milieubeleid resulteert in minder CO₂ per ton landbouwproduct<a class="headerlink" href="#argument-1-strenger-milieubeleid-resulteert-in-minder-co2-per-ton-landbouwproduct" title="Link to this heading">#</a></h3>
+<section id="stelling">
+<h4>Stelling<a class="headerlink" href="#stelling" title="Link to this heading">#</a></h4>
+<p>Landen met een hoger Environmental Performance Index-cijfer (EPI) stoten gemiddeld minder CO₂-equivalenten uit per geproduceerde ton landbouwproduct.</p>
+</section>
+<section id="gebruikte-datasets">
+<h4>Gebruikte datasets<a class="headerlink" href="#gebruikte-datasets" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>FAOSTAT – Landbouwemissies</strong></p></li>
+<li><p><strong>FAOSTAT – Landbouwproductie</strong></p></li>
+<li><p><strong>Environmental Performance Index (EPI)</strong></p></li>
+</ul>
 </section>
 <section id="doel-van-de-preprocessing">
-<h3>Doel van de preprocessing<a class="headerlink" href="#doel-van-de-preprocessing" title="Link to this heading">#</a></h3>
-<p>We wilden niet alleen kijken naar hoeveel CO₂ een land uitstoot, maar juist naar hoe duurzaam die uitstoot is in verhouding tot wat er geproduceerd wordt. Daarom focust deze visualisatie niet op de totale uitstoot, maar op de uitstoot per geproduceerde ton landbouwproduct. Zo zie je niet alleen wie veel produceert, maar vooral wie dat op een relatief schone of juist vervuilende manier doet. Dat maakt het mogelijk om landen van verschillende omvang op een eerlijke manier met elkaar te vergelijken.</p>
+<h4>Doel van de preprocessing<a class="headerlink" href="#doel-van-de-preprocessing" title="Link to this heading">#</a></h4>
+<p>Niet de absolute uitstoot is doorslaggevend, maar de efficiëntie ervan. Door uitstoot te delen door productievolume kunnen landen eerlijker vergeleken worden, ongeacht schaal.</p>
 </section>
 <section id="stappen-in-het-verwerkingsproces">
-<h3>Stappen in het verwerkingsproces<a class="headerlink" href="#stappen-in-het-verwerkingsproces" title="Link to this heading">#</a></h3>
+<h4>Stappen in het verwerkingsproces<a class="headerlink" href="#stappen-in-het-verwerkingsproces" title="Link to this heading">#</a></h4>
 <ol class="arabic simple">
-<li><p><strong>Aggregatie per land</strong><br />
-Zowel de emissie- als productiedata bevatten waarden per landbouwproduct of subcategorie. In de eerste stap zijn deze gegevens samengevoegd tot een totaal per land:</p>
+<li><p><strong>Aggregatie per land</strong></p>
 <ul class="simple">
-<li><p>Emissies zijn opgeteld in <em>kiloton CO₂-equivalenten</em>.</p></li>
-<li><p>Productie is omgerekend van <em>ton</em> naar <em>kiloton</em>, zodat beide datasets dezelfde schaal gebruiken.</p></li>
+<li><p>Emissies opgeteld in <em>kiloton CO₂-eq.</em></p></li>
+<li><p>Productie omgerekend van <em>ton</em> naar <em>kiloton</em>.</p></li>
 </ul>
 </li>
-<li><p><strong>Berekening van uitstoot per ton landbouwproductie</strong><br />
-Na aggregatie is per land de verhouding berekend tussen totale uitstoot en totale productie:
+<li><p><strong>Berekening van uitstoot per ton</strong><br />
 [
 \text{uitstoot per ton} = \frac{\text{totale uitstoot (kt)}}{\text{totale productie (kt)}}
-]
-Deze indicator biedt een genuanceerder beeld dan absolute cijfers: een groot landbouwland met hoge uitstoot én hoge productie kan per ton relatief schoon zijn.</p></li>
-<li><p><strong>Koppeling aan de EPI-score</strong><br />
-De gecombineerde dataset is vervolgens verrijkt met de EPI-score per land. Deze score geeft inzicht in hoe goed een land scoort op aspecten als milieubeleid, luchtkwaliteit, biodiversiteit en klimaatadaptatie. Zo kan de relatie tussen <strong>duurzaam beleid en efficiëntie</strong> van landbouwemissies worden geanalyseerd.</p></li>
+]</p></li>
+<li><p><strong>Koppeling aan EPI-score</strong><br />
+EPI-scores toegevoegd om milieubeleid te relateren aan emissie-efficiëntie.</p></li>
 <li><p><strong>Filtering van landen</strong><br />
-Om vertekening in de resultaten te voorkomen, zijn alleen landen meegenomen die:</p>
+Alleen landen met ≥ 5 000 kt productie én ≥ 50 kt uitstoot zijn behouden.</p></li>
+</ol>
+</section>
+<section id="opbouw-van-de-visualisatie">
+<h4>Opbouw van de visualisatie<a class="headerlink" href="#opbouw-van-de-visualisatie" title="Link to this heading">#</a></h4>
+<p>Een interactieve kaart met twee lagen:</p>
 <ul class="simple">
-<li><p>minstens <strong>5.000 kiloton aan landbouwproductie</strong> rapporteren, én</p></li>
-<li><p>minstens <strong>50 kiloton aan landbouwuitstoot</strong> hebben.
-Zo worden kleine landbouwlanden zoals Qatar uitgesloten, omdat die bij relatief kleine absolute cijfers tot extreem vertekende ratios kunnen leiden.</p></li>
+<li><p><strong>Achtergrondkleur (groentinten):</strong> EPI-score.</p></li>
+<li><p><strong>Stippen (percentielen 10–90 %):</strong> CO₂ per ton landbouwproduct.</p></li>
+</ul>
+</section>
+<section id="resultaten">
+<h4>Resultaten<a class="headerlink" href="#resultaten" title="Link to this heading">#</a></h4>
+<p>Landen met hoge EPI-scores vertonen doorgaans een lagere uitstoot per ton, wat suggereert dat streng milieubeleid effectief is.</p>
+</section>
+</section>
+<section id="argument-2-duurzaam-gerichte-subsidies-verlagen-landbouw-co2">
+<h3>Argument 2 – Duurzaam gerichte subsidies verlagen landbouw-CO₂<a class="headerlink" href="#argument-2-duurzaam-gerichte-subsidies-verlagen-landbouw-co2" title="Link to this heading">#</a></h3>
+<section id="id1">
+<h4>Stelling<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p>Landen die een groter deel van hun landbouwsubsidies aan duurzame doelen toewijzen, stoten relatief minder CO₂ uit binnen de landbouwsector.</p>
+</section>
+<section id="id2">
+<h4>Gebruikte datasets<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>FAOSTAT – Landbouwemissies</strong></p></li>
+<li><p><strong>OECD – Landbouwsubsidies (GSSE/TSE/PSE)</strong></p></li>
+</ul>
+</section>
+<section id="id3">
+<h4>Doel van de preprocessing<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<p>Onderzoeken of de verhouding (\text{GSSE}/\text{TSE}) (duurzaamheidsratio) samenhangt met de landbouwemissietrend.</p>
+</section>
+<section id="id4">
+<h4>Stappen in het verwerkingsproces<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Selectie relevante observaties</strong></p>
+<ul class="simple">
+<li><p>In FAOSTAT: <em>“Emissions (CO₂eq) (AR5)”</em></p></li>
+<li><p>In OECD: GSSE, TSE en PSE.</p></li>
+</ul>
+</li>
+<li><p><strong>Landnaam-mapping</strong><br />
+Handmatige harmonisatie, bijv. <em>“China (People’s Republic of)” → “China”</em>.</p></li>
+<li><p><strong>Aggregatie per land-jaar</strong><br />
+Subsidie- en emissiewaarden geaggregeerd en samengevoegd (inner join).</p></li>
+<li><p><strong>Opschonen &amp; export</strong></p>
+<ul class="simple">
+<li><p>Rijen met ontbrekende TSE verwijderd.</p></li>
+<li><p>Resultaat opgeslagen als <em>CO2.csv</em> met kolommen <code class="docutils literal notranslate"><span class="pre">Country</span></code>, <code class="docutils literal notranslate"><span class="pre">Year</span></code>, <code class="docutils literal notranslate"><span class="pre">CO2_Emission</span></code>, <code class="docutils literal notranslate"><span class="pre">GSSE</span></code>, <code class="docutils literal notranslate"><span class="pre">TSE</span></code>, <code class="docutils literal notranslate"><span class="pre">PSE</span></code>.</p></li>
 </ul>
 </li>
 </ol>
 </section>
-<section id="opbouw-van-de-visualisatie">
-<h3>Opbouw van de visualisatie<a class="headerlink" href="#opbouw-van-de-visualisatie" title="Link to this heading">#</a></h3>
-<p>De uiteindelijke kaart bevat twee informatielagen:</p>
+<section id="id5">
+<h4>Opbouw van de visualisatie<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<p>Een gecombineerde grafiek:</p>
 <ul class="simple">
-<li><p>De <strong>achtergrondkleur</strong> (in groentinten) laat de EPI-score van elk land zien: hoe groener, hoe beter het milieubeleid.</p></li>
-<li><p>De <strong>gekleurde stippen</strong> geven de CO₂-uitstoot per ton landbouwproductie aan. Deze kleuren zijn gebaseerd op percentielen (10%–90%) om uitschieters minder dominant te maken.</p></li>
+<li><p><strong>Blauwe staven:</strong> duurzaamheidsratio (GSSE/TSE).</p></li>
+<li><p><strong>Oranje lijn:</strong> totale landbouw-CO₂ (kt) per jaar.</p></li>
 </ul>
-<p>Door deze twee dimensies te combineren, wordt zichtbaar welke landen erin slagen om sterk milieubeleid te combineren met een efficiënte landbouwsector — en welke landen daar juist in achterblijven.</p>
+</section>
+<section id="id6">
+<h4>Resultaten<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<p>In de meeste landen correleert een stijgende duurzaamheidsratio met een daling of vertraging van de CO₂-groei; enkele afwijkingen bestaan.</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="perspectief-2-economische-welvaart-en-productiviteit-beinvloeden-uitstoot">
+<h2>Perspectief 2: Economische welvaart en productiviteit beïnvloeden uitstoot<a class="headerlink" href="#perspectief-2-economische-welvaart-en-productiviteit-beinvloeden-uitstoot" title="Link to this heading">#</a></h2>
+<section id="argument-1-rijkdom-leidt-niet-automatisch-tot-schonere-productie">
+<h3>Argument 1 – Rijkdom leidt niet automatisch tot schonere productie<a class="headerlink" href="#argument-1-rijkdom-leidt-niet-automatisch-tot-schonere-productie" title="Link to this heading">#</a></h3>
+<section id="id7">
+<h4>Stelling<a class="headerlink" href="#id7" title="Link to this heading">#</a></h4>
+<p>Een hoger bbp per hoofd correleert niet noodzakelijk met een lagere CO₂-uitstoot per ton voedselproductie.</p>
+</section>
+<section id="id8">
+<h4>Gebruikte datasets<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>FAOSTAT – Landbouwemissies</strong></p></li>
+<li><p><strong>FAOSTAT – Landbouwproductie</strong></p></li>
+<li><p><strong>World Bank – GDP per capita</strong></p></li>
+<li><p><strong>Our World in Data – Population &amp; Total CO₂</strong></p></li>
+</ul>
+</section>
+<section id="id9">
+<h4>Doel van de preprocessing<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<p>Twee kernindicatoren bepalen: (1) CO₂ per ton voedsel en (2) productie per hectare, gekoppeld aan welvaartsdata.</p>
+</section>
+<section id="id10">
+<h4>Stappen in het verwerkingsproces<a class="headerlink" href="#id10" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Aggregatie per land</strong> (emissies, productie, areaal).</p></li>
+<li><p><strong>Berekening indicatoren</strong><br />
+[
+\text{CO₂ per ton} = \frac{\text{CO₂ (kt)} \times 1000}{\text{Productie (ton)}}
+]<br />
+[
+\text{Efficiëntie} = \frac{\text{Productie (ton)}}{\text{Area (ha)}}
+]</p></li>
+<li><p><strong>Koppeling GDP &amp; bevolking</strong></p></li>
+<li><p><strong>Filtering op complete data</strong> (o.a. India, Japan, Brazilië, Nigeria, Zuid-Afrika).</p></li>
+<li><p><strong>Normalisatie (min-max) voor radarplot</strong>.</p></li>
+</ol>
+</section>
+<section id="id11">
+<h4>Opbouw van de visualisatie<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Radarplot:</strong> vergelijkt zes landen op CO₂ per ton, GDP per capita, productievolume en bevolkingsgrootte.</p></li>
+</ul>
+</section>
+<section id="id12">
+<h4>Resultaten<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<p>Welvarende landen tonen uiteenlopende emissie-efficiënties; Japan en Nederland scoren hoog op GDP maar niet per se op uitstoot per ton.</p>
+</section>
+</section>
+<section id="argument-2-hogere-land-efficientie-gaat-vaak-samen-met-lagere-co2-per-ton">
+<h3>Argument 2 – Hogere land-efficiëntie gaat vaak samen met lagere CO₂ per ton<a class="headerlink" href="#argument-2-hogere-land-efficientie-gaat-vaak-samen-met-lagere-co2-per-ton" title="Link to this heading">#</a></h3>
+<section id="id13">
+<h4>Stelling<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<p>Landbouwsystemen met een hogere opbrengst per hectare behalen doorgaans een lagere uitstoot per ton geproduceerd voedsel.</p>
+<p><em>(Datasets en preprocessing identiek aan Argument 1.)</em></p>
+</section>
+<section id="id14">
+<h4>Opbouw van de visualisatie<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>X-as:</strong> efficiëntie (ton/ha).</p></li>
+<li><p><strong>Y-as:</strong> CO₂ per ton.</p></li>
+<li><p><strong>Puntkleur:</strong> inkomensgroep; <strong>puntgrootte:</strong> productievolume.</p></li>
+</ul>
+</section>
+<section id="id15">
+<h4>Resultaten<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<p>Landen met intensieve teelt (bijv. Nederland) combineren hoge efficiëntie met lage uitstoot per ton, terwijl extensieve systemen (Nigeria) het omgekeerde profiel laten zien.</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="perspectief-3-de-invloed-van-klimaat-geografie-op-landbouw-co2">
+<h2>Perspectief 3: De invloed van klimaat &amp; geografie op landbouw-CO₂<a class="headerlink" href="#perspectief-3-de-invloed-van-klimaat-geografie-op-landbouw-co2" title="Link to this heading">#</a></h2>
+<section id="argument-1-exportgerichtheid-verhoogt-uitstoot-per-inwoner">
+<h3>Argument 1 – Exportgerichtheid verhoogt uitstoot per inwoner<a class="headerlink" href="#argument-1-exportgerichtheid-verhoogt-uitstoot-per-inwoner" title="Link to this heading">#</a></h3>
+<section id="id16">
+<h4>Stelling<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<p>Emissies voor exportproductie worden volledig in het producerende land geboekt, wat de landbouw-CO₂ per inwoner doet stijgen.</p>
+</section>
+<section id="id17">
+<h4>Gebruikte datasets<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>FAOSTAT – Detailed Trade Matrix</strong></p></li>
+<li><p><strong>FAOSTAT – Landbouwemissies</strong></p></li>
+<li><p><strong>World Bank – Population</strong></p></li>
+</ul>
+</section>
+<section id="id18">
+<h4>Doel van de preprocessing<a class="headerlink" href="#id18" title="Link to this heading">#</a></h4>
+<p>Emissies koppelen aan exportvolume en normaliseren per inwoner en per geëxporteerde ton.</p>
+</section>
+<section id="id19">
+<h4>Stappen in het verwerkingsproces<a class="headerlink" href="#id19" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Aggregatie per land-jaar</strong> (export, emissies).</p></li>
+<li><p><strong>Normalisatie</strong></p>
+<ul class="simple">
+<li><p>Export / Population</p></li>
+<li><p>Emissions / Population</p></li>
+<li><p>Emissions / Export ton</p></li>
+</ul>
+</li>
+<li><p><strong>Datacleaning</strong> (lege waarden behouden als hiaten).</p></li>
+</ol>
+</section>
+<section id="id20">
+<h4>Opbouw van de visualisatie<a class="headerlink" href="#id20" title="Link to this heading">#</a></h4>
+<p>Interactieve lijngrafiek met een dropdown voor vijf metrieke lijnen: export per inwoner, uitstoot per inwoner, exportvolume, totale uitstoot, uitstoot per exportton.</p>
+</section>
+<section id="id21">
+<h4>Resultaten<a class="headerlink" href="#id21" title="Link to this heading">#</a></h4>
+<p>Patroon is duidelijk voor Argentinië (meer export → hogere uitstoot per inwoner), maar wijkt af in Brazilië en de VS wegens ontbossing resp. bevolkingsgrootte.</p>
+</section>
+</section>
+<section id="argument-2-klimaatzone-bepaalt-productmix-en-emissieprofiel">
+<h3>Argument 2 – Klimaatzone bepaalt productmix en emissieprofiel<a class="headerlink" href="#argument-2-klimaatzone-bepaalt-productmix-en-emissieprofiel" title="Link to this heading">#</a></h3>
+<section id="id22">
+<h4>Stelling<a class="headerlink" href="#id22" title="Link to this heading">#</a></h4>
+<p>Het lokale klimaat dicteert de rendabele productmix en daarmee het karakteristieke uitstootpatroon.</p>
+</section>
+<section id="gebruikte-datasets-2022">
+<h4>Gebruikte datasets (2022)<a class="headerlink" href="#gebruikte-datasets-2022" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>FAOSTAT – Production</strong></p></li>
+<li><p><strong>FAOSTAT – Landbouwemissies</strong></p></li>
+<li><p><strong>World Bank – Population</strong></p></li>
+<li><p><strong>combined_2022.csv</strong> (klimaatgegevens: temperatuur &amp; neerslag)</p></li>
+</ul>
+</section>
+<section id="id23">
+<h4>Doel van de preprocessing<a class="headerlink" href="#id23" title="Link to this heading">#</a></h4>
+<p>Emissies en productmix koppelen aan klimaatgegevens om te tonen hoe klimaat de productkeuze en uitstoot beïnvloedt.</p>
+</section>
+<section id="id24">
+<h4>Stappen in het verwerkingsproces<a class="headerlink" href="#id24" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Selectie van landen</strong> (Brazilië, Nederland, VS, Kenia).</p></li>
+<li><p><strong>Mapping naar 10 hoofdcategorieën</strong> van ~150 producten.</p></li>
+<li><p><strong>Berekening indicatoren</strong></p>
+<ul class="simple">
+<li><p>Productie per categorie</p></li>
+<li><p>Totale emissies</p></li>
+<li><p>Emissions / Capita</p></li>
+</ul>
+</li>
+<li><p><strong>Harmonisatie klimaatdata</strong> (maandtelling, vertaling, aggregatie).</p></li>
+</ol>
+</section>
+<section id="id25">
+<h4>Opbouw van de visualisatie<a class="headerlink" href="#id25" title="Link to this heading">#</a></h4>
+<p>Een figuur met drie rijen:</p>
+<ol class="arabic simple">
+<li><p>Balkgrafiek CO₂ per inwoner</p></li>
+<li><p>Polar-diagram productmix</p></li>
+<li><p>Dubbelas: neerslag (bars) &amp; temperatuur (lijn)<br />
+Dropdown voor landkeuze.</p></li>
+</ol>
+</section>
+<section id="id26">
+<h4>Resultaten<a class="headerlink" href="#id26" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Nederland:</strong> kassen &amp; melkvee → hoge uitstoot per inwoner.</p></li>
+<li><p><strong>Kenia:</strong> bloemen &amp; thee → zeer lage uitstoot.</p></li>
+<li><p><strong>Brazilië:</strong> soja &amp; suikerriet → gemiddelde uitstoot.</p></li>
+<li><p><strong>Verenigde Staten:</strong> graan &amp; vee; schaalvoordelen drukken uitstoot.</p></li>
+</ul>
+</section>
 </section>
 </section>
 </section>
@@ -475,10 +750,63 @@ Zo worden kleine landbouwlanden zoals Qatar uitgesloten, omdat die bij relatief 
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#doel-van-de-preprocessing">Doel van de preprocessing</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stappen-in-het-verwerkingsproces">Stappen in het verwerkingsproces</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#opbouw-van-de-visualisatie">Opbouw van de visualisatie</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-strenger-milieubeleid-resulteert-in-minder-co2-per-ton-landbouwproduct">Argument 1 – Strenger milieubeleid resulteert in minder CO₂ per ton landbouwproduct</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stelling">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gebruikte-datasets">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#doel-van-de-preprocessing">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stappen-in-het-verwerkingsproces">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#opbouw-van-de-visualisatie">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#resultaten">Resultaten</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-2-duurzaam-gerichte-subsidies-verlagen-landbouw-co2">Argument 2 – Duurzaam gerichte subsidies verlagen landbouw-CO₂</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Resultaten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-2-economische-welvaart-en-productiviteit-beinvloeden-uitstoot">Perspectief 2: Economische welvaart en productiviteit beïnvloeden uitstoot</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-rijkdom-leidt-niet-automatisch-tot-schonere-productie">Argument 1 – Rijkdom leidt niet automatisch tot schonere productie</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Resultaten</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-2-hogere-land-efficientie-gaat-vaak-samen-met-lagere-co2-per-ton">Argument 2 – Hogere land-efficiëntie gaat vaak samen met lagere CO₂ per ton</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Resultaten</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-3-de-invloed-van-klimaat-geografie-op-landbouw-co2">Perspectief 3: De invloed van klimaat &amp; geografie op landbouw-CO₂</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-exportgerichtheid-verhoogt-uitstoot-per-inwoner">Argument 1 – Exportgerichtheid verhoogt uitstoot per inwoner</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Gebruikte datasets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Resultaten</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-2-klimaatzone-bepaalt-productmix-en-emissieprofiel">Argument 2 – Klimaatzone bepaalt productmix en emissieprofiel</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Stelling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gebruikte-datasets-2022">Gebruikte datasets (2022)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Doel van de preprocessing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Opbouw van de visualisatie</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Resultaten</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
