@@ -1,13 +1,11 @@
-# Boek-instellingen
+# Boek‐instellingen
 title: CO₂-uitstoot van de landbouwsector
 author: Carmen van der Lans, Jette Walvis, Sarah Schaefers, Nur Shidai
 logo: logo.png
 
-# Forceer heruitvoering van alle notebooks bij elke build
 execute:
   execute_notebooks: force
 
-# Repository-info voor “Edit on GitHub”
 repository:
   url: https://github.com/CarmenvanderLans/Information-Vis
   path_to_book: .
@@ -16,22 +14,21 @@ repository:
 # HTML-themaopties + Plotly.js clientside library
 html:
   use_repository_button: true
-  use_issues_button:     true
-  favicon:               logo.png
+  use_issues_button: true
+  favicon: logo.png
+  collapse_input: true      # álle cellen standaard dichtklappen
+  # (optioneel kun je hier toggle‐knoplabels aanpassen met code_prompt_show / hide)
 
-  # déze regel klapt al je code-cellen standaard in:
-  collapse_input: true
-
+# Myst-NB globale hide/remove instellingen
+mystnb:
+  remove_code_source: true  # verwijder alle code‐inputs volledig
 
 toc:
   includehidden: false
-    # this setting hides the local “contents” box on each page
   show: false
 
-  # laad Plotly JS vanuit CDN (nodig om interactieve grafieken in te sluiten)
-  js_files:
-    - https://cdn.plot.ly/plotly-latest.min.js
+js_files:
+  - https://cdn.plot.ly/plotly-latest.min.js
 
-  # zorg dat de map iframe_figures/ wél meegekopieerd wordt naar _build/html/
-  extra_path:
-    - iframe_figures
+extra_path:
+  - iframe_figures
