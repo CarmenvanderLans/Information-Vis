@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Werkverdeling &#8212; CO₂-uitstoot van de landbouwsector</title>
+    <title>Dataset and preprocessing &#8212; CO₂-uitstoot van de landbouwsector</title>
   
   
   
@@ -57,11 +57,12 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'werkverdeling';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dataset-preprocessing';</script>
     <link rel="icon" href="_static/logo.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Reflectie" href="reflectie.html" />
+    <link rel="next" title="Content with notebooks" href="notebooks/notebooks.html" />
+    <link rel="prev" title="Introductie" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -180,12 +181,12 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="dataset-preprocessing.html">Dataset and preprocessing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dataset and preprocessing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/notebooks.html">Content with notebooks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks/data_story_p1_arg1.html">Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reflectie.html">Reflectie</a></li>
 
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Werkverdeling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="werkverdeling.html">Werkverdeling</a></li>
 </ul>
 
     </div>
@@ -257,7 +258,7 @@
       
       
       
-      <li><a href="https://github.com/CarmenvanderLans/Information-Vis/issues/new?title=Issue%20on%20page%20%2Fwerkverdeling.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/CarmenvanderLans/Information-Vis/issues/new?title=Issue%20on%20page%20%2Fdataset-preprocessing.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -287,7 +288,7 @@
       
       
       
-      <li><a href="_sources/werkverdeling.md" target="_blank"
+      <li><a href="_sources/dataset-preprocessing.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -371,7 +372,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Werkverdeling</h1>
+    <h1>Dataset and preprocessing</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -381,10 +382,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jette">Jette</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#carmen">Carmen</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sarah">Sarah</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nur">Nur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#doel-van-de-preprocessing">Doel van de preprocessing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stappen-in-het-verwerkingsproces">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#opbouw-van-de-visualisatie">Opbouw van de visualisatie</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -396,26 +400,59 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="werkverdeling">
-<h1>Werkverdeling<a class="headerlink" href="#werkverdeling" title="Link to this heading">#</a></h1>
-<p>Ons project heeft een vrij chaotisch begin gekend. In de eerste fase hebben we een conceptversie ingeleverd die uiteindelijk een totaal andere invalshoek bleek te hebben dan wat er van ons verwacht werd. Dat kwam vooral door gebrekkige communicatie binnen de groep. We werkten aan verschillende ideeën door elkaar, waardoor het verhaal weinig focus had en niet goed aansloot bij de opdracht. Pas na de feedback van de docent werd duidelijk dat we het hele project opnieuw moesten structureren.</p>
-<p>Na dat feedbackmoment hebben we duidelijke afspraken gemaakt en het onderwerp aangescherpt: we kozen ervoor om ons volledig te richten op de CO₂-uitstoot van de landbouwsector en wat de verschillen tussen landen verklaart. Vanaf dat moment is het werk verdeeld over drie perspectieven: beleid, economie en geografie. We hebben nieuwe datasets verzameld, de oude opgeschoond of vervangen, en een helder verhaal opgebouwd dat ondersteund wordt door passende visualisaties.</p>
-<p>Daarnaast moest ook de technische presentatie opnieuw opgebouwd worden, inclusief de structuur op GitHub, de opmaak van de notebooks en het koppelen van de verschillende onderdelen. Tijdens dit proces hebben we voortdurend op elkaars werk gereageerd en bijgestuurd, zodat het eindresultaat een samenhangend en logisch dataverhaal is geworden. De peer feedback hebben we in de eindfase gebruikt om de inhoud en de visuals verder te verbeteren.</p>
-<section id="jette">
-<h2>Jette<a class="headerlink" href="#jette" title="Link to this heading">#</a></h2>
-<p>Jette was verantwoordelijk voor het volledige <strong>Perspectief 3</strong>, inclusief het voorbereiden van de dataset, het maken van de visualisaties en het schrijven van de bijbehorende tekst. Daarnaast heeft Jette een grote bijdrage geleverd aan de opbouw van het overkoepelende verhaal en gezorgd voor samenhang tussen de verschillende perspectieven. Ook speelde zij een belangrijke rol bij de kwaliteitscontrole door het eindresultaat te controleren en de conclusies te verfijnen.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="dataset-and-preprocessing">
+<h1>Dataset and preprocessing<a class="headerlink" href="#dataset-and-preprocessing" title="Link to this heading">#</a></h1>
+<p>Aangezien ons thema erg breed is en we elk standpunt en argument grondig willen onderbouwen, hebben we voor ieder perspectief aparte datasets geselecteerd. Hieronder beschrijven we per perspectief en argument uitgebreid welke datasets we gekozen hebben en hoe we deze hebben voorbewerkt.</p>
+<section id="perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">
+<h2>Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot<a class="headerlink" href="#perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot" title="Link to this heading">#</a></h2>
+<section id="argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">
+<h3>Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie<a class="headerlink" href="#argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie" title="Link to this heading">#</a></h3>
+<p>Voor deze visualisatie hebben we drie datasets uit 2022 gecombineerd die samen een goed beeld geven van landbouw en milieubeleid wereldwijd:</p>
+<p>FAOSTAT Landbouwemissies: toont per land hoeveel broeikasgassen er in de landbouwsector worden uitgestoten.</p>
+<p>FAOSTAT Landbouwproductie – geeft inzicht in hoeveel landbouwproducten landen produceren (in tonnen).</p>
+<p>Environmental Performance Index (EPI) – een internationale score die laat zien hoe goed landen het doen op het gebied van milieubeleid.</p>
 </section>
-<section id="carmen">
-<h2>Carmen<a class="headerlink" href="#carmen" title="Link to this heading">#</a></h2>
-<p>Carmen was primair verantwoordelijk voor de <strong>GitHub-opzet</strong>, inclusief de mappenstructuur, de opmaak en de technische presentatie van het project. Daarnaast werkte ze aan een van de argumenten binnen <strong>Perspectief 1</strong>, waarbij zij zowel de data-analyse als de geschreven toelichting verzorgde. Carmen ondersteunde de groep bovendien bij algemene technische problemen en verbeterde de leesbaarheid van het dataverhaal.</p>
+<section id="doel-van-de-preprocessing">
+<h3>Doel van de preprocessing<a class="headerlink" href="#doel-van-de-preprocessing" title="Link to this heading">#</a></h3>
+<p>We wilden niet alleen kijken naar hoeveel CO₂ een land uitstoot, maar juist naar hoe duurzaam die uitstoot is in verhouding tot wat er geproduceerd wordt. Daarom focust deze visualisatie niet op de totale uitstoot, maar op de uitstoot per geproduceerde ton landbouwproduct. Zo zie je niet alleen wie veel produceert, maar vooral wie dat op een relatief schone of juist vervuilende manier doet. Dat maakt het mogelijk om landen van verschillende omvang op een eerlijke manier met elkaar te vergelijken.</p>
 </section>
-<section id="sarah">
-<h2>Sarah<a class="headerlink" href="#sarah" title="Link to this heading">#</a></h2>
-<p>Sarah richtte zich op <strong>Perspectief 2</strong>, waarvoor zij de dataset opschoonde, de visualisaties maakte en de begeleidende analyse schreef. Zij was verantwoordelijk voor het helder en effectief verwerken van de economische invalshoek binnen het dataverhaal.</p>
+<section id="stappen-in-het-verwerkingsproces">
+<h3>Stappen in het verwerkingsproces<a class="headerlink" href="#stappen-in-het-verwerkingsproces" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Aggregatie per land</strong><br />
+Zowel de emissie- als productiedata bevatten waarden per landbouwproduct of subcategorie. In de eerste stap zijn deze gegevens samengevoegd tot een totaal per land:</p>
+<ul class="simple">
+<li><p>Emissies zijn opgeteld in <em>kiloton CO₂-equivalenten</em>.</p></li>
+<li><p>Productie is omgerekend van <em>ton</em> naar <em>kiloton</em>, zodat beide datasets dezelfde schaal gebruiken.</p></li>
+</ul>
+</li>
+<li><p><strong>Berekening van uitstoot per ton landbouwproductie</strong><br />
+Na aggregatie is per land de verhouding berekend tussen totale uitstoot en totale productie:
+[
+\text{uitstoot per ton} = \frac{\text{totale uitstoot (kt)}}{\text{totale productie (kt)}}
+]
+Deze indicator biedt een genuanceerder beeld dan absolute cijfers: een groot landbouwland met hoge uitstoot én hoge productie kan per ton relatief schoon zijn.</p></li>
+<li><p><strong>Koppeling aan de EPI-score</strong><br />
+De gecombineerde dataset is vervolgens verrijkt met de EPI-score per land. Deze score geeft inzicht in hoe goed een land scoort op aspecten als milieubeleid, luchtkwaliteit, biodiversiteit en klimaatadaptatie. Zo kan de relatie tussen <strong>duurzaam beleid en efficiëntie</strong> van landbouwemissies worden geanalyseerd.</p></li>
+<li><p><strong>Filtering van landen</strong><br />
+Om vertekening in de resultaten te voorkomen, zijn alleen landen meegenomen die:</p>
+<ul class="simple">
+<li><p>minstens <strong>5.000 kiloton aan landbouwproductie</strong> rapporteren, én</p></li>
+<li><p>minstens <strong>50 kiloton aan landbouwuitstoot</strong> hebben.
+Zo worden kleine landbouwlanden zoals Qatar uitgesloten, omdat die bij relatief kleine absolute cijfers tot extreem vertekende ratios kunnen leiden.</p></li>
+</ul>
+</li>
+</ol>
 </section>
-<section id="nur">
-<h2>Nur<a class="headerlink" href="#nur" title="Link to this heading">#</a></h2>
-<p>Nur schreef de <strong>introductie</strong> en leverde een bijdrage aan een van de argumenten binnen <strong>Perspectief 1</strong>. In de beginfase heeft zij daarnaast meerdere relevante datasets gezocht. Door veranderingen in de richting van het project en gebrekkige afstemming binnen de groep, zijn deze datasets uiteindelijk niet gebruikt. Desondanks vormde haar werk aan de introductie een belangrijke basis voor het kaderen van de hoofdvraag en het schetsen van de context van het dataverhaal.</p>
+<section id="opbouw-van-de-visualisatie">
+<h3>Opbouw van de visualisatie<a class="headerlink" href="#opbouw-van-de-visualisatie" title="Link to this heading">#</a></h3>
+<p>De uiteindelijke kaart bevat twee informatielagen:</p>
+<ul class="simple">
+<li><p>De <strong>achtergrondkleur</strong> (in groentinten) laat de EPI-score van elk land zien: hoe groener, hoe beter het milieubeleid.</p></li>
+<li><p>De <strong>gekleurde stippen</strong> geven de CO₂-uitstoot per ton landbouwproductie aan. Deze kleuren zijn gebaseerd op percentielen (10%–90%) om uitschieters minder dominant te maken.</p></li>
+</ul>
+<p>Door deze twee dimensies te combineren, wordt zichtbaar welke landen erin slagen om sterk milieubeleid te combineren met een efficiënte landbouwsector — en welke landen daar juist in achterblijven.</p>
+</section>
 </section>
 </section>
 
@@ -450,13 +487,22 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="reflectie.html"
+       href="intro.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Reflectie</p>
+        <p class="prev-next-title">Introductie</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="notebooks/notebooks.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Content with notebooks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -474,10 +520,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jette">Jette</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#carmen">Carmen</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sarah">Sarah</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nur">Nur</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perspectief-1-verschillen-in-milieubeleid-verklaren-verschillen-in-landbouwuitstoot">Perspectief 1: Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#argument-1-landen-met-strenger-milieubeleid-stoten-gemiddeld-minder-co2-uit-per-ton-landbouwproductie">Argument 1: Landen met strenger milieubeleid stoten gemiddeld minder CO₂ uit per ton landbouwproductie</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#doel-van-de-preprocessing">Doel van de preprocessing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stappen-in-het-verwerkingsproces">Stappen in het verwerkingsproces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#opbouw-van-de-visualisatie">Opbouw van de visualisatie</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
