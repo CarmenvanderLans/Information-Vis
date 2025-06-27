@@ -19,258 +19,227 @@ Traceback (most recent call last):
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import plotly.io as pio
-pio.renderers.default = "vscode"
+from IPython.display import HTML, display
 
-# ───────────────────────────────────────────────────────────────
-# 1. DATA INLEZEN
-# ───────────────────────────────────────────────────────────────
-emissions_animal = pd.read_csv("datasets/FAOSTAT_data_emissions_animal_6-23-2025.csv")
-emissions_crops  = pd.read_csv("datasets/FAOSTAT_data_emissions_crops_6-23-2025-2.csv")
-export_matrix    = pd.read_csv("datasets/matrix_export.csv")
-population       = pd.read_csv("datasets/Population_E_All_Data_(Normalized).csv")
+# Renderer instellen voor inline weergave
+pio.renderers.default = "notebook"  # of 'jupyterlab'
 
-# ───────────────────────────────────────────────────────────────
-# 2. GEGEVENS OPSCHONEN & SAMENVOEGEN
-# ───────────────────────────────────────────────────────────────
-population_clean = (
-    population[
-        (population["Element"] == "Total Population - Both sexes") &
-        (population["Area"].isin([
-            "Argentina", "Brazil", "India", "Thailand",
-            "Netherlands", "United States of America"
-        ]))
-    ][["Area", "Year", "Value"]]
-    .rename(columns={"Value": "Population (1000s)"})
-)
-population_clean["Year"] = population_clean["Year"].astype(int)
+# ==== MANUELE SPACING INSTELLEN ====
+row_heights        = [0.25, 0.45, 0.30]
+vertical_spacing   = 0.08
+subplot_title_pad  = 20
+top_margin         = 180
 
-animal = emissions_animal[
-    emissions_animal["Area"].isin([
-        "Argentina", "Brazil", "India", "Thailand",
-        "Netherlands", "United States of America"
-    ]) &
-    emissions_animal["Element"].str.contains("Emissions")
-]
-
-crops = emissions_crops[
-    emissions_crops["Area"].isin([
-        "Argentina", "Brazil", "India", "Thailand",
-        "Netherlands", "United States of America"
-    ]) &
-    emissions_crops["Element"].str.contains("Emissions")
-]
-
-emissions_all = pd.concat([animal, crops])
-emissions_all["Year"] = emissions_all["Year"].astype(int)
-emissions_all = (
-    emissions_all
-    .groupby(["Area", "Year"])["Value"]
-    .sum()
-    .reset_index()
-    .rename(columns={"Value": "Total Emissions (kt CO2eq)"})
-)
-
-export_volume = (
-    export_matrix[
-        (export_matrix["Element"] == "Export quantity") &
-        (export_matrix["Reporter Countries"].isin([
-            "Argentina", "Brazil", "India", "Thailand",
-            "Netherlands", "United States of America"
-        ]))
-    ][["Reporter Countries", "Year", "Value"]]
-    .groupby(["Reporter Countries", "Year"])
-    .sum()
-    .reset_index()
-    .rename(columns={
-        "Reporter Countries": "Area",
-        "Value": "Total Export Volume (tonnes)"
-    })
-)
-export_volume["Year"] = export_volume["Year"].astype(int)
-
-df = (
-    emissions_all
-    .merge(population_clean, on=["Area", "Year"], how="left")
-    .merge(export_volume,  on=["Area", "Year"], how="left")
-)
-df = df[df["Year"] >= 1985]
-
-df["Emissions per Capita (tonnes CO2eq)"] = (
-    df["Total Emissions (kt CO2eq)"] * 1_000
-) / (df["Population (1000s)"] * 1_000)
-df["Export per Capita (tonnes)"] = (
-    df["Total Export Volume (tonnes)"]
-) / (df["Population (1000s)"] * 1_000)
-df["Emissions per Export Tonne (kg CO2eq/tonne)"] = (
-    df["Total Emissions (kt CO2eq)"] * 1_000_000
-) / df["Total Export Volume (tonnes)"]
-
-metrics = {
-    "Total Emissions (kt CO2eq)":               "Total Emissions (kt CO2eq)",
-    "Emissions per Capita (tonnes CO2eq)":      "Emissions per Capita (tonnes CO2eq)",
-    "Total Export Volume (tonnes)":             "Total Export Volume (tonnes)",
-    "Export per Capita (tonnes)":               "Export per Capita (tonnes)",
-    "Emissions per Export Tonne (kg CO2eq/tonne)":
-        "Emissions per Export Tonne (kg CO2eq/tonne)"
+# ==== COLOUR PANEL ====
+colours = {
+    'background':        '#FFFFFF',
+    'font':              '#000000',
+    'grid':              '#444444',
+    'emissions_bar':     '#6094AA',
+    'emissions_outline': '#000000',
+    'production_bar':    "#65B1C5",
+    'polar_bg':          '#FFFFFF',
+    'precip_fill':       '#83CFE5',
+    'precip_outline':    '#000000',
+    'temp_line':         '#CA4A4A',
+    'temp_marker':       '#CA4A4A'
 }
 
-# ───────────────────────────────────────────────────────────────
-# 3. STIJLDEFINITIE – handmatig per land
-# ───────────────────────────────────────────────────────────────
-line_styles = {
-    "Argentina": {
-        "color": "#F79B9B",
-        "dash":  "solid",
-        "width": 3
-    },
-    "Brazil": {
-        "color": "#F7CB9B",
-        "dash":  "solid",
-        "width": 3
-    },
-    "India": {
-        "color": "#A1F79B",
-        "dash":  "solid",
-        "width": 3
-    },
-    "Thailand": {
-        "color": "#6CBEF5",
-        "dash":  "solid",
-        "width": 3
-    },
-    "Netherlands": {
-        "color": "#A39BF7",
-        "dash":  "solid",
-        "width": 3
-    },
-    "United States of America": {
-        "color": "#F1A1F7",
-        "dash":  "solid",
-        "width": 3
-    }
+# ==== NAME MAPPING & TRANSLATIONS ====
+name_map = {
+    'Netherlands (Kingdom of the)': 'Netherlands',
+    'United States of America':      'United States'
+}
+dutch_country_names = {
+    'Brazil': 'Brazilië',
+    'Netherlands': 'Nederland',
+    'United States': 'Verenigde Staten',
+    'Kenya': 'Kenia'
+}
+dutch_month_names = {
+    'Jan':'Jan','Feb':'Feb','Mar':'Maa','Apr':'Apr','May':'Mei','Jun':'Jun',
+    'Jul':'Jul','Aug':'Aug','Sep':'Sep','Oct':'Okt','Nov':'Nov','Dec':'Dec'
+}
+dutch_category_names = {
+    'Fruits':'Fruit','Vegetables':'Groenten','Grains & Cereals':'Granen en Ceralia',
+    'Oil Crops':'Oliegewassen','Livestock & Animal Products':'Vee en Dierlijke Producten',
+    'Sugar cane':'Suikerriet','Cotton':'Katoen','Rubber':'Rubber','Silk':'Zijde','Jute/Hemp':'Jute/Hennep'
 }
 
-# ───────────────────────────────────────────────────────────────
-# 4. FIGUUR MAKEN – met eigen stijlen
-# ───────────────────────────────────────────────────────────────
-fig = go.Figure()
+# ==== CATEGORY MAP ====
+category_map = {
+    'Apples':'Fruits','Bananas':'Fruits','Oranges':'Fruits','Pineapples':'Fruits',
+    'Mangoes, mangosteens, guavas':'Fruits','Papayas':'Fruits','Watermelons':'Fruits',
+    'Grapes':'Fruits','Lemons and limes':'Fruits','Tangerines, mandarins, clementines':'Fruits',
+    'Cantaloupes and other melons':'Fruits','Pears':'Fruits','Peaches and nectarines':'Fruits',
+    'Avocados':'Fruits','Strawberries':'Fruits','Plums and sloes':'Fruits','Cherries':'Fruits',
+    'Pomegranates':'Fruits','Pomelos and grapefruits':'Fruits','Figs':'Fruits','Persimmons':'Fruits',
+    'Currants':'Fruits','Sour cherries':'Fruits','Olives':'Fruits',
+    'Plantains and cooking bananas':'Fruits','Cranberries':'Fruits',
+    'Tomatoes':'Vegetables','Onions, dry':'Vegetables','Cabbages':'Vegetables',
+    'Carrots and turnips':'Vegetables','Lettuce and chicory':'Vegetables','Spinach':'Vegetables',
+    'Cauliflowers and broccoli':'Vegetables','Cucumbers and gherkins':'Vegetables',
+    'Pumpkins, squash and gourds':'Vegetables','Garlic':'Vegetables',
+    'Leeks, other alliaceous vegetables':'Vegetables','Mushrooms and truffles':'Vegetables',
+    'Eggplants (aubergines)':'Vegetables','Peas, green':'Vegetables',
+    'Artichokes':'Vegetables','Asparagus':'Vegetables',
+    'Wheat':'Grains & Cereals','Maize':'Grains & Cereals','Rice, paddy':'Grains & Cereals',
+    'Barley':'Grains & Cereals','Sorghum':'Grains & Cereals','Millet':'Grains & Cereals',
+    'Oats':'Grains & Cereals','Rye':'Grains & Cereals','Triticale':'Grains & Cereals',
+    'Quinoa':'Grains & Cereals','Canary seed':'Grains & Cereals','Cereals n.e.c.':'Grains & Cereals',
+    'Soybeans':'Oil Crops','Rapeseed':'Oil Crops','Sunflower seed':'Oil Crops','Oil palm fruit':'Oil Crops',
+    'Groundnuts, in shell':'Oil Crops','Sesame seed':'Oil Crops','Safflower seed':'Oil Crops',
+    'Mustard seed':'Oil Crops','Flaxseed':'Oil Crops','Hempseed':'Oil Crops','Linseed':'Oil Crops',
+    'Palm kernels':'Oil Crops','Castor oil seeds':'Oil Crops',
+    'Cattle':'Livestock & Animal Products','Buffalo':'Livestock & Animal Products','Sheep':'Livestock & Animal Products',
+    'Goats':'Livestock & Animal Products','Chickens':'Livestock & Animal Products','Ducks':'Livestock & Animal Products',
+    'Turkeys':'Livestock & Animal Products','Geese and guinea fowls':'Livestock & Animal Products',
+    'Pigeons, other birds':'Livestock & Animal Products','Rabbits and hares':'Livestock & Animal Products',
+    'Camels':'Livestock & Animal Products','Horses':'Livestock & Animal Products','Mules':'Livestock & Animal Products',
+    'Hen eggs, in shell':'Livestock & Animal Products','Raw milk of cattle':'Livestock & Animal Products',
+    'Raw milk of buffalo':'Livestock & Animal Products','Raw milk of sheep':'Livestock & Animal Products',
+    'Raw milk of goats':'Livestock & Animal Products','Honey':'Livestock & Animal Products',
+    'Livestock fat':'Livestock & Animal Products','Meat':'Livestock & Animal Products',
+    'Sugar cane':'Sugar cane',
+    'Cotton lint':'Cotton','Cottonseed':'Cotton',
+    'Rubber, natural':'Rubber','Natural rubber in primary forms':'Rubber',
+    'Silk-worm cocoons, reelable':'Silk','Raw silk (not thrown)':'Silk',
+    'Jute, raw or retted':'Jute/Hemp','True hemp, raw or retted':'Jute/Hemp',
+    'Ramie, raw or retted':'Jute/Hemp','Kenaf, and other textile bast fibres, raw or retted':'Jute/Hemp',
+    'Sisal, raw':'Jute/Hemp','Coir, raw':'Jute/Hemp','Kapok fibre, raw':'Jute/Hemp'
+}
 
-for metric_idx, (metric_name, col) in enumerate(metrics.items()):
-    for country in df["Area"].unique():
-        subset  = df[df["Area"] == country]
-        visible = (metric_idx == 0)
+# ==== 1) LOAD & PREP ====
+prod = pd.read_csv('datasets/FAOSTAT_production_arg3.csv')
+prod['Country'] = prod['Area'].replace(name_map)
+prod['Category'] = prod['Item'].map(category_map)
+prod_df = prod.query("Element=='Production' & Year==2022 & Unit=='t'").dropna(subset=['Category'])
+grouped_prod = prod_df.groupby(['Country','Category'])['Value'].sum().reset_index()
 
-        style   = line_styles.get(country, {})
-        fig.add_trace(
-            go.Scatter(
-                x=subset["Year"],
-                y=subset[col],
-                mode="lines",
-                name=country,
-                visible=visible,
-                legendgroup=country,
-                showlegend=True,
-                line=dict(
-                    color=style.get("color", None),
-                    dash=style.get("dash",  "solid"),
-                    width=style.get("width", 2)
-                )
-            )
-        )
+# ==== 2) EMISSIONS & POP ====
+em   = pd.read_csv('datasets/FAOSTAT_data_en_6-26-2025-6.csv')
+pop  = pd.read_csv('datasets/API_SP.POP.TOTL_DS2_en_csv_v2_124794.csv', skiprows=4)
+em['Area'] = em['Area'].replace(name_map)
+pop['Country Name'] = pop['Country Name'].replace(name_map)
+countries = ['Brazil','Netherlands','United States','Kenya']
+em2    = em.query("Year==2022 and Area in @countries")
+em_tot = em2.groupby('Area')['Value'].sum().reset_index().rename(columns={'Area':'Country','Value':'Total_Emissions'})
+pop2   = pop[['Country Name','2022']].rename(columns={'Country Name':'Country','2022':'Population'})
+merged_em = pd.merge(em_tot, pop2, on='Country')
+merged_em['Emissions_per_capita'] = merged_em['Total_Emissions'] / merged_em['Population']
 
-n_countries      = len(df["Area"].unique())
-dropdown_buttons = []
+# ==== 3) TEMP & PRECIP ====
+tp = pd.read_csv('datasets/combined_2022.csv')
+tp['name'] = tp['name'].replace({'United States of America':'United States'})
+tp = tp[tp['name'].isin(countries)]
+tp['Month']     = pd.to_datetime(tp['Month'], format='%Y-%m')
+tp['Month_str'] = tp['Month'].dt.strftime('%b').map(dutch_month_names)
+month_order     = tp.sort_values('Month')['Month_str'].unique()
+y_temp_min, y_temp_max = tp['Temperature'].min(), tp['Temperature'].max()
 
-for i, (metric_name, _) in enumerate(metrics.items()):
-    visibility = [False] * len(metrics) * n_countries
-    for j in range(n_countries):
-        visibility[i * n_countries + j] = True
-    dropdown_buttons.append(
-        dict(
-            label=metric_name,
-            method="update",
-            args=[
-                {"visible": visibility},
-                {"yaxis": {"title": metric_name}}
-            ]
-        )
-    )
+# ==== BUILD FIGURE ====
+fig = make_subplots(
+    rows=3, cols=1,
+    specs=[[{'type':'xy'}],[{'type':'polar'}],[{'type':'xy','secondary_y':True}]],
+    row_heights=row_heights,
+    vertical_spacing=vertical_spacing,
+    subplot_titles=("CO₂ per hoofd (2022)","Productie per categorie (2022)","Temp & neerslag (2022)")
+)
+
+categories       = sorted(grouped_prod['Category'].unique())
+dutch_categories = [dutch_category_names.get(c,c) for c in categories]
+angles           = np.linspace(0, 360, len(categories), endpoint=False)
+
+for i, country in enumerate(countries):
+    # Grafiek 1
+    val = merged_em.loc[merged_em['Country']==country,'Emissions_per_capita'].iat[0]
+    fig.add_trace(go.Bar(
+        x=[dutch_country_names[country]], y=[val],
+        marker=dict(color=colours['emissions_bar'], line=dict(color=colours['emissions_outline'], width=2)),
+        visible=(i==0)
+    ), row=1, col=1)
+    # Grafiek 2
+    dfp = grouped_prod.query("Country==@country").set_index('Category').reindex(categories).reset_index()
+    fig.add_trace(go.Barpolar(
+        r=dfp['Value'],
+        theta=[angles[categories.index(c)] for c in dfp['Category']],
+        width=[360/len(categories)*0.8]*len(categories),
+        marker_color=colours['production_bar'],
+        visible=(i==0)
+    ), row=2, col=1)
+    # Grafiek 3 – neerslag
+    dft = tp[tp['name']==country]
+    fig.add_trace(go.Bar(
+        x=dft['Month_str'], y=dft['Precipitation'],
+        marker=dict(color=colours['precip_fill'], line=dict(color=colours['precip_outline'], width=1)),
+        opacity=0.7, visible=(i==0)
+    ), row=3, col=1, secondary_y=True)
+    # Grafiek 3 – temperatuur
+    fig.add_trace(go.Scatter(
+        x=dft['Month_str'], y=dft['Temperature'],
+        mode='lines+markers', line=dict(color=colours['temp_line']), marker=dict(color=colours['temp_marker']),
+        visible=(i==0)
+    ), row=3, col=1, secondary_y=False)
+
+# Dropdown-buttons
+buttons = []
+for idx, country in enumerate(countries):
+    vis = [False]*len(fig.data)
+    for j in range(4):
+        vis[4*idx + j] = True
+    buttons.append(dict(label=dutch_country_names[country], method='update', args=[{'visible':vis},{}]))
 
 fig.update_layout(
-    updatemenus=[{
-        "buttons":       dropdown_buttons,
-        "direction":     "down",
-        "showactive":    True,
-        "x":             1.03,
-        "xanchor":       "left",
-        "y":             0.95,
-        "yanchor":       "top",
-        "pad":           {"r": 0, "t": 0},
-        "font":          {"size": 11},
-        "bgcolor":       "white"
-    }],
-    title="Agricultural Emissions & Exports (1985–2020)",
-    xaxis_title="Year",
-    yaxis_title="Total Emissions (kt CO2eq)",
-    legend_title="Country",
-    legend=dict(
-        x=1.03,
-        xanchor="left",
-        y=0.8,
-        yanchor="top"
-    ),
-    margin=dict(r=160, l=80, t=80, b=60),
-    height=600,
-    width=900
+    updatemenus=[dict(active=0, buttons=buttons,
+                      x=0.1, y=1.38, xanchor='left', yanchor='top',
+                      direction='down', pad=dict(l=10,r=10,t=10,b=10), font=dict(size=16))],
+    margin=dict(l=50,r=50,t=top_margin,b=50),
+    plot_bgcolor=colours['background'], paper_bgcolor=colours['background'],
+    font=dict(color=colours['font']), showlegend=False,
+    width=700, height=1350,
+    polar=dict(bgcolor=colours['polar_bg'])
 )
 
-# ───────────────────────────────────────────────────────────────
-# 5. INTERFACE NAAR HET NEDERLANDS
-# ───────────────────────────────────────────────────────────────
+# Annotations & axes styling
+fig.add_annotation(text="Alle indicatoren per land", xref="paper", yref="paper",
+                   x=0.5, y=1.2, showarrow=False, font=dict(size=16), align="center")
+for ann in fig.layout.annotations:
+    ann.yshift = -subplot_title_pad
 
-vertaling = {
-    "Total Emissions (kt CO2eq)":               "Totale uitstoot (kiloton CO₂-equ.)",
-    "Emissions per Capita (tonnes CO2eq)":      "Uitstoot per inwoner (ton CO₂-equ.)",
-    "Total Export Volume (tonnes)":             "Totaal export­volume (ton)",
-    "Export per Capita (tonnes)":               "Export per inwoner (ton)",
-    "Emissions per Export Tonne (kg CO2eq/tonne)":
-        "Uitstoot per ton export (kg CO₂-equ.)"
-}
+fig.update_yaxes(row=1, col=1, range=[0,2], dtick=0.5, showgrid=True, gridcolor=colours['grid'])
+fig.update_layout(polar=dict(radialaxis=dict(showgrid=True,gridcolor=colours['grid']),
+                             angularaxis=dict(showgrid=True, gridcolor=colours['grid'],
+                                              tickvals=angles, ticktext=dutch_categories)))
+fig.update_xaxes(row=3, col=1, type='category', categoryorder='array', categoryarray=month_order,
+                 showgrid=True, gridcolor=colours['grid'])
+fig.update_yaxes(row=3, col=1, secondary_y=False, range=[y_temp_min,y_temp_max], dtick=5,
+                 showgrid=True, gridcolor=colours['grid'])
+fig.update_yaxes(row=3, col=1, secondary_y=True, showgrid=False)
 
-for btn in fig.layout.updatemenus[0].buttons:
-    eng = btn.label
-    if eng in vertaling:
-        dut = vertaling[eng]
-        btn.label                     = dut
-        btn.args[1]["yaxis"]["title"] = dut
-
-fig.update_layout(
-    title="Landbouw­emissies en -export (1985–2020)",
-    xaxis_title="Jaar",
-    yaxis_title="Totale uitstoot (kt CO2-eq)",
-    legend_title="Land"
-)
-
-# ───────────────────────────────────────────────────────────────
-# 6. VISUALISATIE TONEN
-# ───────────────────────────────────────────────────────────────
-fig.show()
+# Genereer enkel de <div>+<script> en render inline
+html_snippet = fig.to_html(include_plotlyjs='cdn', full_html=False)
+display(HTML(html_snippet))
 
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Cell [0;32mIn[1], line 9[0m
-[1;32m      4[0m pio[38;5;241m.[39mrenderers[38;5;241m.[39mdefault [38;5;241m=[39m [38;5;124m"[39m[38;5;124mvscode[39m[38;5;124m"[39m
-[1;32m      6[0m [38;5;66;03m# ───────────────────────────────────────────────────────────────[39;00m
-[1;32m      7[0m [38;5;66;03m# 1. DATA INLEZEN[39;00m
-[1;32m      8[0m [38;5;66;03m# ───────────────────────────────────────────────────────────────[39;00m
-[0;32m----> 9[0m emissions_animal [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124mdatasets/FAOSTAT_data_emissions_animal_6-23-2025.csv[39m[38;5;124m"[39m)
-[1;32m     10[0m emissions_crops  [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124mdatasets/FAOSTAT_data_emissions_crops_6-23-2025-2.csv[39m[38;5;124m"[39m)
-[1;32m     11[0m export_matrix    [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124mdatasets/matrix_export.csv[39m[38;5;124m"[39m)
+Cell [0;32mIn[2], line 97[0m
+[1;32m     54[0m category_map [38;5;241m=[39m {
+[1;32m     55[0m     [38;5;124m'[39m[38;5;124mApples[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mBananas[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mOranges[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mPineapples[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,
+[1;32m     56[0m     [38;5;124m'[39m[38;5;124mMangoes, mangosteens, guavas[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mPapayas[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mWatermelons[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mFruits[39m[38;5;124m'[39m,
+[0;32m   (...)[0m
+[1;32m     93[0m     [38;5;124m'[39m[38;5;124mSisal, raw[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mJute/Hemp[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mCoir, raw[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mJute/Hemp[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mKapok fibre, raw[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mJute/Hemp[39m[38;5;124m'[39m
+[1;32m     94[0m }
+[1;32m     96[0m [38;5;66;03m# ==== 1) LOAD & PREP ====[39;00m
+[0;32m---> 97[0m prod [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m'[39m[38;5;124mdatasets/FAOSTAT_production_arg3.csv[39m[38;5;124m'[39m)
+[1;32m     98[0m prod[[38;5;124m'[39m[38;5;124mCountry[39m[38;5;124m'[39m] [38;5;241m=[39m prod[[38;5;124m'[39m[38;5;124mArea[39m[38;5;124m'[39m][38;5;241m.[39mreplace(name_map)
+[1;32m     99[0m prod[[38;5;124m'[39m[38;5;124mCategory[39m[38;5;124m'[39m] [38;5;241m=[39m prod[[38;5;124m'[39m[38;5;124mItem[39m[38;5;124m'[39m][38;5;241m.[39mmap(category_map)
 
 File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1026[0m, in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)[0m
 [1;32m   1013[0m kwds_defaults [38;5;241m=[39m _refine_defaults_read(
@@ -327,5 +296,5 @@ File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/common.py:873
 [1;32m    881[0m         [38;5;66;03m# Binary mode[39;00m
 [1;32m    882[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(handle, ioargs[38;5;241m.[39mmode)
 
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'datasets/FAOSTAT_data_emissions_animal_6-23-2025.csv'
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'datasets/FAOSTAT_production_arg3.csv'
 
