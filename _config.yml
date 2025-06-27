@@ -16,11 +16,12 @@ repository:
 # HTML-themaopties + Plotly.js clientside library
 html:
   use_repository_button: true
-  use_issues_button: true
-  favicon: logo.png
+  use_issues_button:     true
+  favicon:               logo.png
 
-html:
+  # déze regel klapt al je code-cellen standaard in:
   collapse_input: true
+
 
 toc:
   includehidden: false
