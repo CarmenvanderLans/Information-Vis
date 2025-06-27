@@ -423,9 +423,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># — Cell 2: load, process, and draw the figure —</span>
-
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
 
 <span class="c1"># 1) Load raw data from data1/</span>
@@ -433,19 +431,19 @@ document.write(`
 <span class="n">productie</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/FAOSTAT_landbouw_productie_2022.csv&quot;</span><span class="p">)</span>
 <span class="n">epi</span>       <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data1/epi2022results05302022.csv&quot;</span><span class="p">)</span>
 
-<span class="c1"># 2) Aggregate to per‐country</span>
+<span class="c1"># 2) Aggregate to per-country</span>
 <span class="n">em_land</span> <span class="o">=</span> <span class="n">emissies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 <span class="n">em_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span>
 <span class="n">pr_land</span> <span class="o">=</span> <span class="n">productie</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 <span class="n">pr_land</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span>
 <span class="n">pr_land</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr_land</span><span class="p">[</span><span class="s2">&quot;Production_ton&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1_000</span>
 
-<span class="c1"># 3) Merge and compute per‐ton emissions</span>
+<span class="c1"># 3) Merge and compute per-ton emissions</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">em_land</span><span class="p">,</span> <span class="n">pr_land</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">)</span>
 <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Emissions_kt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Production_kt&quot;</span><span class="p">]</span>
 
 <span class="c1"># 4) Attach EPI score</span>
-<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
+<span class="n">epi</span> <span class="o">=</span> <span class="n">epi</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="s2">&quot;EPI.new&quot;</span><span class="p">:</span> <span class="s2">&quot;EPI_Score&quot;</span><span class="p">})</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">epi</span><span class="p">[[</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span><span class="s2">&quot;EPI_Score&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Country&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
 
 <span class="c1"># 5) Filter out very small producers</span>
@@ -479,7 +477,7 @@ document.write(`
     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Uitstoot per ton&quot;</span>
 <span class="p">)</span>
 
-<span class="c1"># 7) Layout and annotations</span>
+<span class="c1"># 7) Layout zonder annotations</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">([</span><span class="n">choropleth</span><span class="p">,</span> <span class="n">scatter</span><span class="p">])</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)&quot;</span><span class="p">,</span>
@@ -489,27 +487,8 @@ document.write(`
         <span class="n">projection_type</span><span class="o">=</span><span class="s2">&quot;equirectangular&quot;</span><span class="p">,</span> <span class="n">projection_scale</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span>
         <span class="n">center</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="p">),</span>
-    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">220</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span><span class="p">,</span>
-    <span class="n">annotations</span><span class="o">=</span><span class="p">[</span>
-      <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">text</span><span class="o">=</span><span class="s2">&quot;CO₂-uitstoot per ton landbouwproductie&quot;</span><span class="p">,</span>
-        <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
-        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-        <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
-      <span class="p">),</span>
-      <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">text</span><span class="o">=</span><span class="p">(</span>
-          <span class="s2">&quot;Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen&lt;br&gt;&quot;</span>
-          <span class="s2">&quot;zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen&lt;br&gt;&quot;</span>
-          <span class="s2">&quot;(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),&lt;br&gt;&quot;</span>
-          <span class="s2">&quot;om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen.&quot;</span>
-        <span class="p">),</span>
-        <span class="n">showarrow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">xref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="n">yref</span><span class="o">=</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span>
-        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mf">0.36</span><span class="p">,</span> <span class="n">xanchor</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">yanchor</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-        <span class="n">align</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-      <span class="p">)</span>
-    <span class="p">]</span>
+    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">60</span><span class="p">),</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">710</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1100</span>
 <span class="p">)</span>
 
 <span class="c1"># 8) Render</span>
@@ -520,7 +499,7 @@ document.write(`
 <div class="cell_output docutils container">
 </div>
 </div>
-<p><span style="font-size: 60%;"> Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen (meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot), om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen.” </span></p>
+<p><span style="font-size: 60%;"> Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen (meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot), om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen. </span></p>
 <p>De visualisatie laat duidelijk zien dat landen met een hoge EPI-score, wat wijst op sterker milieubeleid, gemiddeld minder CO₂ uitstoten per ton landbouwproductie. Dit is goed te zien bij landen als Zwitserland, Duitsland en Nieuw-Zeeland. Deze landen zijn donkergroen gekleurd, wat duidt op een hoog milieubeleidsscore, en hebben lichtere stippen, wat betekent dat hun uitstoot per ton landbouwproductie relatief laag is.</p>
 <p>Landen met lage EPI-scores, zoals India, Pakistan, Nigeria en Kenya, vallen juist op door hun lichtere achtergrondkleur in combinatie met donkergekleurde stippen. Dit betekent dat deze landen minder streng milieubeleid voeren en tegelijkertijd relatief veel uitstoten per ton landbouwproductie. Dit patroon ondersteunt sterk het idee dat strenger milieubeleid samenhangt met duurzamere landbouw.</p>
 <p>Een opvallende uitzondering vormen sommige Scandinavische landen, zoals Zweden en Finland. Zij scoren hoog op milieubeleid en zijn dus donkergroen op de kaart, maar hebben toch relatief donkere stippen. Dat betekent dat hun uitstoot per ton landbouwproductie hoger ligt dan je op basis van hun EPI-score zou verwachten. Toch zijn dit uitzonderingen op een veel duidelijker en bredere trend: landen met beter milieubeleid produceren landbouw gemiddeld op een schonere en efficiëntere manier.</p>
