@@ -23,9 +23,9 @@ We wilden niet alleen kijken naar hoeveel CO₂ een land uitstoot, maar juist na
 
 2. *Berekening van uitstoot per ton landbouwproductie*  
    Na aggregatie is per land de verhouding berekend tussen totale uitstoot en totale productie:  
-   \[
-   \text{uitstoot per ton} = \frac{\text{totale uitstoot (kt)}}{\text{totale productie (kt)}}
-   \]  
+$$
+\text{CO₂-uitstoot per ton landbouwproductie} = \frac{\text{Totale landbouwemissie (kt)}}{\text{Totale landbouwproductie (kt)}}
+$$
 
 3. *Koppeling aan de EPI-score*  
    De gecombineerde dataset is verrijkt met de EPI-score per land. Zo kan de relatie tussen milieubeleid en emissie-efficiëntie worden geanalyseerd.  
@@ -57,25 +57,42 @@ Door de verhouding tussen GSSE en TSE te berekenen, ontstaat een duurzaamheidsma
    - Uit de FAO-dataset zijn alleen rijen behouden met de indicator “Emissions (CO2eq) (AR5)”  
    - Uit de OECD-dataset zijn alleen de indicatoren GSSE, TSE en PSE geselecteerd  
 
-2. *Mapping maken van landnamen*
-   Omdat FAO en OECD verschillende naamconventies gebruiken, zijn landnamen gematcht via een handmatige mapping , bijvoorbeeld “China (People’s Republic of)” → “China”.
+2. *Mapping maken van landnamen*  
+   Omdat FAO en OECD verschillende naamconventies gebruiken, zijn landnamen gematcht via een handmatige mapping, bijvoorbeeld “China (People’s Republic of)” → “China”.
 
 3. *Samenvatten per land en jaar*  
    - Subsidie- en emissiewaarden zijn per land en jaar geaggregeerd  
-   - Dataframes zijn samengevoegd via een inner join op Mapped_Country en Year
+   - Dataframes zijn samengevoegd via een inner join op `Mapped_Country` en `Year`
+
+4. *Berekeningen uitvoeren*  
+   Voor elk land en jaar zijn de volgende variabelen berekend:  
+   - **Duurzaamheidsratio subsidies:**
+
+     $$
+     \text{GSSE-ratio} = \frac{\text{GSSE}}{\text{TSE}}
+     $$
+
+     waarbij:
+     - **GSSE** = General Services Support Estimate (duurzame infrastructuur en kennis)  
+     - **TSE** = Total Support Estimate (alle landbouwsubsidies)  
+
+   - **Totale landbouwuitstoot in tonnen:**
+
+     $$
+     \text{Totale uitstoot (ton)} = \text{CO₂ (kt)} \times 1.000
+     $$
 
 5. *Opschonen en exporteren*  
    - Waarden met ontbrekende of nulwaardes in TSE zijn verwijderd  
    - De uiteindelijke dataset bevat:  
-     - 'Mapped_Country, 'Year'
-     - 'CO2_Emission'  
-     - 'GSSE_Subsidy', 'TSE_Subsidy', 'PSE_Subsidy'
-   - De dataset is opgeslagen als 'CO2.csv'
+     - `Mapped_Country`, `Year`  
+     - `CO2_Emission`, `GSSE_Subsidy`, `TSE_Subsidy`, `PSE_Subsidy`, `GSSE-ratio`  
+   - De dataset is opgeslagen als `CO2.csv`
 
 #### Opbouw van de visualisatie  
 De uiteindelijke visualisatie combineert twee informatielagen in één interactieve grafiek:
 - De blauwe staven tonen de duurzaamheidsratio (GSSE/TSE) — hoe hoger de balk, hoe groter het aandeel van subsidies dat naar duurzame ondersteuning gaat.
-- De oranje lijn toont de totale CO₂-uitstoot uit landbouw (in ton CO₂-equivalent) per jaar.
+- De oranje lijn toont de totale CO₂-uitstoot uit landbouw (in ton CO₂-equivalent) per jaar.  
 Door deze twee lagen te combineren, wordt zichtbaar of een toename in duurzame subsidiëring samenhangt met een afname of juist toename van de landbouwuitstoot en welke landen hierin voor- of achterlopen.
 
 ---
@@ -100,7 +117,6 @@ We wilden niet alleen weten hoeveel een land uitstoot, maar vooral hoe efficiën
    → Hoe efficiënt wordt het beschikbare land benut?
 
 Deze maatstaven zijn gecombineerd met welvaartsdata (GDP per capita), zodat kan worden onderzocht of rijkere landen efficiënter en duurzamer produceren.
-
 ### Stappen in het verwerkingsproces
 
 1. *Aggregatie per land*
@@ -111,26 +127,44 @@ Deze maatstaven zijn gecombineerd met welvaartsdata (GDP per capita), zodat kan 
 
 2. *Berekening van kernindicatoren*
 
-   * *CO₂ per ton*:
+   Voor **Argument 1 (Radarplot)** zijn de volgende indicatoren per land berekend:
+
+   * **CO₂-uitstoot per ton landbouwproductie**:
 
      $$
-     \text{CO₂ per ton} = \frac{\text{CO₂ (kt)} \times 1000}{\text{Productie (ton)}}
-     $$
-   * *Efficiëntie (ton per hectare)*:
-
-     $$
-     \text{Efficiëntie} = \frac{\text{Productie (ton)}}{\text{Area (ha)}}
+     \text{CO₂/ton} = \frac{\text{Emissies (kt)} \times 1.000}{\text{Productie (ton)}}
      $$
 
-3. *Koppeling aan GDP en bevolkingsdata*
+   * **Productie-efficiëntie per hectare landbouwgrond**:
+
+     $$
+     \text{Efficiëntie} = \frac{\text{Productie (ton)}}{\text{Landbouwoppervlak (ha)}}
+     $$
+
+   Voor **Argument 2 (Scatterplot)** zijn deze indicatoren jaarlijks berekend voor elk land (2015–2023):
+
+   * **Jaarlijkse CO₂-uitstoot per ton landbouwproductie**:
+
+     $$
+     \text{Jaarlijkse CO₂/ton} = \frac{\text{Jaarlijkse emissie (kt)} \times 1.000}{\text{Jaarlijkse productie (ton)}}
+     $$
+
+   * **Jaarlijkse efficiëntie per hectare**:
+
+     $$
+     \text{Ton/ha} = \frac{\text{Productie (ton)}}{\text{Landbouwgrond (ha)}}
+     $$
+
+3. *Koppeling aan GDP en bevolkingsdata*  
    Door GDP per capita en bevolkingsgrootte toe te voegen, ontstaat een breder profiel per land: rijkdom, schaal, uitstoot en efficiëntie.
 
-4. *Filtering en selectie*
+4. *Filtering en selectie*  
    Alleen landen met consistente data voor alle variabelen zijn opgenomen, waaronder India, Japan, Brazilië, Nigeria en Zuid-Afrika. Deze landen bieden een goede spreiding qua inkomen, schaal en productiemodel.
 
-5. *Normalisatie & visualisatie*
-   Voor de radarplot (Argument 1) zijn de variabelen geschaald (min-max) en gecombineerd in een polar chart.
-   Voor het tweede argument is een interactieve scatterplot gemaakt (2015–2023) waarin efficiëntie wordt afgezet tegen CO₂ per ton. Daarbij     is per land ook de inkomensgroep weergegeven op basis van GDP per capita.
+5. *Normalisatie & visualisatie*  
+   Voor de radarplot (Argument 1) zijn de variabelen geschaald (min-max) en gecombineerd in een polar chart.  
+   Voor het tweede argument is een interactieve scatterplot gemaakt (2015–2023) waarin efficiëntie wordt afgezet tegen CO₂ per ton. Daarbij is per land ook de inkomensgroep weergegeven op basis van GDP per capita.
+
 
 ### Opbouw van de visualisaties
 
@@ -156,16 +190,31 @@ We wilden emissies koppelen aan de mate waarin een land voor de wereldmarkt prod
 
 #### Stappen in het verwerkingsproces  
 1. *Aggregatie per land-jaar*  
-   - Exporttonnages en emissies opgeteld.  
+   - Exporttonnages (in ton) en landbouwemissies (in kiloton CO₂-equivalent) zijn per land en jaar opgeteld.  
+   - Bevolkingsdata toegevoegd voor alle landen en jaren.
 
-2. *Normalisatie*  
-   - Export per Capita = export / population  
-   - Emissions per Capita = emissions / population  
-   - Emissions per Export Tonne = emissions (kg) / export (ton)  
+2. *Normalisatie en berekeningen*  
+   Voor elk land en jaar zijn de volgende indicatoren berekend:
+
+   - **Export per inwoner:**
+     $$
+     \text{Export per capita} = \frac{\text{Export (ton)}}{\text{Bevolking}}
+     $$
+
+   - **Emissies per inwoner:**
+     $$
+     \text{Emissies per capita} = \frac{\text{Emissies (kt)} \times 1.000}{\text{Bevolking}}
+     $$
+
+   - **Emissies per geëxporteerde ton:**
+     $$
+     \text{Emissies per exportton} = \frac{\text{Emissies (kt)} \times 1.000.000}{\text{Export (ton)}}
+     $$
 
 3. *Schoonmaak*  
-   - Jaren zonder waarden verwijderd.  
-   - Databrekingen (bijv. Argentinië 1999) zichtbaar gelaten als lege segmenten.
+   - Jaren zonder waarden zijn verwijderd.  
+   - Databrekingen (bijv. Argentinië 1999) zijn zichtbaar gelaten als lege segmenten om trends te behouden.
+
 
 #### Opbouw van de visualisatie  
 Een interactieve dropdown-lijngrafiek met vijf metrieken:  
@@ -197,17 +246,22 @@ We koppelden emissies en productmix aan klimaatgegevens om te tonen hoe klimaat 
    Brazilië, Nederland, Verenigde Staten en Kenia – vier landen met contrasterende klimaten.  
 
 2. *Productcategorie-mapping*  
-   Ongeveer 150 FAO-producten herleid naar 10 hoofdcategorieën (Fruit, Granen, Vee, enz.).  
+   Ongeveer 150 FAO-producten zijn herleid naar 10 hoofdcategorieën (zoals Fruit, Granen, Vee, Groenten, enz.).  
 
 3. *Aggregatie en berekening van indicatoren*  
-   - Productie per categorie.  
-   - Totale emissies per land.  
-   - Emissions per Capita = emissies (kt) / population.  
+   - Totale productie is berekend per hoofdcategorie, per land.  
+   - Totale landbouwemissies per land verzameld (in kiloton CO₂-equivalent).  
+   - **Emissies per inwoner:**
+
+     $$
+     \text{Emissies per capita} = \frac{\text{Emissies (kt)}}{\text{Bevolking}}
+     $$
 
 4. *Klimaatdata harmoniseren*  
-   - Maand → datetime.  
-   - Maandnamen vertaald.  
-   - Berekening van temperatuurbereik en neerslagsom per jaar.
+   - Maandnamen omgezet naar datetime-formaat  
+   - Maandgemiddelden zijn vertaald en samengevoegd tot jaarlijkse statistieken  
+   - **Temperatuurbereik** berekend als verschil tussen hoogste en laagste maandtemperatuur  
+   - **Jaarlijkse neerslagsom** berekend als de som van alle 12 maanden
 
 #### Opbouw van de visualisatie  
 Eén gecombineerd figuur met drie rijen:  

@@ -474,9 +474,9 @@ Zowel de emissie- als productiedata bevatten waarden per landbouwproduct of subc
 </li>
 <li><p><em>Berekening van uitstoot per ton landbouwproductie</em><br />
 Na aggregatie is per land de verhouding berekend tussen totale uitstoot en totale productie:<br />
-[
-\text{uitstoot per ton} = \frac{\text{totale uitstoot (kt)}}{\text{totale productie (kt)}}
-]</p></li>
+$<span class="math notranslate nohighlight">\(
+\text{CO₂-uitstoot per ton landbouwproductie} = \frac{\text{Totale landbouwemissie (kt)}}{\text{Totale landbouwproductie (kt)}}
+\)</span>$</p></li>
 <li><p><em>Koppeling aan de EPI-score</em><br />
 De gecombineerde dataset is verrijkt met de EPI-score per land. Zo kan de relatie tussen milieubeleid en emissie-efficiëntie worden geanalyseerd.</p></li>
 <li><p><em>Filtering van landen</em><br />
@@ -514,19 +514,41 @@ Door de verhouding tussen GSSE en TSE te berekenen, ontstaat een duurzaamheidsma
 </section>
 <section id="id3">
 <h4>Stappen in het verwerkingsproces<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
-<ol class="arabic simple">
+<ol class="arabic">
 <li><p><em>Filteren van relevante observaties</em></p>
 <ul class="simple">
 <li><p>Uit de FAO-dataset zijn alleen rijen behouden met de indicator “Emissions (CO2eq) (AR5)”</p></li>
 <li><p>Uit de OECD-dataset zijn alleen de indicatoren GSSE, TSE en PSE geselecteerd</p></li>
 </ul>
 </li>
-<li><p><em>Mapping maken van landnamen</em>
-Omdat FAO en OECD verschillende naamconventies gebruiken, zijn landnamen gematcht via een handmatige mapping , bijvoorbeeld “China (People’s Republic of)” → “China”.</p></li>
+<li><p><em>Mapping maken van landnamen</em><br />
+Omdat FAO en OECD verschillende naamconventies gebruiken, zijn landnamen gematcht via een handmatige mapping, bijvoorbeeld “China (People’s Republic of)” → “China”.</p></li>
 <li><p><em>Samenvatten per land en jaar</em></p>
 <ul class="simple">
 <li><p>Subsidie- en emissiewaarden zijn per land en jaar geaggregeerd</p></li>
-<li><p>Dataframes zijn samengevoegd via een inner join op Mapped_Country en Year</p></li>
+<li><p>Dataframes zijn samengevoegd via een inner join op <code class="docutils literal notranslate"><span class="pre">Mapped_Country</span></code> en <code class="docutils literal notranslate"><span class="pre">Year</span></code></p></li>
+</ul>
+</li>
+<li><p><em>Berekeningen uitvoeren</em><br />
+Voor elk land en jaar zijn de volgende variabelen berekend:</p>
+<ul>
+<li><p><strong>Duurzaamheidsratio subsidies:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+     \text{GSSE-ratio} = \frac{\text{GSSE}}{\text{TSE}}
+     \]</div>
+<p>waarbij:</p>
+<ul class="simple">
+<li><p><strong>GSSE</strong> = General Services Support Estimate (duurzame infrastructuur en kennis)</p></li>
+<li><p><strong>TSE</strong> = Total Support Estimate (alle landbouwsubsidies)</p></li>
+</ul>
+</li>
+<li><p><strong>Totale landbouwuitstoot in tonnen:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+     \text{Totale uitstoot (ton)} = \text{CO₂ (kt)} \times 1.000
+     \]</div>
+</li>
 </ul>
 </li>
 <li><p><em>Opschonen en exporteren</em></p>
@@ -534,12 +556,11 @@ Omdat FAO en OECD verschillende naamconventies gebruiken, zijn landnamen gematch
 <li><p>Waarden met ontbrekende of nulwaardes in TSE zijn verwijderd</p></li>
 <li><p>De uiteindelijke dataset bevat:</p>
 <ul>
-<li><p>‘Mapped_Country, ‘Year’</p></li>
-<li><p>‘CO2_Emission’</p></li>
-<li><p>‘GSSE_Subsidy’, ‘TSE_Subsidy’, ‘PSE_Subsidy’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Mapped_Country</span></code>, <code class="docutils literal notranslate"><span class="pre">Year</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CO2_Emission</span></code>, <code class="docutils literal notranslate"><span class="pre">GSSE_Subsidy</span></code>, <code class="docutils literal notranslate"><span class="pre">TSE_Subsidy</span></code>, <code class="docutils literal notranslate"><span class="pre">PSE_Subsidy</span></code>, <code class="docutils literal notranslate"><span class="pre">GSSE-ratio</span></code></p></li>
 </ul>
 </li>
-<li><p>De dataset is opgeslagen als ‘CO2.csv’</p></li>
+<li><p>De dataset is opgeslagen als <code class="docutils literal notranslate"><span class="pre">CO2.csv</span></code></p></li>
 </ul>
 </li>
 </ol>
@@ -549,7 +570,7 @@ Omdat FAO en OECD verschillende naamconventies gebruiken, zijn landnamen gematch
 <p>De uiteindelijke visualisatie combineert twee informatielagen in één interactieve grafiek:</p>
 <ul class="simple">
 <li><p>De blauwe staven tonen de duurzaamheidsratio (GSSE/TSE) — hoe hoger de balk, hoe groter het aandeel van subsidies dat naar duurzame ondersteuning gaat.</p></li>
-<li><p>De oranje lijn toont de totale CO₂-uitstoot uit landbouw (in ton CO₂-equivalent) per jaar.
+<li><p>De oranje lijn toont de totale CO₂-uitstoot uit landbouw (in ton CO₂-equivalent) per jaar.<br />
 Door deze twee lagen te combineren, wordt zichtbaar of een toename in duurzame subsidiëring samenhangt met een afname of juist toename van de landbouwuitstoot en welke landen hierin voor- of achterlopen.</p></li>
 </ul>
 </section>
@@ -588,28 +609,44 @@ Door deze twee lagen te combineren, wordt zichtbaar of een toename in duurzame s
 </ul>
 </li>
 <li><p><em>Berekening van kernindicatoren</em></p>
+<p>Voor <strong>Argument 1 (Radarplot)</strong> zijn de volgende indicatoren per land berekend:</p>
 <ul>
-<li><p><em>CO₂ per ton</em>:</p>
+<li><p><strong>CO₂-uitstoot per ton landbouwproductie</strong>:</p>
 <div class="math notranslate nohighlight">
 \[
-     \text{CO₂ per ton} = \frac{\text{CO₂ (kt)} \times 1000}{\text{Productie (ton)}}
+     \text{CO₂/ton} = \frac{\text{Emissies (kt)} \times 1.000}{\text{Productie (ton)}}
      \]</div>
 </li>
-<li><p><em>Efficiëntie (ton per hectare)</em>:</p>
+<li><p><strong>Productie-efficiëntie per hectare landbouwgrond</strong>:</p>
 <div class="math notranslate nohighlight">
 \[
-     \text{Efficiëntie} = \frac{\text{Productie (ton)}}{\text{Area (ha)}}
+     \text{Efficiëntie} = \frac{\text{Productie (ton)}}{\text{Landbouwoppervlak (ha)}}
+     \]</div>
+</li>
+</ul>
+<p>Voor <strong>Argument 2 (Scatterplot)</strong> zijn deze indicatoren jaarlijks berekend voor elk land (2015–2023):</p>
+<ul>
+<li><p><strong>Jaarlijkse CO₂-uitstoot per ton landbouwproductie</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+     \text{Jaarlijkse CO₂/ton} = \frac{\text{Jaarlijkse emissie (kt)} \times 1.000}{\text{Jaarlijkse productie (ton)}}
+     \]</div>
+</li>
+<li><p><strong>Jaarlijkse efficiëntie per hectare</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+     \text{Ton/ha} = \frac{\text{Productie (ton)}}{\text{Landbouwgrond (ha)}}
      \]</div>
 </li>
 </ul>
 </li>
-<li><p><em>Koppeling aan GDP en bevolkingsdata</em>
+<li><p><em>Koppeling aan GDP en bevolkingsdata</em><br />
 Door GDP per capita en bevolkingsgrootte toe te voegen, ontstaat een breder profiel per land: rijkdom, schaal, uitstoot en efficiëntie.</p></li>
-<li><p><em>Filtering en selectie</em>
+<li><p><em>Filtering en selectie</em><br />
 Alleen landen met consistente data voor alle variabelen zijn opgenomen, waaronder India, Japan, Brazilië, Nigeria en Zuid-Afrika. Deze landen bieden een goede spreiding qua inkomen, schaal en productiemodel.</p></li>
-<li><p><em>Normalisatie &amp; visualisatie</em>
-Voor de radarplot (Argument 1) zijn de variabelen geschaald (min-max) en gecombineerd in een polar chart.
-Voor het tweede argument is een interactieve scatterplot gemaakt (2015–2023) waarin efficiëntie wordt afgezet tegen CO₂ per ton. Daarbij     is per land ook de inkomensgroep weergegeven op basis van GDP per capita.</p></li>
+<li><p><em>Normalisatie &amp; visualisatie</em><br />
+Voor de radarplot (Argument 1) zijn de variabelen geschaald (min-max) en gecombineerd in een polar chart.<br />
+Voor het tweede argument is een interactieve scatterplot gemaakt (2015–2023) waarin efficiëntie wordt afgezet tegen CO₂ per ton. Daarbij is per land ook de inkomensgroep weergegeven op basis van GDP per capita.</p></li>
 </ol>
 </section>
 <section id="opbouw-van-de-visualisaties">
@@ -645,20 +682,31 @@ Voor het tweede argument is een interactieve scatterplot gemaakt (2015–2023) w
 <ol class="arabic simple">
 <li><p><em>Aggregatie per land-jaar</em></p>
 <ul class="simple">
-<li><p>Exporttonnages en emissies opgeteld.</p></li>
+<li><p>Exporttonnages (in ton) en landbouwemissies (in kiloton CO₂-equivalent) zijn per land en jaar opgeteld.</p></li>
+<li><p>Bevolkingsdata toegevoegd voor alle landen en jaren.</p></li>
 </ul>
 </li>
-<li><p><em>Normalisatie</em></p>
+<li><p><em>Normalisatie en berekeningen</em><br />
+Voor elk land en jaar zijn de volgende indicatoren berekend:</p>
 <ul class="simple">
-<li><p>Export per Capita = export / population</p></li>
-<li><p>Emissions per Capita = emissions / population</p></li>
-<li><p>Emissions per Export Tonne = emissions (kg) / export (ton)</p></li>
+<li><p><strong>Export per inwoner:</strong>
+$<span class="math notranslate nohighlight">\(
+\text{Export per capita} = \frac{\text{Export (ton)}}{\text{Bevolking}}
+\)</span>$</p></li>
+<li><p><strong>Emissies per inwoner:</strong>
+$<span class="math notranslate nohighlight">\(
+\text{Emissies per capita} = \frac{\text{Emissies (kt)} \times 1.000}{\text{Bevolking}}
+\)</span>$</p></li>
+<li><p><strong>Emissies per geëxporteerde ton:</strong>
+$<span class="math notranslate nohighlight">\(
+\text{Emissies per exportton} = \frac{\text{Emissies (kt)} \times 1.000.000}{\text{Export (ton)}}
+\)</span>$</p></li>
 </ul>
 </li>
 <li><p><em>Schoonmaak</em></p>
 <ul class="simple">
-<li><p>Jaren zonder waarden verwijderd.</p></li>
-<li><p>Databrekingen (bijv. Argentinië 1999) zichtbaar gelaten als lege segmenten.</p></li>
+<li><p>Jaren zonder waarden zijn verwijderd.</p></li>
+<li><p>Databrekingen (bijv. Argentinië 1999) zijn zichtbaar gelaten als lege segmenten om trends te behouden.</p></li>
 </ul>
 </li>
 </ol>
@@ -697,23 +745,29 @@ Voor het tweede argument is een interactieve scatterplot gemaakt (2015–2023) w
 </section>
 <section id="id13">
 <h4>Stappen in het verwerkingsproces<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
-<ol class="arabic simple">
+<ol class="arabic">
 <li><p><em>Selectie van landen</em><br />
 Brazilië, Nederland, Verenigde Staten en Kenia – vier landen met contrasterende klimaten.</p></li>
 <li><p><em>Productcategorie-mapping</em><br />
-Ongeveer 150 FAO-producten herleid naar 10 hoofdcategorieën (Fruit, Granen, Vee, enz.).</p></li>
+Ongeveer 150 FAO-producten zijn herleid naar 10 hoofdcategorieën (zoals Fruit, Granen, Vee, Groenten, enz.).</p></li>
 <li><p><em>Aggregatie en berekening van indicatoren</em></p>
-<ul class="simple">
-<li><p>Productie per categorie.</p></li>
-<li><p>Totale emissies per land.</p></li>
-<li><p>Emissions per Capita = emissies (kt) / population.</p></li>
+<ul>
+<li><p>Totale productie is berekend per hoofdcategorie, per land.</p></li>
+<li><p>Totale landbouwemissies per land verzameld (in kiloton CO₂-equivalent).</p></li>
+<li><p><strong>Emissies per inwoner:</strong></p>
+<div class="math notranslate nohighlight">
+\[
+     \text{Emissies per capita} = \frac{\text{Emissies (kt)}}{\text{Bevolking}}
+     \]</div>
+</li>
 </ul>
 </li>
 <li><p><em>Klimaatdata harmoniseren</em></p>
 <ul class="simple">
-<li><p>Maand → datetime.</p></li>
-<li><p>Maandnamen vertaald.</p></li>
-<li><p>Berekening van temperatuurbereik en neerslagsom per jaar.</p></li>
+<li><p>Maandnamen omgezet naar datetime-formaat</p></li>
+<li><p>Maandgemiddelden zijn vertaald en samengevoegd tot jaarlijkse statistieken</p></li>
+<li><p><strong>Temperatuurbereik</strong> berekend als verschil tussen hoogste en laagste maandtemperatuur</p></li>
+<li><p><strong>Jaarlijkse neerslagsom</strong> berekend als de som van alle 12 maanden</p></li>
 </ul>
 </li>
 </ol>
