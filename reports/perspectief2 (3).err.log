@@ -1,0 +1,180 @@
+Traceback (most recent call last):
+  File "/opt/anaconda3/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/asyncio/base_events.py", line 685, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/anaconda3/lib/python3.12/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+import plotly.io as pio
+from IPython.display import HTML, display
+
+# Renderer voor inline weergave
+pio.renderers.default = 'notebook'  # of 'jupyterlab'
+
+# ——————————————————————————————
+# 1) DATA INLADEN & SAMENSTELLEN
+# ——————————————————————————————
+emissions_df  = pd.read_csv('Emissions_Agriculture_Energy_E_All_Data.csv', encoding='latin1')
+production_df = pd.read_csv('Production_Crops_Livestock_E_All_Data.csv', encoding='latin1', low_memory=False)
+gdp_df        = pd.read_csv('gdp-per-capita-worldbank.csv')
+co2_df        = pd.read_csv('owid-co2-data.csv')
+
+# CO₂ 2021 per land (kt)
+em2021 = (
+    emissions_df
+    .query("Item=='Total Energy' and Element=='Emissions (CO2)' and Unit=='kt'")
+    [['Area','Y2021']]
+    .rename(columns={'Area':'Land','Y2021':'CO2_uitstoot_kt'})
+)
+em2021['CO2_uitstoot_kt'] = pd.to_numeric(em2021['CO2_uitstoot_kt'], errors='coerce')
+
+# Landbouwproductie 2021 (t → ton)
+prod2021 = (
+    production_df
+    .query("Element=='Production' and Unit=='t'")
+    .groupby('Area')['Y2021'].sum()
+    .reset_index()
+    .rename(columns={'Area':'Land','Y2021':'Productie_ton'})
+)
+prod2021['Productie_ton'] = pd.to_numeric(prod2021['Productie_ton'], errors='coerce')
+
+# BBP per hoofd 2021
+gdp2021 = (
+    gdp_df
+    .query("Year==2021")
+    .rename(columns={
+        'Entity':'Land',
+        'GDP per capita, PPP (constant 2021 international $)':'BBP_per_hoofd'
+    })[['Land','BBP_per_hoofd']]
+)
+gdp2021['BBP_per_hoofd'] = pd.to_numeric(gdp2021['BBP_per_hoofd'], errors='coerce')
+
+# Bevolking 2021
+pop2021 = (
+    co2_df
+    .query("year==2021")
+    [['country','population']]
+    .rename(columns={'country':'Land','population':'Bevolking'})
+)
+pop2021['Bevolking'] = pd.to_numeric(pop2021['Bevolking'], errors='coerce')
+
+# Merge & bereken CO2_per_ton
+df = (
+    em2021
+    .merge(prod2021,  on='Land')
+    .assign(
+        CO2_per_ton=lambda d: d['CO2_uitstoot_kt']*1000/d['Productie_ton']
+    )
+    .merge(gdp2021,    on='Land')
+    .merge(pop2021,    on='Land')
+    .dropna()
+)
+
+# Selectie en vertaling
+landen_map = {
+    'Brazil':'Brazilië','India':'India','Indonesia':'Indonesië',
+    'Japan':'Japan','Nigeria':'Nigeria','South Africa':'Zuid-Afrika',
+    'United States':'Verenigde Staten'
+}
+df_sel = df[df['Land'].isin(landen_map)].copy()
+df_sel['land_naam'] = df_sel['Land'].map(landen_map)
+
+# Normaliseren
+cols = ['BBP_per_hoofd','CO2_per_ton','Productie_ton','Bevolking']
+df_norm = df_sel.copy()
+for c in cols:
+    mn, mx = df_norm[c].min(), df_norm[c].max()
+    df_norm[c] = (df_norm[c]-mn)/(mx-mn)
+
+# ——————————————————————————————
+# 2) INTERACTIEVE RADAR CHART MET PLOTLY
+# ——————————————————————————————
+categories = cols
+fig = go.Figure()
+
+# Voeg per land één polar-plot
+for i, row in df_norm.iterrows():
+    vals = row[categories].tolist()
+    vals += vals[:1]  # sluit de cirkel
+    fig.add_trace(go.Scatterpolar(
+        r=vals,
+        theta=categories + [categories[0]],
+        fill='toself',
+        name=row['land_naam'],
+        hovertemplate='<b>%{text}</b><br>' +
+                      '%{theta}: %{r:.2f}<extra></extra>',
+        text=[row['land_naam']]*len(vals)
+    ))
+
+fig.update_layout(
+    polar=dict(
+        radialaxis=dict(
+            visible=True,
+            range=[0,1],
+            tickvals=[0,0.25,0.5,0.75,1]
+        )
+    ),
+    title='Internationale vergelijking: BBP, uitstoot & landbouwproductie (genormaliseerd)',
+    showlegend=True,
+    legend=dict(title='Land')
+)
+
+# ——————————————————————————————
+# 3) INLINE RENDEREN ZONDER HTML/JS TE TONEN
+# ——————————————————————————————
+html_snippet = fig.to_html(include_plotlyjs='cdn', full_html=False)
+display(HTML(html_snippet))
+
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mKeyError[0m                                  Traceback (most recent call last)
+Cell [0;32mIn[1], line 29[0m
+[1;32m     25[0m em2021[[38;5;124m'[39m[38;5;124mCO2_uitstoot_kt[39m[38;5;124m'[39m] [38;5;241m=[39m pd[38;5;241m.[39mto_numeric(em2021[[38;5;124m'[39m[38;5;124mCO2_uitstoot_kt[39m[38;5;124m'[39m], errors[38;5;241m=[39m[38;5;124m'[39m[38;5;124mcoerce[39m[38;5;124m'[39m)
+[1;32m     27[0m [38;5;66;03m# Landbouwproductie 2021 (t → ton)[39;00m
+[1;32m     28[0m prod2021 [38;5;241m=[39m (
+[0;32m---> 29[0m     production_df
+[1;32m     30[0m     [38;5;241m.[39mquery([38;5;124m"[39m[38;5;124mElement==[39m[38;5;124m'[39m[38;5;124mProduction[39m[38;5;124m'[39m[38;5;124m and Unit==[39m[38;5;124m'[39m[38;5;124mt[39m[38;5;124m'[39m[38;5;124m"[39m)
+[1;32m     31[0m     [38;5;241m.[39mgroupby([38;5;124m'[39m[38;5;124mArea[39m[38;5;124m'[39m)[[38;5;124m'[39m[38;5;124mY2021[39m[38;5;124m'[39m][38;5;241m.[39msum()
+[1;32m     32[0m     [38;5;241m.[39mreset_index()
+[1;32m     33[0m     [38;5;241m.[39mrename(columns[38;5;241m=[39m{[38;5;124m'[39m[38;5;124mArea[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mLand[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mY2021[39m[38;5;124m'[39m:[38;5;124m'[39m[38;5;124mProductie_ton[39m[38;5;124m'[39m})
+[1;32m     34[0m )
+[1;32m     35[0m prod2021[[38;5;124m'[39m[38;5;124mProductie_ton[39m[38;5;124m'[39m] [38;5;241m=[39m pd[38;5;241m.[39mto_numeric(prod2021[[38;5;124m'[39m[38;5;124mProductie_ton[39m[38;5;124m'[39m], errors[38;5;241m=[39m[38;5;124m'[39m[38;5;124mcoerce[39m[38;5;124m'[39m)
+[1;32m     37[0m [38;5;66;03m# BBP per hoofd 2021[39;00m
+
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/core/groupby/generic.py:1951[0m, in [0;36mDataFrameGroupBy.__getitem__[0;34m(self, key)[0m
+[1;32m   1944[0m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(key, [38;5;28mtuple[39m) [38;5;129;01mand[39;00m [38;5;28mlen[39m(key) [38;5;241m>[39m [38;5;241m1[39m:
+[1;32m   1945[0m     [38;5;66;03m# if len == 1, then it becomes a SeriesGroupBy and this is actually[39;00m
+[1;32m   1946[0m     [38;5;66;03m# valid syntax, so don't raise[39;00m
+[1;32m   1947[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
+[1;32m   1948[0m         [38;5;124m"[39m[38;5;124mCannot subset columns with a tuple with more than one element. [39m[38;5;124m"[39m
+[1;32m   1949[0m         [38;5;124m"[39m[38;5;124mUse a list instead.[39m[38;5;124m"[39m
+[1;32m   1950[0m     )
+[0;32m-> 1951[0m [38;5;28;01mreturn[39;00m [38;5;28msuper[39m()[38;5;241m.[39m[38;5;21m__getitem__[39m(key)
+
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/core/base.py:244[0m, in [0;36mSelectionMixin.__getitem__[0;34m(self, key)[0m
+[1;32m    242[0m [38;5;28;01melse[39;00m:
+[1;32m    243[0m     [38;5;28;01mif[39;00m key [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m [38;5;28mself[39m[38;5;241m.[39mobj:
+[0;32m--> 244[0m         [38;5;28;01mraise[39;00m [38;5;167;01mKeyError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mColumn not found: [39m[38;5;132;01m{[39;00mkey[38;5;132;01m}[39;00m[38;5;124m"[39m)
+[1;32m    245[0m     ndim [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mobj[key][38;5;241m.[39mndim
+[1;32m    246[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_gotitem(key, ndim[38;5;241m=[39mndim)
+
+[0;31mKeyError[0m: 'Column not found: Y2021'
+

@@ -57,12 +57,10 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'perspectief2';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'perspectief2 (3)';</script>
     <link rel="icon" href="_static/logo.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="De invloed van klimaat en geografie op voedselproductie" href="perspectief3.html" />
-    <link rel="prev" title="Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot" href="perspectief1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -125,6 +123,8 @@
       
       
       
+        
+      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -180,11 +180,11 @@
                 </a>
             </li>
         </ul>
-        <ul class="current nav bd-sidenav">
+        <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="dataset-preprocessing.html">Dataset en preprocessing</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="perspectief1.html">Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Economische welvaart en productiviteit beïnvloeden uitstoot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perspectief2.html">Economische welvaart en productiviteit beïnvloeden uitstoot</a></li>
 <li class="toctree-l1"><a class="reference internal" href="perspectief3.html">De invloed van klimaat en geografie op voedselproductie</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reflectie.html">Peer feedback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="werkverdeling.html">Werkverdeling</a></li>
@@ -259,7 +259,7 @@
       
       
       
-      <li><a href="https://github.com/CarmenvanderLans/Information-Vis/issues/new?title=Issue%20on%20page%20%2Fperspectief2.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/CarmenvanderLans/Information-Vis/issues/new?title=Issue%20on%20page%20%2Fperspectief2 (3).html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -289,7 +289,7 @@
       
       
       
-      <li><a href="_sources/perspectief2.ipynb" target="_blank"
+      <li><a href="_sources/perspectief2 (3).ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -418,107 +418,144 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">import</span> <span class="nn">plotly.io</span> <span class="k">as</span> <span class="nn">pio</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span><span class="p">,</span> <span class="n">display</span>
 
-<span class="n">emissions_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;Emissions_Agriculture_Energy_E_All_Data.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+<span class="c1"># Renderer voor inline weergave</span>
+<span class="n">pio</span><span class="o">.</span><span class="n">renderers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="s1">&#39;notebook&#39;</span>  <span class="c1"># of &#39;jupyterlab&#39;</span>
+
+<span class="c1"># ——————————————————————————————</span>
+<span class="c1"># 1) DATA INLADEN &amp; SAMENSTELLEN</span>
+<span class="c1"># ——————————————————————————————</span>
+<span class="n">emissions_df</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;Emissions_Agriculture_Energy_E_All_Data.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
 <span class="n">production_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;Production_Crops_Livestock_E_All_Data.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">gdp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gdp-per-capita-worldbank.csv&#39;</span><span class="p">)</span>
-<span class="n">co2_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;owid-co2-data.csv&#39;</span><span class="p">)</span>
+<span class="n">gdp_df</span>        <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gdp-per-capita-worldbank.csv&#39;</span><span class="p">)</span>
+<span class="n">co2_df</span>        <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;owid-co2-data.csv&#39;</span><span class="p">)</span>
 
-<span class="n">emissions_filtered</span> <span class="o">=</span> <span class="n">emissions_df</span><span class="p">[</span>
-    <span class="p">(</span><span class="n">emissions_df</span><span class="p">[</span><span class="s2">&quot;Item&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Total Energy&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
-    <span class="p">(</span><span class="n">emissions_df</span><span class="p">[</span><span class="s2">&quot;Element&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Emissions (CO2)&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
-    <span class="p">(</span><span class="n">emissions_df</span><span class="p">[</span><span class="s2">&quot;Unit&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;kt&quot;</span><span class="p">)</span>
-<span class="p">]</span>
-<span class="n">emissions_2021</span> <span class="o">=</span> <span class="n">emissions_filtered</span><span class="p">[[</span><span class="s2">&quot;Area&quot;</span><span class="p">,</span> <span class="s2">&quot;Y2021&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">emissions_2021</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">,</span> <span class="s2">&quot;CO2_uitstoot_kt&quot;</span><span class="p">]</span>
-<span class="n">emissions_2021</span><span class="p">[</span><span class="s2">&quot;CO2_uitstoot_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">emissions_2021</span><span class="p">[</span><span class="s2">&quot;CO2_uitstoot_kt&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="c1"># CO₂ 2021 per land (kt)</span>
+<span class="n">em2021</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">emissions_df</span>
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Item==&#39;Total Energy&#39; and Element==&#39;Emissions (CO2)&#39; and Unit==&#39;kt&#39;&quot;</span><span class="p">)</span>
+    <span class="p">[[</span><span class="s1">&#39;Area&#39;</span><span class="p">,</span><span class="s1">&#39;Y2021&#39;</span><span class="p">]]</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Area&#39;</span><span class="p">:</span><span class="s1">&#39;Land&#39;</span><span class="p">,</span><span class="s1">&#39;Y2021&#39;</span><span class="p">:</span><span class="s1">&#39;CO2_uitstoot_kt&#39;</span><span class="p">})</span>
+<span class="p">)</span>
+<span class="n">em2021</span><span class="p">[</span><span class="s1">&#39;CO2_uitstoot_kt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">em2021</span><span class="p">[</span><span class="s1">&#39;CO2_uitstoot_kt&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
 
-<span class="n">production_filtered</span> <span class="o">=</span> <span class="n">production_df</span><span class="p">[</span>
-    <span class="p">(</span><span class="n">production_df</span><span class="p">[</span><span class="s2">&quot;Element&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Production&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
-    <span class="p">(</span><span class="n">production_df</span><span class="p">[</span><span class="s2">&quot;Unit&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;t&quot;</span><span class="p">)</span>
-<span class="p">]</span>
-<span class="n">production_2021</span> <span class="o">=</span> <span class="n">production_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Y2021&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-<span class="n">production_2021</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">,</span> <span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">]</span>
-<span class="n">production_2021</span><span class="p">[</span><span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">production_2021</span><span class="p">[</span><span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="c1"># Landbouwproductie 2021 (t → ton)</span>
+<span class="n">prod2021</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">production_df</span>
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Element==&#39;Production&#39; and Unit==&#39;t&#39;&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Area&#39;</span><span class="p">)[</span><span class="s1">&#39;Y2021&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Area&#39;</span><span class="p">:</span><span class="s1">&#39;Land&#39;</span><span class="p">,</span><span class="s1">&#39;Y2021&#39;</span><span class="p">:</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">})</span>
+<span class="p">)</span>
+<span class="n">prod2021</span><span class="p">[</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">prod2021</span><span class="p">[</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
 
-<span class="n">gdp_2021</span> <span class="o">=</span> <span class="n">gdp_df</span><span class="p">[</span><span class="n">gdp_df</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2021</span><span class="p">][[</span><span class="s2">&quot;Entity&quot;</span><span class="p">,</span> <span class="s2">&quot;GDP per capita, PPP (constant 2021 international $)&quot;</span><span class="p">]]</span>
-<span class="n">gdp_2021</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">,</span> <span class="s2">&quot;BBP_per_hoofd&quot;</span><span class="p">]</span>
-<span class="n">gdp_2021</span><span class="p">[</span><span class="s2">&quot;BBP_per_hoofd&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">gdp_2021</span><span class="p">[</span><span class="s2">&quot;BBP_per_hoofd&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+<span class="c1"># BBP per hoofd 2021</span>
+<span class="n">gdp2021</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">gdp_df</span>
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Year==2021&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">&#39;Entity&#39;</span><span class="p">:</span><span class="s1">&#39;Land&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;GDP per capita, PPP (constant 2021 international $)&#39;</span><span class="p">:</span><span class="s1">&#39;BBP_per_hoofd&#39;</span>
+    <span class="p">})[[</span><span class="s1">&#39;Land&#39;</span><span class="p">,</span><span class="s1">&#39;BBP_per_hoofd&#39;</span><span class="p">]]</span>
+<span class="p">)</span>
+<span class="n">gdp2021</span><span class="p">[</span><span class="s1">&#39;BBP_per_hoofd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">gdp2021</span><span class="p">[</span><span class="s1">&#39;BBP_per_hoofd&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
 
-<span class="n">pop_2021</span> <span class="o">=</span> <span class="n">co2_df</span><span class="p">[</span><span class="n">co2_df</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2021</span><span class="p">][[</span><span class="s2">&quot;country&quot;</span><span class="p">,</span> <span class="s2">&quot;population&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">pop_2021</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">,</span> <span class="s2">&quot;Bevolking&quot;</span><span class="p">]</span>
-<span class="n">pop_2021</span><span class="p">[</span><span class="s2">&quot;Bevolking&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">pop_2021</span><span class="p">[</span><span class="s2">&quot;Bevolking&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+<span class="c1"># Bevolking 2021</span>
+<span class="n">pop2021</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">co2_df</span>
+    <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;year==2021&quot;</span><span class="p">)</span>
+    <span class="p">[[</span><span class="s1">&#39;country&#39;</span><span class="p">,</span><span class="s1">&#39;population&#39;</span><span class="p">]]</span>
+    <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;country&#39;</span><span class="p">:</span><span class="s1">&#39;Land&#39;</span><span class="p">,</span><span class="s1">&#39;population&#39;</span><span class="p">:</span><span class="s1">&#39;Bevolking&#39;</span><span class="p">})</span>
+<span class="p">)</span>
+<span class="n">pop2021</span><span class="p">[</span><span class="s1">&#39;Bevolking&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">pop2021</span><span class="p">[</span><span class="s1">&#39;Bevolking&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">emissions_2021</span><span class="p">,</span> <span class="n">production_2021</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Land&quot;</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">&quot;CO2_per_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;CO2_uitstoot_kt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">]</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">gdp_2021</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Land&quot;</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pop_2021</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Land&quot;</span><span class="p">)</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="c1"># Merge &amp; bereken CO2_per_ton</span>
+<span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">em2021</span>
+    <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">prod2021</span><span class="p">,</span>  <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Land&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">CO2_per_ton</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;CO2_uitstoot_kt&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="o">/</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">gdp2021</span><span class="p">,</span>    <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Land&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pop2021</span><span class="p">,</span>    <span class="n">on</span><span class="o">=</span><span class="s1">&#39;Land&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="p">)</span>
 
-<span class="n">landen</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Brazil&#39;</span><span class="p">:</span> <span class="s1">&#39;Brazilië&#39;</span><span class="p">,</span> <span class="s1">&#39;India&#39;</span><span class="p">:</span> <span class="s1">&#39;India&#39;</span><span class="p">,</span> <span class="s1">&#39;Indonesia&#39;</span><span class="p">:</span> <span class="s1">&#39;Indonesië&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Japan&#39;</span><span class="p">:</span> <span class="s1">&#39;Japan&#39;</span><span class="p">,</span> <span class="s1">&#39;Nigeria&#39;</span><span class="p">:</span> <span class="s1">&#39;Nigeria&#39;</span><span class="p">,</span> <span class="s1">&#39;South Africa&#39;</span><span class="p">:</span> <span class="s1">&#39;Zuid-Afrika&#39;</span><span class="p">,</span> <span class="s1">&#39;United States&#39;</span><span class="p">:</span> <span class="s1">&#39;Verenigde Staten&#39;</span>
+<span class="c1"># Selectie en vertaling</span>
+<span class="n">landen_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Brazil&#39;</span><span class="p">:</span><span class="s1">&#39;Brazilië&#39;</span><span class="p">,</span><span class="s1">&#39;India&#39;</span><span class="p">:</span><span class="s1">&#39;India&#39;</span><span class="p">,</span><span class="s1">&#39;Indonesia&#39;</span><span class="p">:</span><span class="s1">&#39;Indonesië&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Japan&#39;</span><span class="p">:</span><span class="s1">&#39;Japan&#39;</span><span class="p">,</span><span class="s1">&#39;Nigeria&#39;</span><span class="p">:</span><span class="s1">&#39;Nigeria&#39;</span><span class="p">,</span><span class="s1">&#39;South Africa&#39;</span><span class="p">:</span><span class="s1">&#39;Zuid-Afrika&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;United States&#39;</span><span class="p">:</span><span class="s1">&#39;Verenigde Staten&#39;</span>
 <span class="p">}</span>
-<span class="n">df_selected</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">landen</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">df_selected</span><span class="p">[</span><span class="s2">&quot;land_naam&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_selected</span><span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">landen</span><span class="p">)</span>
+<span class="n">df_sel</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Land&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">landen_map</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_sel</span><span class="p">[</span><span class="s1">&#39;land_naam&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_sel</span><span class="p">[</span><span class="s1">&#39;Land&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">landen_map</span><span class="p">)</span>
 
-<span class="n">df_final</span> <span class="o">=</span> <span class="n">df_selected</span><span class="p">[[</span>
-    <span class="s2">&quot;land_naam&quot;</span><span class="p">,</span> <span class="s2">&quot;BBP_per_hoofd&quot;</span><span class="p">,</span> <span class="s2">&quot;CO2_per_ton&quot;</span><span class="p">,</span> <span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">,</span> <span class="s2">&quot;Bevolking&quot;</span>
-<span class="p">]]</span>
-<span class="n">df_final</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;land_naam&#39;</span><span class="p">,</span> <span class="s1">&#39;BBP_per_hoofd&#39;</span><span class="p">,</span> <span class="s1">&#39;CO2_per_ton&#39;</span><span class="p">,</span> <span class="s1">&#39;Productie_ton&#39;</span><span class="p">,</span> <span class="s1">&#39;Bevolking&#39;</span><span class="p">]</span>
+<span class="c1"># Normaliseren</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BBP_per_hoofd&#39;</span><span class="p">,</span><span class="s1">&#39;CO2_per_ton&#39;</span><span class="p">,</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">,</span><span class="s1">&#39;Bevolking&#39;</span><span class="p">]</span>
+<span class="n">df_norm</span> <span class="o">=</span> <span class="n">df_sel</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+    <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="n">df_norm</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">df_norm</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">df_norm</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_norm</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">-</span><span class="n">mn</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">mx</span><span class="o">-</span><span class="n">mn</span><span class="p">)</span>
 
-<span class="n">scaler</span> <span class="o">=</span> <span class="n">MinMaxScaler</span><span class="p">()</span>
-<span class="n">categorieën</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;BBP_per_hoofd&#39;</span><span class="p">,</span> <span class="s1">&#39;CO2_per_ton&#39;</span><span class="p">,</span> <span class="s1">&#39;Productie_ton&#39;</span><span class="p">,</span> <span class="s1">&#39;Bevolking&#39;</span><span class="p">]</span>
-<span class="n">df_schaal</span> <span class="o">=</span> <span class="n">df_final</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">df_schaal</span><span class="p">[</span><span class="n">categorieën</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_schaal</span><span class="p">[</span><span class="n">categorieën</span><span class="p">])</span>
+<span class="c1"># ——————————————————————————————</span>
+<span class="c1"># 2) INTERACTIEVE RADAR CHART MET PLOTLY</span>
+<span class="c1"># ——————————————————————————————</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="n">cols</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
 
-<span class="n">kleuren</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#AEC6CF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFB347&#39;</span><span class="p">,</span> <span class="s1">&#39;#77DD77&#39;</span><span class="p">,</span> <span class="s1">&#39;#FF6961&#39;</span><span class="p">,</span> <span class="s1">&#39;#CBAACB&#39;</span><span class="p">,</span> <span class="s1">&#39;#FDFD96&#39;</span><span class="p">,</span> <span class="s1">&#39;#B0E0E6&#39;</span><span class="p">]</span>
+<span class="c1"># Voeg per land één polar-plot</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_norm</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">categories</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">vals</span> <span class="o">+=</span> <span class="n">vals</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># sluit de cirkel</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatterpolar</span><span class="p">(</span>
+        <span class="n">r</span><span class="o">=</span><span class="n">vals</span><span class="p">,</span>
+        <span class="n">theta</span><span class="o">=</span><span class="n">categories</span> <span class="o">+</span> <span class="p">[</span><span class="n">categories</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+        <span class="n">fill</span><span class="o">=</span><span class="s1">&#39;toself&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;land_naam&#39;</span><span class="p">],</span>
+        <span class="n">hovertemplate</span><span class="o">=</span><span class="s1">&#39;&lt;b&gt;%</span><span class="si">{text}</span><span class="s1">&lt;/b&gt;&lt;br&gt;&#39;</span> <span class="o">+</span>
+                      <span class="s1">&#39;%</span><span class="si">{theta}</span><span class="s1">: %</span><span class="si">{r:.2f}</span><span class="s1">&lt;extra&gt;&lt;/extra&gt;&#39;</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;land_naam&#39;</span><span class="p">]]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+    <span class="p">))</span>
 
-<span class="k">def</span> <span class="nf">maak_radar_chart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">categorieën</span><span class="p">,</span> <span class="n">titel</span><span class="p">):</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;totaal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">categorieën</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;totaal&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">polar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">radialaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">tickvals</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.75</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">),</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Internationale vergelijking: BBP, uitstoot &amp; landbouwproductie (genormaliseerd)&#39;</span><span class="p">,</span>
+    <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">legend</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Land&#39;</span><span class="p">)</span>
+<span class="p">)</span>
 
-    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">categorieën</span><span class="p">)</span>
-    <span class="n">hoeken</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
-    <span class="n">hoeken</span> <span class="o">+=</span> <span class="n">hoeken</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">polar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">hoeken</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">categorieën</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_rlabel_position</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;0.2&quot;</span><span class="p">,</span> <span class="s2">&quot;0.4&quot;</span><span class="p">,</span> <span class="s2">&quot;0.6&quot;</span><span class="p">,</span> <span class="s2">&quot;0.8&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_sorted</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="n">waarden</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">categorieën</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="n">waarden</span> <span class="o">+=</span> <span class="n">waarden</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">hoeken</span><span class="p">,</span> <span class="n">waarden</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">kleuren</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">kleuren</span><span class="p">)],</span> <span class="n">label</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;land_naam&#39;</span><span class="p">])</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hoeken</span><span class="p">,</span> <span class="n">waarden</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">kleuren</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">kleuren</span><span class="p">)],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">titel</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">maak_radar_chart</span><span class="p">(</span><span class="n">df_schaal</span><span class="p">,</span> <span class="n">categorieën</span><span class="p">,</span> <span class="s2">&quot;Internationale vergelijking: BBP, uitstoot en landbouwproductie&quot;</span><span class="p">)</span>
+<span class="c1"># ——————————————————————————————</span>
+<span class="c1"># 3) INLINE RENDEREN ZONDER HTML/JS TE TONEN</span>
+<span class="c1"># ——————————————————————————————</span>
+<span class="n">html_snippet</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">&#39;cdn&#39;</span><span class="p">,</span> <span class="n">full_html</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">html_snippet</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">24</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="n">emissions_2021</span><span class="p">[</span><span class="s2">&quot;CO2_uitstoot_kt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">emissions_2021</span><span class="p">[</span><span class="s2">&quot;CO2_uitstoot_kt&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">20</span> <span class="n">production_filtered</span> <span class="o">=</span> <span class="n">production_df</span><span class="p">[</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span>     <span class="p">(</span><span class="n">production_df</span><span class="p">[</span><span class="s2">&quot;Element&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Production&quot;</span><span class="p">)</span> <span class="o">&amp;</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span>     <span class="p">(</span><span class="n">production_df</span><span class="p">[</span><span class="s2">&quot;Unit&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;t&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="p">]</span>
-<span class="ne">---&gt; </span><span class="mi">24</span> <span class="n">production_2021</span> <span class="o">=</span> <span class="n">production_filtered</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Area&quot;</span><span class="p">)[</span><span class="s2">&quot;Y2021&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="n">production_2021</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Land&quot;</span><span class="p">,</span> <span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="n">production_2021</span><span class="p">[</span><span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">production_2021</span><span class="p">[</span><span class="s2">&quot;Totale_productie_ton&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">29</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="n">em2021</span><span class="p">[</span><span class="s1">&#39;CO2_uitstoot_kt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">em2021</span><span class="p">[</span><span class="s1">&#39;CO2_uitstoot_kt&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="c1"># Landbouwproductie 2021 (t → ton)</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span> <span class="n">prod2021</span> <span class="o">=</span> <span class="p">(</span>
+<span class="ne">---&gt; </span><span class="mi">29</span>     <span class="n">production_df</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span>     <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Element==&#39;Production&#39; and Unit==&#39;t&#39;&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span>     <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Area&#39;</span><span class="p">)[</span><span class="s1">&#39;Y2021&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">32</span>     <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span>     <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Area&#39;</span><span class="p">:</span><span class="s1">&#39;Land&#39;</span><span class="p">,</span><span class="s1">&#39;Y2021&#39;</span><span class="p">:</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">})</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="n">prod2021</span><span class="p">[</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">prod2021</span><span class="p">[</span><span class="s1">&#39;Productie_ton&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="c1"># BBP per hoofd 2021</span>
 
 <span class="nn">File /opt/anaconda3/lib/python3.12/site-packages/pandas/core/groupby/generic.py:1951,</span> in <span class="ni">DataFrameGroupBy.__getitem__</span><span class="nt">(self, key)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1944</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -605,7 +642,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/ab2c07ebbc80cfcbd836016717b68ac95dc4bc5c802f70fdd6e5b7f9559631e6.png" src="_images/ab2c07ebbc80cfcbd836016717b68ac95dc4bc5c802f70fdd6e5b7f9559631e6.png" />
+<img alt="_images/733301acaff9a59059e58c5bd14d7ea16592d56208fd8a7e84c6ff013ddeb2bb.png" src="_images/733301acaff9a59059e58c5bd14d7ea16592d56208fd8a7e84c6ff013ddeb2bb.png" />
 </div>
 </div>
 <section id="waarom-deze-landen">
@@ -790,24 +827,6 @@ Zuid-Afrika bevindt zich vaak in het midden van de grafiek. Het land produceert 
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="perspectief1.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Verschillen in milieubeleid verklaren verschillen in landbouwuitstoot</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="perspectief3.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">De invloed van klimaat en geografie op voedselproductie</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
