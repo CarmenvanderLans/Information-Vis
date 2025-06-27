@@ -13,7 +13,6 @@ repository:
   path_to_book: .
   branch: main
 
-
 # HTML-themaopties + Plotly.js clientside library
 html:
   use_repository_button: true
