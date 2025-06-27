@@ -7,7 +7,7 @@ Duurzamere landbouw is daarom erg belangrijk om deze CO₂-uitstoot te verlagen.
 
 In dit dataverhaal gaan we de factoren die de verschillen in CO₂-uitstoot van de landbouwsector tussen landen onderzoeken en proberen te verklaren. We benaderen dit vanuit drie perspectieven:
 
----
+
 
 ## Perspectief 1  
 *Verschillen in milieubeleid leiden tot verschillen in de CO₂-uitstoot van de landbouwsector.*
@@ -17,7 +17,6 @@ In dit dataverhaal gaan we de factoren die de verschillen in CO₂-uitstoot van 
 - **Argument 2:**  
   Landen die duurzaamheid belonen via subsidies stoten minder CO₂ uit.
 
----
 
 ## Perspectief 2  
 *Economische welvaart en productiviteit beïnvloeden CO₂-uitstoot.*
@@ -25,7 +24,6 @@ In dit dataverhaal gaan we de factoren die de verschillen in CO₂-uitstoot van 
 - **Argument:**  
   Rijkere landen investeren vaker in efficiënte, emissiearme technologieën. Tegelijkertijd kan hogere productie ook tot hogere totale CO₂-uitstoot leiden.
 
----
 
 ## Perspectief 3  
 *Geografische ligging beïnvloedt CO₂-uitstoot van de landbouwsector.*
@@ -33,11 +31,10 @@ In dit dataverhaal gaan we de factoren die de verschillen in CO₂-uitstoot van 
 - **Argument:**  
   Klimaat, bodemkwaliteit en beschikbare landbouwgrond spelen een rol. Tropische landen stoten bijvoorbeeld vaak meer CO₂ uit per hectare vanwege andere gewassen en productiemethoden.
 
----
+
 
 In de volgende secties introduceren we de gebruikte datasets en presenteren we visualisaties die elk perspectief onderbouwen. Het doel is om inzicht te krijgen in hoe verschillende factoren samenhangen met landbouwemissies en welke lessen hieruit te trekken zijn voor duurzamer beleid.
 
----
 
 ## Auteurs
 
