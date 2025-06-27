@@ -5,7 +5,7 @@ root: intro
 
 chapters:
   - file: dataset-preprocessing
-  - file: notebooks/data_story_persp1    # ← your Perspectief 1
-  - file: notebooks/data_story_persp3    # ← your Perspectief 3
+  - file: notebooks/data_story_persp1    
+  - file: notebooks/data_story_persp3    
   - file: reflectie
   - file: werkverdeling
