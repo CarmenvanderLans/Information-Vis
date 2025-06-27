@@ -20,124 +20,195 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 ------------------
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
+import plotly.graph_objects as go
+import plotly.io as pio
+from IPython.display import HTML, display
 
-emissions_df = pd.read_csv('Emissions_Agriculture_Energy_E_All_Data.csv', encoding='latin1')
+# Renderer voor inline weergave
+pio.renderers.default = 'notebook'  # of 'jupyterlab'
+
+# ——————————————————————————————
+# 1) DATA INLADEN & SAMENSTELLEN
+# ——————————————————————————————
+emissions_df  = pd.read_csv('Emissions_Agriculture_Energy_E_All_Data.csv', encoding='latin1')
 production_df = pd.read_csv('Production_Crops_Livestock_E_All_Data.csv', encoding='latin1', low_memory=False)
-gdp_df = pd.read_csv('gdp-per-capita-worldbank.csv')
-co2_df = pd.read_csv('owid-co2-data.csv')
+gdp_df        = pd.read_csv('gdp-per-capita-worldbank.csv')
+co2_df        = pd.read_csv('owid-co2-data.csv')
 
-emissions_filtered = emissions_df[
-    (emissions_df["Item"] == "Total Energy") &
-    (emissions_df["Element"] == "Emissions (CO2)") &
-    (emissions_df["Unit"] == "kt")
-]
-emissions_2021 = emissions_filtered[["Area", "Y2021"]].copy()
-emissions_2021.columns = ["Land", "CO2_uitstoot_kt"]
-emissions_2021["CO2_uitstoot_kt"] = pd.to_numeric(emissions_2021["CO2_uitstoot_kt"], errors='coerce')
+# CO₂ 2021 per land (kt)
+em2021 = (
+    emissions_df
+    .query("Item=='Total Energy' and Element=='Emissions (CO2)' and Unit=='kt'")
+    [['Area','Y2021']]
+    .rename(columns={'Area':'Land','Y2021':'CO2_uitstoot_kt'})
+)
+em2021['CO2_uitstoot_kt'] = pd.to_numeric(em2021['CO2_uitstoot_kt'], errors='coerce')
 
-production_filtered = production_df[
-    (production_df["Element"] == "Production") &
-    (production_df["Unit"] == "t")
-]
-production_2021 = production_filtered.groupby("Area")["Y2021"].sum().reset_index()
-production_2021.columns = ["Land", "Totale_productie_ton"]
-production_2021["Totale_productie_ton"] = pd.to_numeric(production_2021["Totale_productie_ton"], errors='coerce')
+# Landbouwproductie 2021 (t → ton)
+prod2021 = (
+    production_df
+    .query("Element=='Production' and Unit=='t'")
+    .groupby('Area')['Y2021'].sum()
+    .reset_index()
+    .rename(columns={'Area':'Land','Y2021':'Productie_ton'})
+)
+prod2021['Productie_ton'] = pd.to_numeric(prod2021['Productie_ton'], errors='coerce')
 
-gdp_2021 = gdp_df[gdp_df["Year"] == 2021][["Entity", "GDP per capita, PPP (constant 2021 international $)"]]
-gdp_2021.columns = ["Land", "BBP_per_hoofd"]
-gdp_2021["BBP_per_hoofd"] = pd.to_numeric(gdp_2021["BBP_per_hoofd"], errors="coerce")
+# BBP per hoofd 2021
+gdp2021 = (
+    gdp_df
+    .query("Year==2021")
+    .rename(columns={
+        'Entity':'Land',
+        'GDP per capita, PPP (constant 2021 international $)':'BBP_per_hoofd'
+    })[['Land','BBP_per_hoofd']]
+)
+gdp2021['BBP_per_hoofd'] = pd.to_numeric(gdp2021['BBP_per_hoofd'], errors='coerce')
 
-pop_2021 = co2_df[co2_df["year"] == 2021][["country", "population"]].copy()
-pop_2021.columns = ["Land", "Bevolking"]
-pop_2021["Bevolking"] = pd.to_numeric(pop_2021["Bevolking"], errors="coerce")
+# Bevolking 2021
+pop2021 = (
+    co2_df
+    .query("year==2021")
+    [['country','population']]
+    .rename(columns={'country':'Land','population':'Bevolking'})
+)
+pop2021['Bevolking'] = pd.to_numeric(pop2021['Bevolking'], errors='coerce')
 
-df = pd.merge(emissions_2021, production_2021, on="Land")
-df["CO2_per_ton"] = df["CO2_uitstoot_kt"] * 1000 / df["Totale_productie_ton"]
-df = pd.merge(df, gdp_2021, on="Land")
-df = pd.merge(df, pop_2021, on="Land")
-df = df.dropna()
+# Merge & bereken CO2_per_ton
+df = (
+    em2021
+    .merge(prod2021,  on='Land')
+    .assign(
+        CO2_per_ton=lambda d: d['CO2_uitstoot_kt']*1000/d['Productie_ton']
+    )
+    .merge(gdp2021,    on='Land')
+    .merge(pop2021,    on='Land')
+    .dropna()
+)
 
-landen = {
-    'Brazil': 'Brazilië', 'India': 'India', 'Indonesia': 'Indonesië',
-    'Japan': 'Japan', 'Nigeria': 'Nigeria', 'South Africa': 'Zuid-Afrika', 'United States': 'Verenigde Staten'
+# Selectie en vertaling
+landen_map = {
+    'Brazil':'Brazilië','India':'India','Indonesia':'Indonesië',
+    'Japan':'Japan','Nigeria':'Nigeria','South Africa':'Zuid-Afrika',
+    'United States':'Verenigde Staten'
 }
-df_selected = df[df["Land"].isin(landen.keys())].copy()
-df_selected["land_naam"] = df_selected["Land"].map(landen)
+df_sel = df[df['Land'].isin(landen_map)].copy()
+df_sel['land_naam'] = df_sel['Land'].map(landen_map)
 
-df_final = df_selected[[
-    "land_naam", "BBP_per_hoofd", "CO2_per_ton", "Totale_productie_ton", "Bevolking"
-]]
-df_final.columns = ['land_naam', 'BBP_per_hoofd', 'CO2_per_ton', 'Productie_ton', 'Bevolking']
+# Normaliseren
+cols = ['BBP_per_hoofd','CO2_per_ton','Productie_ton','Bevolking']
+df_norm = df_sel.copy()
+for c in cols:
+    mn, mx = df_norm[c].min(), df_norm[c].max()
+    df_norm[c] = (df_norm[c]-mn)/(mx-mn)
 
-scaler = MinMaxScaler()
-categorieën = ['BBP_per_hoofd', 'CO2_per_ton', 'Productie_ton', 'Bevolking']
-df_schaal = df_final.copy()
-df_schaal[categorieën] = scaler.fit_transform(df_schaal[categorieën])
+# ——————————————————————————————
+# 2) INTERACTIEVE RADAR CHART MET PLOTLY
+# ——————————————————————————————
+categories = cols
+fig = go.Figure()
 
-kleuren = ['#AEC6CF', '#FFB347', '#77DD77', '#FF6961', '#CBAACB', '#FDFD96', '#B0E0E6']
+# Voeg per land één polar-plot
+for i, row in df_norm.iterrows():
+    vals = row[categories].tolist()
+    vals += vals[:1]  # sluit de cirkel
+    fig.add_trace(go.Scatterpolar(
+        r=vals,
+        theta=categories + [categories[0]],
+        fill='toself',
+        name=row['land_naam'],
+        hovertemplate='<b>%{text}</b><br>' +
+                      '%{theta}: %{r:.2f}<extra></extra>',
+        text=[row['land_naam']]*len(vals)
+    ))
 
-def maak_radar_chart(df, categorieën, titel):
-    df['totaal'] = df[categorieën].sum(axis=1)
-    df_sorted = df.sort_values(by='totaal', ascending=False).reset_index(drop=True)
+fig.update_layout(
+    polar=dict(
+        radialaxis=dict(
+            visible=True,
+            range=[0,1],
+            tickvals=[0,0.25,0.5,0.75,1]
+        )
+    ),
+    title='Internationale vergelijking: BBP, uitstoot & landbouwproductie (genormaliseerd)',
+    showlegend=True,
+    legend=dict(title='Land')
+)
 
-    N = len(categorieën)
-    hoeken = [n / float(N) * 2 * np.pi for n in range(N)]
-    hoeken += hoeken[:1]
-
-    plt.figure(figsize=(8, 8))
-    ax = plt.subplot(111, polar=True)
-
-    plt.xticks(hoeken[:-1], categorieën, color='grey', size=12)
-    ax.set_rlabel_position(30)
-    plt.yticks([0.2, 0.4, 0.6, 0.8], ["0.2", "0.4", "0.6", "0.8"], color="grey", size=10)
-    plt.ylim(0, 1)
-
-    for i, row in df_sorted.iterrows():
-        waarden = row[categorieën].values.flatten().tolist()
-        waarden += waarden[:1]
-        ax.fill(hoeken, waarden, alpha=0.5, color=kleuren[i % len(kleuren)], label=row['land_naam'])
-        ax.plot(hoeken, waarden, color=kleuren[i % len(kleuren)], linewidth=1)
-
-    plt.title(titel, size=15, y=1.1)
-    plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1))
-    plt.tight_layout()
-    plt.show()
-
-maak_radar_chart(df_schaal, categorieën, "Internationale vergelijking: BBP, uitstoot en landbouwproductie")
+# ——————————————————————————————
+# 3) INLINE RENDEREN ZONDER HTML/JS TE TONEN
+# ——————————————————————————————
+html_snippet = fig.to_html(include_plotlyjs='cdn', full_html=False)
+display(HTML(html_snippet))
 
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mKeyError[0m                                  Traceback (most recent call last)
-Cell [0;32mIn[1], line 24[0m
-[1;32m     18[0m emissions_2021[[38;5;124m"[39m[38;5;124mCO2_uitstoot_kt[39m[38;5;124m"[39m] [38;5;241m=[39m pd[38;5;241m.[39mto_numeric(emissions_2021[[38;5;124m"[39m[38;5;124mCO2_uitstoot_kt[39m[38;5;124m"[39m], errors[38;5;241m=[39m[38;5;124m'[39m[38;5;124mcoerce[39m[38;5;124m'[39m)
-[1;32m     20[0m production_filtered [38;5;241m=[39m production_df[
-[1;32m     21[0m     (production_df[[38;5;124m"[39m[38;5;124mElement[39m[38;5;124m"[39m] [38;5;241m==[39m [38;5;124m"[39m[38;5;124mProduction[39m[38;5;124m"[39m) [38;5;241m&[39m
-[1;32m     22[0m     (production_df[[38;5;124m"[39m[38;5;124mUnit[39m[38;5;124m"[39m] [38;5;241m==[39m [38;5;124m"[39m[38;5;124mt[39m[38;5;124m"[39m)
-[1;32m     23[0m ]
-[0;32m---> 24[0m production_2021 [38;5;241m=[39m production_filtered[38;5;241m.[39mgroupby([38;5;124m"[39m[38;5;124mArea[39m[38;5;124m"[39m)[[38;5;124m"[39m[38;5;124mY2021[39m[38;5;124m"[39m][38;5;241m.[39msum()[38;5;241m.[39mreset_index()
-[1;32m     25[0m production_2021[38;5;241m.[39mcolumns [38;5;241m=[39m [[38;5;124m"[39m[38;5;124mLand[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mTotale_productie_ton[39m[38;5;124m"[39m]
-[1;32m     26[0m production_2021[[38;5;124m"[39m[38;5;124mTotale_productie_ton[39m[38;5;124m"[39m] [38;5;241m=[39m pd[38;5;241m.[39mto_numeric(production_2021[[38;5;124m"[39m[38;5;124mTotale_productie_ton[39m[38;5;124m"[39m], errors[38;5;241m=[39m[38;5;124m'[39m[38;5;124mcoerce[39m[38;5;124m'[39m)
+[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
+Cell [0;32mIn[1], line 14[0m
+[1;32m     10[0m [38;5;66;03m# ——————————————————————————————[39;00m
+[1;32m     11[0m [38;5;66;03m# 1) DATA INLADEN & SAMENSTELLEN[39;00m
+[1;32m     12[0m [38;5;66;03m# ——————————————————————————————[39;00m
+[1;32m     13[0m emissions_df  [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m'[39m[38;5;124mEmissions_Agriculture_Energy_E_All_Data.csv[39m[38;5;124m'[39m, encoding[38;5;241m=[39m[38;5;124m'[39m[38;5;124mlatin1[39m[38;5;124m'[39m)
+[0;32m---> 14[0m production_df [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m'[39m[38;5;124mProduction_Crops_Livestock_E_All_Data.csv[39m[38;5;124m'[39m, encoding[38;5;241m=[39m[38;5;124m'[39m[38;5;124mlatin1[39m[38;5;124m'[39m, low_memory[38;5;241m=[39m[38;5;28;01mFalse[39;00m)
+[1;32m     15[0m gdp_df        [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m'[39m[38;5;124mgdp-per-capita-worldbank.csv[39m[38;5;124m'[39m)
+[1;32m     16[0m co2_df        [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m'[39m[38;5;124mowid-co2-data.csv[39m[38;5;124m'[39m)
 
-File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/core/groupby/generic.py:1951[0m, in [0;36mDataFrameGroupBy.__getitem__[0;34m(self, key)[0m
-[1;32m   1944[0m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(key, [38;5;28mtuple[39m) [38;5;129;01mand[39;00m [38;5;28mlen[39m(key) [38;5;241m>[39m [38;5;241m1[39m:
-[1;32m   1945[0m     [38;5;66;03m# if len == 1, then it becomes a SeriesGroupBy and this is actually[39;00m
-[1;32m   1946[0m     [38;5;66;03m# valid syntax, so don't raise[39;00m
-[1;32m   1947[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
-[1;32m   1948[0m         [38;5;124m"[39m[38;5;124mCannot subset columns with a tuple with more than one element. [39m[38;5;124m"[39m
-[1;32m   1949[0m         [38;5;124m"[39m[38;5;124mUse a list instead.[39m[38;5;124m"[39m
-[1;32m   1950[0m     )
-[0;32m-> 1951[0m [38;5;28;01mreturn[39;00m [38;5;28msuper[39m()[38;5;241m.[39m[38;5;21m__getitem__[39m(key)
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1026[0m, in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)[0m
+[1;32m   1013[0m kwds_defaults [38;5;241m=[39m _refine_defaults_read(
+[1;32m   1014[0m     dialect,
+[1;32m   1015[0m     delimiter,
+[0;32m   (...)[0m
+[1;32m   1022[0m     dtype_backend[38;5;241m=[39mdtype_backend,
+[1;32m   1023[0m )
+[1;32m   1024[0m kwds[38;5;241m.[39mupdate(kwds_defaults)
+[0;32m-> 1026[0m [38;5;28;01mreturn[39;00m _read(filepath_or_buffer, kwds)
 
-File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/core/base.py:244[0m, in [0;36mSelectionMixin.__getitem__[0;34m(self, key)[0m
-[1;32m    242[0m [38;5;28;01melse[39;00m:
-[1;32m    243[0m     [38;5;28;01mif[39;00m key [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m [38;5;28mself[39m[38;5;241m.[39mobj:
-[0;32m--> 244[0m         [38;5;28;01mraise[39;00m [38;5;167;01mKeyError[39;00m([38;5;124mf[39m[38;5;124m"[39m[38;5;124mColumn not found: [39m[38;5;132;01m{[39;00mkey[38;5;132;01m}[39;00m[38;5;124m"[39m)
-[1;32m    245[0m     ndim [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mobj[key][38;5;241m.[39mndim
-[1;32m    246[0m     [38;5;28;01mreturn[39;00m [38;5;28mself[39m[38;5;241m.[39m_gotitem(key, ndim[38;5;241m=[39mndim)
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:620[0m, in [0;36m_read[0;34m(filepath_or_buffer, kwds)[0m
+[1;32m    617[0m _validate_names(kwds[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mnames[39m[38;5;124m"[39m, [38;5;28;01mNone[39;00m))
+[1;32m    619[0m [38;5;66;03m# Create the parser.[39;00m
+[0;32m--> 620[0m parser [38;5;241m=[39m TextFileReader(filepath_or_buffer, [38;5;241m*[39m[38;5;241m*[39mkwds)
+[1;32m    622[0m [38;5;28;01mif[39;00m chunksize [38;5;129;01mor[39;00m iterator:
+[1;32m    623[0m     [38;5;28;01mreturn[39;00m parser
 
-[0;31mKeyError[0m: 'Column not found: Y2021'
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1620[0m, in [0;36mTextFileReader.__init__[0;34m(self, f, engine, **kwds)[0m
+[1;32m   1617[0m     [38;5;28mself[39m[38;5;241m.[39moptions[[38;5;124m"[39m[38;5;124mhas_index_names[39m[38;5;124m"[39m] [38;5;241m=[39m kwds[[38;5;124m"[39m[38;5;124mhas_index_names[39m[38;5;124m"[39m]
+[1;32m   1619[0m [38;5;28mself[39m[38;5;241m.[39mhandles: IOHandles [38;5;241m|[39m [38;5;28;01mNone[39;00m [38;5;241m=[39m [38;5;28;01mNone[39;00m
+[0;32m-> 1620[0m [38;5;28mself[39m[38;5;241m.[39m_engine [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39m_make_engine(f, [38;5;28mself[39m[38;5;241m.[39mengine)
+
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1880[0m, in [0;36mTextFileReader._make_engine[0;34m(self, f, engine)[0m
+[1;32m   1878[0m     [38;5;28;01mif[39;00m [38;5;124m"[39m[38;5;124mb[39m[38;5;124m"[39m [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m mode:
+[1;32m   1879[0m         mode [38;5;241m+[39m[38;5;241m=[39m [38;5;124m"[39m[38;5;124mb[39m[38;5;124m"[39m
+[0;32m-> 1880[0m [38;5;28mself[39m[38;5;241m.[39mhandles [38;5;241m=[39m get_handle(
+[1;32m   1881[0m     f,
+[1;32m   1882[0m     mode,
+[1;32m   1883[0m     encoding[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39moptions[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mencoding[39m[38;5;124m"[39m, [38;5;28;01mNone[39;00m),
+[1;32m   1884[0m     compression[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39moptions[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mcompression[39m[38;5;124m"[39m, [38;5;28;01mNone[39;00m),
+[1;32m   1885[0m     memory_map[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39moptions[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mmemory_map[39m[38;5;124m"[39m, [38;5;28;01mFalse[39;00m),
+[1;32m   1886[0m     is_text[38;5;241m=[39mis_text,
+[1;32m   1887[0m     errors[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39moptions[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mencoding_errors[39m[38;5;124m"[39m, [38;5;124m"[39m[38;5;124mstrict[39m[38;5;124m"[39m),
+[1;32m   1888[0m     storage_options[38;5;241m=[39m[38;5;28mself[39m[38;5;241m.[39moptions[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mstorage_options[39m[38;5;124m"[39m, [38;5;28;01mNone[39;00m),
+[1;32m   1889[0m )
+[1;32m   1890[0m [38;5;28;01massert[39;00m [38;5;28mself[39m[38;5;241m.[39mhandles [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m
+[1;32m   1891[0m f [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39mhandles[38;5;241m.[39mhandle
+
+File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/common.py:873[0m, in [0;36mget_handle[0;34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)[0m
+[1;32m    868[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(handle, [38;5;28mstr[39m):
+[1;32m    869[0m     [38;5;66;03m# Check whether the filename is to be opened in binary mode.[39;00m
+[1;32m    870[0m     [38;5;66;03m# Binary mode does not support 'encoding' and 'newline'.[39;00m
+[1;32m    871[0m     [38;5;28;01mif[39;00m ioargs[38;5;241m.[39mencoding [38;5;129;01mand[39;00m [38;5;124m"[39m[38;5;124mb[39m[38;5;124m"[39m [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m ioargs[38;5;241m.[39mmode:
+[1;32m    872[0m         [38;5;66;03m# Encoding[39;00m
+[0;32m--> 873[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(
+[1;32m    874[0m             handle,
+[1;32m    875[0m             ioargs[38;5;241m.[39mmode,
+[1;32m    876[0m             encoding[38;5;241m=[39mioargs[38;5;241m.[39mencoding,
+[1;32m    877[0m             errors[38;5;241m=[39merrors,
+[1;32m    878[0m             newline[38;5;241m=[39m[38;5;124m"[39m[38;5;124m"[39m,
+[1;32m    879[0m         )
+[1;32m    880[0m     [38;5;28;01melse[39;00m:
+[1;32m    881[0m         [38;5;66;03m# Binary mode[39;00m
+[1;32m    882[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(handle, ioargs[38;5;241m.[39mmode)
+
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: 'Production_Crops_Livestock_E_All_Data.csv'
 
