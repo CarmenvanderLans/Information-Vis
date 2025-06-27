@@ -18,125 +18,136 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Cell 2: load, process, and draw the figure
-# ─────────────────────────────────────────────────────────────────────────────
 import pandas as pd
 import plotly.graph_objects as go
 
-# 1) Load raw data from data1/
-emissies  = pd.read_csv("../data1/FAOSTAT_landbouw_emissies_2022.csv")
-productie = pd.read_csv("../data1/FAOSTAT_landbouw_productie_2022.csv")
-epi       = pd.read_csv("../data1/epi2022results05302022.csv")
 
-# 2) Aggregate to per‐country numbers
-em_land = emissies.groupby("Area")["Value"].sum().reset_index()
-em_land.columns = ["Country", "Emissions_kt"]
+df = pd.read_csv("../data1/CO2.csv")
 
-pr_land = productie.groupby("Area")["Value"].sum().reset_index()
-pr_land.columns = ["Country", "Production_ton"]
-pr_land["Production_kt"] = pr_land["Production_ton"] / 1000
 
-# 3) Merge and compute per‐ton emissions
-df = pd.merge(em_land, pr_land, on="Country", how="inner")
-df["Emissions_per_ton"] = df["Emissions_kt"] / df["Production_kt"]
+landnaam_vertaling = {
+    'Australia': 'Australië',
+    'China': 'China',
+    'Brazil': 'Brazilië',
+    'South Africa': 'Zuid-Afrika',
+    'United States of America': 'Verenigde Staten',
+    'Republic of Korea': 'Zuid-Korea'
+}
 
-# 4) Attach EPI score
-epi = epi.rename(columns={"country": "Country", "EPI.new": "EPI_Score"})
-df = pd.merge(df, epi[["Country", "EPI_Score"]], on="Country", how="left")
 
-# 5) Filter out tiny producers
-df = df[(df["Production_kt"] > 5000) & (df["Emissions_kt"] > 50)]
+df['Land_NL'] = df['Mapped_Country'].map(landnaam_vertaling)
 
-# 6) Build the two layers
-p10, p90 = df["Emissions_per_ton"].quantile([0.1, 0.9])
 
-choropleth = go.Choropleth(
-    locations=df["Country"],
-    locationmode="country names",
-    z=df["EPI_Score"],
-    colorscale="YlGn",
-    zmin=0, zmax=100,
-    showscale=True,
-    colorbar=dict(title="EPI Score", x=1.02, len=0.6)
-)
+df = df.dropna(subset=['GSSE_Subsidy', 'TSE_Subsidy', 'CO2_Emission'])
+df = df[df['TSE_Subsidy'] != 0]
+df['Duurzaamheidsratio'] = df['GSSE_Subsidy'] / df['TSE_Subsidy']
 
-scatter = go.Scattergeo(
-    locations=df["Country"],
-    locationmode="country names",
-    text=df["Country"],
-    marker=dict(
-        size=6,
-        color=df["Emissions_per_ton"],
-        colorscale=["#ffffcc", "#ffcc66", "#ff9933", "#cc3300", "#660000"],
-        cmin=p10, cmax=p90,
-        colorbar=dict(
-            title="CO₂ per ton",
-            orientation="h",
-            x=0.5, xanchor="center",
-            y=-0.18, yanchor="bottom",
-            len=1.0, thickness=15,
-            tickvals=[round(p10,3), round((p10+p90)/2,3), round(p90,3)],
-        )
-    ),
-    name="Uitstoot per ton"
-)
 
-# 7) Compose final layout
-fig = go.Figure([choropleth, scatter])
+gewilde_landen = list(landnaam_vertaling.keys())
+df = df[df['Mapped_Country'].isin(gewilde_landen)]
+
+
+df = df.sort_values(by=['Land_NL', 'Year'])
+landen = df['Land_NL'].unique()
+
+
+fig = go.Figure()
+dropdown_buttons = []
+
+for i, land in enumerate(landen):
+    data = df[df['Land_NL'] == land]
+    visible = [False] * (2 * len(landen))
+
+    
+    fig.add_trace(go.Bar(
+        x=data['Year'],
+        y=data['Duurzaamheidsratio'],
+        name=f"Duurzame subsidies (GSSE/TSE) – {land}",
+        marker_color='#C7EEF9',
+        yaxis='y1',
+        visible=(i == 0)
+    ))
+    visible[i * 2] = True
+
+    
+    fig.add_trace(go.Scatter(
+        x=data['Year'],
+        y=data['CO2_Emission'],
+        name=f"CO₂-uitstoot – {land}",
+        mode='lines+markers',
+        marker_color='#EF8C60',
+        yaxis='y2',
+        visible=(i == 0)
+    ))
+    visible[i * 2 + 1] = True
+
+    
+    dropdown_buttons.append(dict(
+        label=land,
+        method='update',
+        args=[{'visible': visible},
+              {'title': f"Duurzame subsidies en CO₂-uitstoot – {land}"}]
+    ))
+
+
 fig.update_layout(
-    title="CO₂-uitstoot per ton landbouwproductie en milieubeleid (EPI-score) per land (2022)",
-    title_font=dict(size=16),
-    geo=dict(
-        showframe=False, showcoastlines=True,
-        projection_type="equirectangular", projection_scale=1.3,
-        center=dict(lat=10, lon=10)
+    title="Duurzame subsidies en CO₂-uitstoot – " + landen[0],
+    xaxis=dict(title="Jaar"),
+    yaxis=dict(title="GSSE / TSE (duurzaamheidsratio)", range=[0, 1]),
+    yaxis2=dict(title="CO₂-uitstoot (ton CO₂eq)", overlaying="y", side="right"),
+    updatemenus=[dict(
+        buttons=dropdown_buttons,
+        direction='down',
+        x=1.03,
+        xanchor="left",
+        y=1.15,
+        yanchor="top",
+        showactive=True
+    )],
+    legend=dict(x=0.01, y=1),
+    barmode='group',
+    height=600,
+    template='plotly_white'
+)
+
+fig.update_layout(
+    height=750,
+    margin=dict(b=150) 
+)
+
+
+fig.add_annotation(
+    text=(
+        " Met het dropdownmenu rechtsboven kun je wisselen tussen landen. <br>" 
+        " Beweeg met je muis over de grafiek om de exacte waarden per jaar te bekijken. <br>"
+        " De grafiek helpt inzicht te krijgen in hoe subsidiebeleid mogelijk samenhangt met de uitstoot uit de landbouwsector."
     ),
-    margin=dict(t=60, b=220, l=60, r=60),
-    height=710, width=1100,
-    annotations=[
-        dict(
-            text="CO₂-uitstoot per ton landbouwproductie",
-            showarrow=False, xref="paper", yref="paper",
-            x=0.5, y=-0.15, xanchor="center", yanchor="bottom",
-            font=dict(size=13)
-        ),
-        dict(
-            text=(
-                "Deze visualisatie toont de CO₂-uitstoot per ton landbouwproductie en relateert dit aan het milieubeleid van landen<br>"
-                "zoals gemeten via de EPI-score. Alleen landen met voldoende landbouwproductie zijn meegenomen<br>"
-                "(meer dan 5.000 kiloton productie en meer dan 50 kiloton uitstoot),<br>"
-                "om vertekende resultaten door kleine landbouwlanden zoals Qatar te voorkomen."
-            ),
-            showarrow=False, xref="paper", yref="paper",
-            x=0.5, y=-0.36, xanchor="center", yanchor="bottom",
-            align="center", font=dict(size=12)
-        )
-    ]
+    xref="paper", yref="paper",
+    x=0, y=-0.25,
+    showarrow=False,
+    align="left",
+    font=dict(size=12),
+    borderpad=4
 )
 
-# 8) Show & export
+
 fig.show()
-
-# write a high-res PNG for embedding
-os.makedirs("../iframe_figures", exist_ok=True)
-fig.write_image(
-    "../iframe_figures/persp1_arg1.png",
-    format="png", width=1100, height=710, scale=2
-)
-
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Cell [0;32mIn[3], line 8[0m
-[1;32m      5[0m [38;5;28;01mimport[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mgraph_objects[39;00m [38;5;28;01mas[39;00m [38;5;21;01mgo[39;00m
-[1;32m      7[0m [38;5;66;03m# 1) Load raw data from data1/[39;00m
-[0;32m----> 8[0m emissies  [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/FAOSTAT_landbouw_emissies_2022.csv[39m[38;5;124m"[39m)
-[1;32m      9[0m productie [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/FAOSTAT_landbouw_productie_2022.csv[39m[38;5;124m"[39m)
-[1;32m     10[0m epi       [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/epi2022results05302022.csv[39m[38;5;124m"[39m)
+Cell [0;32mIn[3], line 5[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
+[1;32m      2[0m [38;5;28;01mimport[39;00m [38;5;21;01mplotly[39;00m[38;5;21;01m.[39;00m[38;5;21;01mgraph_objects[39;00m [38;5;28;01mas[39;00m [38;5;21;01mgo[39;00m
+[0;32m----> 5[0m df [38;5;241m=[39m pd[38;5;241m.[39mread_csv([38;5;124m"[39m[38;5;124m../data1/CO2.csv[39m[38;5;124m"[39m)
+[1;32m      8[0m landnaam_vertaling [38;5;241m=[39m {
+[1;32m      9[0m     [38;5;124m'[39m[38;5;124mAustralia[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mAustralië[39m[38;5;124m'[39m,
+[1;32m     10[0m     [38;5;124m'[39m[38;5;124mChina[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mChina[39m[38;5;124m'[39m,
+[0;32m   (...)[0m
+[1;32m     14[0m     [38;5;124m'[39m[38;5;124mRepublic of Korea[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mZuid-Korea[39m[38;5;124m'[39m
+[1;32m     15[0m }
+[1;32m     18[0m df[[38;5;124m'[39m[38;5;124mLand_NL[39m[38;5;124m'[39m] [38;5;241m=[39m df[[38;5;124m'[39m[38;5;124mMapped_Country[39m[38;5;124m'[39m][38;5;241m.[39mmap(landnaam_vertaling)
 
 File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/parsers/readers.py:1026[0m, in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)[0m
 [1;32m   1013[0m kwds_defaults [38;5;241m=[39m _refine_defaults_read(
@@ -193,5 +204,5 @@ File [0;32m/opt/anaconda3/lib/python3.12/site-packages/pandas/io/common.py:873
 [1;32m    881[0m         [38;5;66;03m# Binary mode[39;00m
 [1;32m    882[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(handle, ioargs[38;5;241m.[39mmode)
 
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '../data1/FAOSTAT_landbouw_emissies_2022.csv'
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '../data1/CO2.csv'
 
